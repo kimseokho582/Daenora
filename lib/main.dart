@@ -1,11 +1,37 @@
-import 'package:deanora/post.dart';
-import 'package:deanora/screen/myClass.dart';
+import 'package:deanora/screen/MyLogin.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
+import 'dart:async';
+
 
 
 
 void main() {
   runApp(MyApp());
+}
+
+Container cover_Background(){
+  return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: <Color>[
+            Color(0xff8C65EC),
+            Color(0xff6D6CEB)
+          ]
+        )
+      ),
+      
+    );
+}
+
+Container cover_img(w,h,name){
+  return Container(
+    child:(
+      Image.asset('assets/images/${name}.png',width: w,height: h,)
+    )
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -22,64 +48,47 @@ class _MyAppState extends State<MyApp> {
           primaryColor: Colors.black,
           accentColor: Colors.white
         ),
-       debugShowCheckedModeBanner: false, home: LoginPage());
+      // debugShowCheckedModeBanner: false,
+        home: Cover());
   }
 }
 
-class LoginPage extends StatefulWidget {
+class Cover extends StatefulWidget {
+  const Cover({ Key? key }) : super(key: key);
+
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _CoverState createState() => _CoverState();
 }
 
-class _LoginPageState extends State<LoginPage> {
-  final id = TextEditingController();
-  final pw = TextEditingController();
+class _CoverState extends State<Cover> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        child: ListView(
-          padding: EdgeInsets.symmetric(horizontal: 24.0),
-          children: <Widget>[
-            SizedBox(height: 120.0),
-            TextField(
-              controller: id,
-              decoration: InputDecoration(
-                filled: true,
-                labelText: 'Username',
-              ),
-            ),
-            SizedBox(height: 12.0),
-            TextField(
-              controller: pw,
-              decoration: InputDecoration(
-                filled: true,
-                labelText: 'Password',
-              ),
-              obscureText: true,
-            ),
-            ButtonBar(
-              children: <Widget>[
-                TextButton(
-                  child: Text('CANCEL'),
-                  onPressed: () {
-                    id.clear();
-                    pw.clear();
-                  },
-                ),
-                ElevatedButton(
-                  child: Text('NEXT'),
-                  onPressed: ()async {
-                    var classes = await post.postClass(id.text, pw.text);
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => myClass(id.text,pw.text,classes)));
-                  },
-               ),
-              ],
-            ),
-          ],
-        ),
-      ),
+    //myTimer(context);
+    return Stack(
+      children: <Widget>[
+        Positioned(child: cover_Background()),
+        Align(alignment: Alignment(0.0,-0.45),
+              child:cover_img(181.0,151.7,"coverLogo")),
+               Align(alignment: Alignment(0.0,0.11),
+              child:cover_img(164.5,56.8,"coverTitle")),
+        
+
+      ],     
     );
+
   }
 }
+
+void myTimer(BuildContext context){
+Timer timer= new Timer(new Duration(seconds: 2), () {
+  print('object');
+   Navigator.push(context,PageTransition(
+     duration: Duration(milliseconds: 800),
+     type: PageTransitionType.fade,
+     alignment: Alignment.topCenter,
+     child: MyLogin(),
+     ),
+ );
+});
+}
+

@@ -1,22 +1,21 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 
 
-class myClass extends StatefulWidget {
+class MyClass extends StatefulWidget {
   String id, pw;
   List classes;
-  myClass(this.id, this.pw, this.classes);
+  MyClass(this.id, this.pw, this.classes);
   @override
-  _myClassState createState() => _myClassState(this.id, this.pw, this.classes);
+  _MyClassState createState() => _MyClassState(this.id, this.pw, this.classes);
 }
 
-class _myClassState extends State<myClass> {
+class _MyClassState extends State<MyClass> {
   String id, pw;
   List classes;
-  _myClassState(this.id, this.pw, this.classes);
+  _MyClassState(this.id, this.pw, this.classes);
 
   @override
 
