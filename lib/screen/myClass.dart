@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:deanora/object/lecture.dart';
 import 'package:deanora/object/user.dart';
+import 'package:deanora/screen/myAssignment.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -50,9 +51,13 @@ class _MyClassState extends State<MyClass> {
                 Container(child: Text("내 강의실")),
                 Column(
                     children: classes
-                        .map((e) => InkWell(
+                        .map((e) => new InkWell(
                               onTap: () {
                                 print('taped ${e.className}');
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => MyAssignment(e)));
                               },
                               child: Container(
                                 margin:

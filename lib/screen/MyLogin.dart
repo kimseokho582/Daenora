@@ -3,8 +3,7 @@ import 'package:deanora/crawl/crawl.dart';
 import 'package:deanora/crawl/customException.dart';
 import 'package:deanora/screen/myClass.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:http/http.dart' as http;
+import 'package:page_transition/page_transition.dart';
 
 class MyLogin extends StatefulWidget {
   @override
@@ -14,6 +13,8 @@ class MyLogin extends StatefulWidget {
 class _MyLoginState extends State<MyLogin> {
   final id = TextEditingController();
   final pw = TextEditingController();
+  // dynamic id = "201663025";
+  // dynamic pw ="Ghldnjs369!"
   //201663025
   //Ghldnjs369!
 
@@ -41,11 +42,17 @@ class _MyLoginState extends State<MyLogin> {
 
                         var crawl = new Crawl();
                         try {
-                          var obj = await crawl.crawlClasses(id.text, pw.text);
+                          //var obj = await crawl.crawlClasses(id.text, pw.text);
+                          var obj = await crawl.crawlClasses(
+                              "201663025", "Ghldnjs369!");
+
                           Navigator.push(
                               context,
-                              MaterialPageRoute(
-                                  builder: (context) => MyClass(obj)));
+                              PageTransition(
+                                duration: Duration(milliseconds: 150),
+                                type: PageTransitionType.bottomToTop,
+                                child: MyClass(obj),
+                              ));
                         } on CustomException catch (e) {
                           print('${e.code} ${e.message}');
                         }

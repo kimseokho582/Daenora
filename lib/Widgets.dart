@@ -29,7 +29,6 @@ Container loginTextF(_controller, hintext, icon, obscure) {
         width: 250,
         child: TextField(
             controller: _controller,
-            obscureText: obscure,
             decoration: InputDecoration(
                 hintText: hintext,
                 prefixIcon: Container(
