@@ -9,20 +9,6 @@ void main() {
   runApp(MyApp());
 }
 
-void myTimer(BuildContext context) {
-  Timer timer = new Timer(new Duration(seconds: 2), () {
-    Navigator.push(
-      context,
-      PageTransition(
-        duration: Duration(milliseconds: 800),
-        type: PageTransitionType.fade,
-        alignment: Alignment.topCenter,
-        child: MyLogin(),
-      ),
-    );
-  });
-}
-
 class MyApp extends StatefulWidget {
   _MyAppState createState() => _MyAppState();
 }
@@ -36,7 +22,7 @@ class _MyAppState extends State<MyApp> {
             brightness: Brightness.light,
             primaryColor: Colors.black,
             accentColor: Colors.white),
-        // debugShowCheckedModeBanner: false,
+        debugShowCheckedModeBanner: false,
         home: Cover());
   }
 }
@@ -49,11 +35,9 @@ class Cover extends StatefulWidget {
 }
 
 class _CoverState extends State<Cover> {
-  @override
   Widget build(BuildContext context) {
     var windowWidth = MediaQuery.of(context).size.width;
-    var windowHeight = MediaQuery.of(context).size.height;
-    myTimer(context);
+    //var windowHeight = MediaQuery.of(context).size.height;
     return Stack(
       children: <Widget>[
         Positioned(child: cover_Background()),
@@ -68,5 +52,28 @@ class _CoverState extends State<Cover> {
         ),
       ],
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    Timer(Duration(seconds: 2), () {
+      print('pop');
+      Navigator.pop(
+        context,
+      );
+    });
+    Timer(Duration(seconds: 2), () {
+      print('hii');
+      Navigator.push(
+        context,
+        PageTransition(
+          duration: Duration(milliseconds: 800),
+          type: PageTransitionType.fade,
+          alignment: Alignment.topCenter,
+          child: MyLogin(),
+        ),
+      );
+    });
   }
 }

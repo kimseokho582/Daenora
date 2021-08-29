@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'package:deanora/detail/assignment.dart';
-import 'package:deanora/detail/lecture.dart';
+import 'package:deanora/object/assignment.dart';
+import 'package:deanora/object/lecture.dart';
 import 'package:http/http.dart' as http;
 
 class Post {
