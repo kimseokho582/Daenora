@@ -1,5 +1,6 @@
 import 'package:deanora/object/lecture.dart';
 import 'package:deanora/object/user.dart';
+import 'package:deanora/screen/myAssignment.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
 
@@ -32,9 +33,9 @@ Container loginTextF(_controller, hintext, icon, obscure) {
         child: Stack(
           children: [
             TextField(
-              onChanged: (text){
-                print(text);
-              },
+                onChanged: (text) {
+                  print(text);
+                },
                 controller: _controller,
                 decoration: InputDecoration(
                     enabledBorder: UnderlineInputBorder(
@@ -47,7 +48,7 @@ Container loginTextF(_controller, hintext, icon, obscure) {
                     //   borderSide: BorderSide(color: Colors.red),
                     // ),
                     hintText: hintext,
-                     hintStyle: TextStyle( color: Colors.grey.withOpacity(0.5)),
+                    hintStyle: TextStyle(color: Colors.grey.withOpacity(0.5)),
                     prefixIcon: Container(
                       margin: const EdgeInsets.all(0),
                       padding: const EdgeInsets.only(bottom: 8),
@@ -56,12 +57,11 @@ Container loginTextF(_controller, hintext, icon, obscure) {
             Positioned(
               bottom: 0,
               child: Container(
-                 height: 1,
-                 width: 250,
+                height: 1,
+                width: 250,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: <Color>[Color(0xff8C65EC), Color(0xff6D6CEB)]
-                  ),
+                      colors: <Color>[Color(0xff8C65EC), Color(0xff6D6CEB)]),
                 ),
               ),
             )
@@ -102,4 +102,39 @@ List user(props) {
   user.add(User(props["user"]["name"], props["user"]["studentId"]));
   //print(user[0].name);
   return user;
+}
+
+Widget divided(BuildContext context, props) {
+  return GestureDetector(
+    onTap: () {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => MyAssignment(props)));
+    },
+    child: Container(
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(width: 2, color: Colors.grey.withOpacity(0.15)),
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.2),
+            spreadRadius: 1,
+            blurRadius: 1,
+            offset: Offset(1, 3),
+          )
+        ],
+      ),
+      child: Container(
+        margin: const EdgeInsets.all(25),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text('${props.className}'),
+          SizedBox(
+            height: 5,
+          ),
+          Text(' ${props.profName} 교수님')
+        ]),
+      ),
+    ),
+  );
 }

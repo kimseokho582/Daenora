@@ -26,15 +26,18 @@ class _MyLoginState extends State<MyLogin> {
         home: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
           child: Scaffold(
-            resizeToAvoidBottomInset : false,
+            resizeToAvoidBottomInset: false,
             backgroundColor: Colors.white,
             body: Center(
               child: Column(
                 children: [
-                  SizedBox(height:110),
+                  SizedBox(height: 110),
                   putimg(105.0, 105.0, "loginLogo"),
-                  SizedBox(height:60),
+                  SizedBox(height: 60),
                   loginTextF(id, "학번", "loginIdIcon", false),
+                  SizedBox(
+                    height: 10,
+                  ),
                   loginTextF(pw, "비밀번호", "loginPwIcon", true),
                   SizedBox(
                     height: 80.0,
@@ -46,7 +49,7 @@ class _MyLoginState extends State<MyLogin> {
 
                         var crawl = new Crawl();
                         try {
-                         // var obj = await crawl.crawlClasses(id.text, pw.text);
+                          // var obj = await crawl.crawlClasses(id.text, pw.text);
                           var obj = await crawl.crawlClasses(
                               "201663025", "Ghldnjs369!");
 

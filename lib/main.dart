@@ -42,13 +42,13 @@ class _CoverState extends State<Cover> {
       children: <Widget>[
         Positioned(child: cover_Background()),
         Align(
-          alignment: Alignment(0.0, -0.26),
-          child: putimg(windowWidth * 0.44, windowWidth * 0.44, "coverLogo"),
+          alignment: Alignment(0.0, -0.2),
+          child: putimg(windowWidth * 0.3, windowWidth * 0.3, "coverLogo"),
         ),
         Align(
           alignment: Alignment(0.0, 0.2),
           child: putimg(
-              windowWidth * 0.4, windowWidth * 0.4 * 0.416, "coverTitle"),
+              windowWidth * 0.3, windowWidth * 0.3 * 0.416, "coverTitle"),
         ),
       ],
     );
@@ -57,13 +57,13 @@ class _CoverState extends State<Cover> {
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 2), () {
+    Timer(Duration(seconds: 1), () {
       print('pop');
       Navigator.pop(
         context,
       );
     });
-    Timer(Duration(seconds: 2), () {
+    Timer(Duration(seconds: 1), () {
       print('hii');
       Navigator.push(
         context,
