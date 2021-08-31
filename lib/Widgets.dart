@@ -1,3 +1,5 @@
+import 'package:deanora/object/lecture.dart';
+import 'package:deanora/object/user.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
 
@@ -27,15 +29,44 @@ Container loginTextF(_controller, hintext, icon, obscure) {
     child: SizedBox(
         height: 30,
         width: 250,
-        child: TextField(
-            controller: _controller,
-            decoration: InputDecoration(
-                hintText: hintext,
-                prefixIcon: Container(
-                  margin: const EdgeInsets.all(0),
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: putimg(10.0, 10.0, icon),
-                )))),
+        child: Stack(
+          children: [
+            TextField(
+              onChanged: (text){
+                print(text);
+              },
+                controller: _controller,
+                decoration: InputDecoration(
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white),
+                    ),
+                    // border: UnderlineInputBorder(
+                    //   borderSide: BorderSide(color: Colors.red),
+                    // ),
+                    hintText: hintext,
+                     hintStyle: TextStyle( color: Colors.grey.withOpacity(0.5)),
+                    prefixIcon: Container(
+                      margin: const EdgeInsets.all(0),
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: putimg(10.0, 10.0, icon),
+                    ))),
+            Positioned(
+              bottom: 0,
+              child: Container(
+                 height: 1,
+                 width: 250,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: <Color>[Color(0xff8C65EC), Color(0xff6D6CEB)]
+                  ),
+                ),
+              ),
+            )
+          ],
+        )),
   );
 }
 
@@ -52,4 +83,23 @@ BoxDecoration classContainerDeco() {
       )
     ],
   );
+}
+
+List classes(props) {
+  List classes = [];
+  props['classes']
+      .map((x) =>
+          {classes.add(Lecture(x["className"], x["profName"], x["classId"]))})
+      .toList();
+  classes.map((e) => {Text(e.className)}).toList();
+  //print(classes[0].classId);
+
+  return classes;
+}
+
+List user(props) {
+  List user = [];
+  user.add(User(props["user"]["name"], props["user"]["studentId"]));
+  //print(user[0].name);
+  return user;
 }

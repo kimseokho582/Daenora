@@ -11,8 +11,10 @@ class MyAssignment extends StatefulWidget {
 class _MyAssignmentState extends State<MyAssignment> {
   var props;
   _MyAssignmentState(this.props);
+  
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -39,7 +41,9 @@ class _MyAssignmentState extends State<MyAssignment> {
                       style: TextStyle(color: Colors.white))),
               Center(
                   child: Text("${props.profName}",
-                      style: TextStyle(color: Colors.white)))
+                      style: TextStyle(color: Colors.white))),
+            
+
             ]),
           ),
         ),
@@ -47,3 +51,5 @@ class _MyAssignmentState extends State<MyAssignment> {
     );
   }
 }
+
+

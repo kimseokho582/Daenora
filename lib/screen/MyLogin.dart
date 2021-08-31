@@ -2,6 +2,7 @@ import 'package:deanora/Widgets.dart';
 import 'package:deanora/crawl/crawl.dart';
 import 'package:deanora/crawl/customException.dart';
 import 'package:deanora/screen/myClass.dart';
+import 'package:deanora/screen/test.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 
@@ -25,11 +26,14 @@ class _MyLoginState extends State<MyLogin> {
         home: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
           child: Scaffold(
+            resizeToAvoidBottomInset : false,
             backgroundColor: Colors.white,
             body: Center(
               child: Column(
                 children: [
+                  SizedBox(height:110),
                   putimg(105.0, 105.0, "loginLogo"),
+                  SizedBox(height:60),
                   loginTextF(id, "학번", "loginIdIcon", false),
                   loginTextF(pw, "비밀번호", "loginPwIcon", true),
                   SizedBox(
@@ -42,7 +46,7 @@ class _MyLoginState extends State<MyLogin> {
 
                         var crawl = new Crawl();
                         try {
-                          //var obj = await crawl.crawlClasses(id.text, pw.text);
+                         // var obj = await crawl.crawlClasses(id.text, pw.text);
                           var obj = await crawl.crawlClasses(
                               "201663025", "Ghldnjs369!");
 
@@ -52,6 +56,7 @@ class _MyLoginState extends State<MyLogin> {
                                 duration: Duration(milliseconds: 150),
                                 type: PageTransitionType.bottomToTop,
                                 child: MyClass(obj),
+                                //child: Test(obj),
                               ));
                         } on CustomException catch (e) {
                           print('${e.code} ${e.message}');
