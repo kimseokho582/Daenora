@@ -58,14 +58,8 @@ class _CoverState extends State<Cover> {
   void initState() {
     super.initState();
     Timer(Duration(seconds: 1), () {
-      print('pop');
-      Navigator.pop(
-        context,
-      );
-    });
-    Timer(Duration(seconds: 1), () {
       print('hii');
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
         PageTransition(
           duration: Duration(milliseconds: 800),

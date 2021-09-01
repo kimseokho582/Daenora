@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'package:deanora/Widgets.dart';
+import 'package:deanora/classdivid.dart';
+import 'package:deanora/crawl/crawl.dart';
 import 'package:deanora/object/lecture.dart';
 import 'package:deanora/object/user.dart';
 import 'package:deanora/screen/myAssignment.dart';
@@ -7,15 +9,16 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class MyClass extends StatefulWidget {
-  var props;
+  var id, pw, classProps, userProps;
 
-  MyClass(this.props);
+  MyClass(this.id, this.pw, this.classProps, this.userProps);
   @override
-  _MyClassState createState() => _MyClassState(this.props);
+  _MyClassState createState() =>
+      _MyClassState(this.id, this.pw, this.classProps, this.userProps);
 }
 
 class _MyClassState extends State<MyClass> {
-  var props;
+  var id, pw, classProps, userProps;
   List names = [];
   List filteredNames = [];
   List fname = [];
@@ -23,12 +26,11 @@ class _MyClassState extends State<MyClass> {
   Icon searchIcon = new Icon(Icons.search);
   Widget bar = new Text("");
 
-  _MyClassState(this.props);
-
+  _MyClassState(this.id, this.pw, this.classProps, this.userProps);
   @override
   void initState() {
     super.initState();
-    this._getNames(props);
+    this._getNames(classProps);
   }
 
   PreferredSizeWidget myAppbar(BuildContext context) {
@@ -78,7 +80,6 @@ class _MyClassState extends State<MyClass> {
                                 setState(() {
                                   filteredNames = tmp;
                                 });
-                                print(filteredNames);
                               } else {
                                 setState(() {
                                   filteredNames = fname;
@@ -123,6 +124,7 @@ class _MyClassState extends State<MyClass> {
     return GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: MaterialApp(
+          debugShowCheckedModeBanner: false,
           home: Scaffold(
               appBar: myAppbar(context),
               resizeToAvoidBottomInset: false,
@@ -144,7 +146,7 @@ class _MyClassState extends State<MyClass> {
                           Text.rich(TextSpan(children: <TextSpan>[
                             TextSpan(text: "  안녕하세요, "),
                             TextSpan(
-                              text: "${user(props)[0].name}",
+                              text: "${user(userProps)[0].name}",
                               style: TextStyle(
                                   fontWeight: FontWeight.w900, fontSize: 18),
                             ),
@@ -166,7 +168,8 @@ class _MyClassState extends State<MyClass> {
                         child: ListView.builder(
                           itemCount: filteredNames.length,
                           itemBuilder: (BuildContext context, int index) {
-                            return divided(context, filteredNames[index]);
+                            return ClassDivid(
+                                id, pw, filteredNames[index], userProps);
                           },
                         ),
                       ),
@@ -177,24 +180,14 @@ class _MyClassState extends State<MyClass> {
         ));
   }
 
-  void _getNames(props) {
-    // print(classes(props)[0].className);
-    // print(classes(props).length);
-    for (int i = 0; i < classes(props).length; i++) {
-      names.add(classes(props)[i]);
-    }
-    for (int i = 0; i < classes(props).length; i++) {
-      names.add(classes(props)[i]);
-    }
-    for (int i = 0; i < classes(props).length; i++) {
-      names.add(classes(props)[i]);
+  void _getNames(classProps) {
+    for (int i = 0; i < classes(classProps).length; i++) {
+      names.add(classes(classProps)[i]);
     }
 
     setState(() {
       filteredNames = names;
       fname = names;
     });
-    //print(filteredNames[0].className);
-    print(filteredNames.length);
   }
 }

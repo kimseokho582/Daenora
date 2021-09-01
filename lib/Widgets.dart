@@ -1,3 +1,5 @@
+import 'package:deanora/crawl/crawl.dart';
+import 'package:deanora/object/assignment.dart';
 import 'package:deanora/object/lecture.dart';
 import 'package:deanora/object/user.dart';
 import 'package:deanora/screen/myAssignment.dart';
@@ -87,11 +89,11 @@ BoxDecoration classContainerDeco() {
 
 List classes(props) {
   List classes = [];
-  props['classes']
+  props
       .map((x) =>
           {classes.add(Lecture(x["className"], x["profName"], x["classId"]))})
       .toList();
-  classes.map((e) => {Text(e.className)}).toList();
+  //classes.map((e) => {Text(e.className)}).toList();
   //print(classes[0].classId);
 
   return classes;
@@ -99,16 +101,34 @@ List classes(props) {
 
 List user(props) {
   List user = [];
-  user.add(User(props["user"]["name"], props["user"]["studentId"]));
+  user.add(User(props["name"], props["studentId"]));
   //print(user[0].name);
   return user;
 }
 
-Widget divided(BuildContext context, props) {
+List assignments(props) {
+  List assignment = [];
+  props
+      .map((x) => {
+            assignment.add(Assignment(
+                x["title"], x["state"], x["startDate"], x["endDate"]))
+          })
+      .toList();
+  return assignment;
+}
+
+Widget classDivided(BuildContext context, id, pw, classProps, userProps) {
+  print("클래스페이지 켜짐");
+
   return GestureDetector(
-    onTap: () {
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => MyAssignment(props)));
+    onTap: () async {
+      var crawl = new Crawl();
+      var assignment = await crawl.crawlAssignments(id, pw, classProps.classId);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  MyAssignment(classProps, userProps, assignment)));
     },
     child: Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
@@ -127,13 +147,17 @@ Widget divided(BuildContext context, props) {
       ),
       child: Container(
         margin: const EdgeInsets.all(25),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text('${props.className}'),
-          SizedBox(
-            height: 5,
-          ),
-          Text(' ${props.profName} 교수님')
-        ]),
+        child: Row(
+          children: [
+            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text('${classProps.className}'),
+              SizedBox(
+                height: 5,
+              ),
+              Text(' ${classProps.profName} 교수님')
+            ]),
+          ],
+        ),
       ),
     ),
   );

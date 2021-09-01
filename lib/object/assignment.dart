@@ -1,10 +1,8 @@
 class Assignment {
-  String index;
-  String assignmentName;
+  String title;
+  String state;
   String startDate;
   String endDate;
-  String submission;
 
-  Assignment(this.index,this.assignmentName,this.startDate,this.endDate,this.submission);
-
+  Assignment(this.title, this.state, this.startDate, this.endDate);
 }
