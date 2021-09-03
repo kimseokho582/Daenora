@@ -19,6 +19,7 @@ class MyClass extends StatefulWidget {
 
 class _MyClassState extends State<MyClass> {
   var id, pw, classProps, userProps;
+  var assignment;
   List names = [];
   List filteredNames = [];
   List fname = [];
@@ -31,6 +32,7 @@ class _MyClassState extends State<MyClass> {
   void initState() {
     super.initState();
     this._getNames(classProps);
+
   }
 
   PreferredSizeWidget myAppbar(BuildContext context) {
@@ -124,7 +126,7 @@ class _MyClassState extends State<MyClass> {
     return GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: MaterialApp(
-          debugShowCheckedModeBanner: false,
+          //debugShowCheckedModeBanner: false,
           home: Scaffold(
               appBar: myAppbar(context),
               resizeToAvoidBottomInset: false,
@@ -137,11 +139,12 @@ class _MyClassState extends State<MyClass> {
                       height: 30,
                       margin: const EdgeInsets.only(left: 10, bottom: 20),
                       child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Icon(
                             Icons.account_circle,
                             color: Colors.blueGrey,
+                            size: 35,
                           ),
                           Text.rich(TextSpan(children: <TextSpan>[
                             TextSpan(text: "  안녕하세요, "),
@@ -155,21 +158,24 @@ class _MyClassState extends State<MyClass> {
                         ],
                       ),
                     ),
+                     SizedBox(
+                      height: 10,
+                    ),
                     Container(
                         child: Text("내 강의실 List",
                             style: TextStyle(
                                 fontWeight: FontWeight.w900, fontSize: 18))),
                     SizedBox(
-                      height: 30,
+                      height: 40,
                     ),
                     Center(
                       child: Container(
-                        height: windowHeight - 170,
+                        height: windowHeight - 190,
                         child: ListView.builder(
                           itemCount: filteredNames.length,
                           itemBuilder: (BuildContext context, int index) {
                             return ClassDivid(
-                                id, pw, filteredNames[index], userProps);
+                               id, pw, filteredNames[index], userProps);
                           },
                         ),
                       ),
@@ -184,10 +190,15 @@ class _MyClassState extends State<MyClass> {
     for (int i = 0; i < classes(classProps).length; i++) {
       names.add(classes(classProps)[i]);
     }
-
+    // for (int i = 0; i < classes(classProps).length; i++) {
+    //   names.add(classes(classProps)[i]);
+    // }    for (int i = 0; i < classes(classProps).length; i++) {
+    //   names.add(classes(classProps)[i]);
+    // }
     setState(() {
       filteredNames = names;
       fname = names;
     });
   }
 }
+

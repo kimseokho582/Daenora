@@ -42,11 +42,11 @@ class _CoverState extends State<Cover> {
       children: <Widget>[
         Positioned(child: cover_Background()),
         Align(
-          alignment: Alignment(0.0, -0.2),
+          alignment: Alignment(0.0, -0.18),
           child: putimg(windowWidth * 0.3, windowWidth * 0.3, "coverLogo"),
         ),
         Align(
-          alignment: Alignment(0.0, 0.2),
+          alignment: Alignment(0.0, 0.16),
           child: putimg(
               windowWidth * 0.3, windowWidth * 0.3 * 0.416, "coverTitle"),
         ),

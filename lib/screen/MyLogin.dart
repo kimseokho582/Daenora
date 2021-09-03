@@ -77,17 +77,21 @@ class _MyLoginState extends State<MyLogin> {
                                 "201663025", "Ghldnjs369!");
                             var user = await crawl.crawlUser(
                                 "201663025", "Ghldnjs369!");
-                            print(user["name"]);
+                            // var classes = await crawl.crawlClasses(
+                            //     "201663035", "Wjdtls753!");
+                            // var user = await crawl.crawlUser(
+                            //     "201663035", "Wjdtls753!");
+                            //print(user["name"]);
 
                             Navigator.push(
                                 context,
                                 PageTransition(
-                                  duration: Duration(milliseconds: 150),
-                                  type: PageTransitionType.bottomToTop,
+                                  duration: Duration(milliseconds: 250),
+                                  type: PageTransitionType.fade,
                                   child:
                                       //MyClass(id.text, pw.text, classes, user),
-                                      MyClass("201663025", "Ghldnjs369!",
-                                          classes, user),
+                                      MyClass("201663025", "Ghldnjs369!",classes, user),
+                                      //MyClass("201663035", "Wjdtls753!",classes, user),
                                   //child: Test(obj),
                                 ));
                           } on CustomException catch (e) {
