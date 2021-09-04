@@ -39,6 +39,7 @@ Container loginTextF(_controller, hintext, icon, obscure) {
                   print(text);
                 },
                 controller: _controller,
+                obscureText: obscure,
                 decoration: InputDecoration(
                     enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: Colors.white),
@@ -117,48 +118,48 @@ List assignments(props) {
   return assignment;
 }
 
-Widget classDivided(BuildContext context, id, pw, classProps, userProps) {
-  print("클래스페이지 켜짐");
+// Widget classDivided(BuildContext context, id, pw, classProps, userProps) {
+//   print("클래스페이지 켜짐");
 
-  return GestureDetector(
-    onTap: () async {
-      var crawl = new Crawl();
-      var assignment = await crawl.crawlAssignments(id, pw, classProps.classId);
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  MyAssignment(classProps, userProps, assignment)));
-    },
-    child: Container(
-      margin: const EdgeInsets.symmetric(vertical: 10),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(width: 2, color: Colors.grey.withOpacity(0.15)),
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
-            spreadRadius: 1,
-            blurRadius: 1,
-            offset: Offset(1, 3),
-          )
-        ],
-      ),
-      child: Container(
-        margin: const EdgeInsets.all(25),
-        child: Row(
-          children: [
-            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text('${classProps.className}'),
-              SizedBox(
-                height: 5,
-              ),
-              Text(' ${classProps.profName} 교수님')
-            ]),
-          ],
-        ),
-      ),
-    ),
-  );
-}
+//   return GestureDetector(
+//     onTap: () async {
+//       var crawl = new Crawl();
+//       var assignment = await crawl.crawlAssignments(id, pw, classProps.classId);
+//       Navigator.push(
+//           context,
+//           MaterialPageRoute(
+//               builder: (context) =>
+//                   MyAssignment(classProps, userProps, assignment)));
+//     },
+//     child: Container(
+//       margin: const EdgeInsets.symmetric(vertical: 10),
+//       decoration: BoxDecoration(
+//         color: Colors.white,
+//         border: Border.all(width: 2, color: Colors.grey.withOpacity(0.15)),
+//         borderRadius: BorderRadius.circular(10),
+//         boxShadow: [
+//           BoxShadow(
+//             color: Colors.grey.withOpacity(0.2),
+//             spreadRadius: 1,
+//             blurRadius: 1,
+//             offset: Offset(1, 3),
+//           )
+//         ],
+//       ),
+//       child: Container(
+//         margin: const EdgeInsets.all(25),
+//         child: Row(
+//           children: [
+//             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+//               Text('${classProps.className}'),
+//               SizedBox(
+//                 height: 5,
+//               ),
+//               Text(' ${classProps.profName} 교수님')
+//             ]),
+//           ],
+//         ),
+//       ),
+//     ),
+//   );
+// }

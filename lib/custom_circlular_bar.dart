@@ -14,33 +14,48 @@ class CustomCircularBar extends StatefulWidget {
   final int duration;
   final double fontSize;
   final double size;
-  const CustomCircularBar({ required this.vsync, this.upperBound = 1.0, this.duration = 300, this.size = 50, this.fontSize = 12});
+  final Color startColor, endColor;
+  const CustomCircularBar({
+    required this.vsync,
+    this.upperBound = 0.0001,
+    this.duration = 400,
+    this.size = 50,
+    this.fontSize = 12,
+    this.startColor = Colors.red,
+    this.endColor = const Color.fromRGBO(124, 77, 241, 1)
+  });
 
   @override
   State<CustomCircularBar> createState() => 
-    _CustomCircularBar(this.vsync, this.upperBound, this.duration, this.size, this.fontSize);
+    _CustomCircularBar(
+      this.vsync,
+      this.upperBound == 0 ? 0.001 : this.upperBound,
+      this.duration == 0 ? 1 : this.duration,
+      this.size, this.fontSize,
+      this.startColor, this.endColor
+    );
 }
 
 class _CustomCircularBar extends State<CustomCircularBar> {
   late AnimationController _controller;
-  final ColorTween progressColor = ColorTween(begin: Colors.red, end: new Color.fromRGBO(124, 77, 241, 1));
+  late ColorTween progressColor;
   final double fontSize;
   final double size;
   
-  _CustomCircularBar(TickerProvider vsync, double upperBound, int duration, this.size, this.fontSize) {
+  _CustomCircularBar(TickerProvider vsync, double upperBound, int duration, this.size, this.fontSize, Color startColor, Color endColor) {
     _controller = AnimationController(
       vsync: vsync,
-      duration: const Duration(milliseconds: 300),
+      duration: Duration(milliseconds: duration),
       upperBound: upperBound
     )..addListener(() {
       setState(() {});
     });
     _controller.forward();
+    this.progressColor = ColorTween(begin: startColor, end: endColor);
   }
 
   @override
   Widget build(BuildContext context) {
-    print(this.fontSize);
     return Stack(
         children: [
           SizedBox(

@@ -3,65 +3,52 @@ import 'package:deanora/crawl/crawl.dart';
 import 'package:deanora/custom_circlular_bar.dart';
 import 'package:deanora/screen/myAssignment.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 
 class ClassDivid extends StatefulWidget {
-  var id, pw, classProps, userProps;
+  var id, pw, classProps, doneCnt, userProps;
 
-  ClassDivid(this.id, this.pw, this.classProps, this.userProps);
+  ClassDivid(this.id, this.pw, this.classProps, this.doneCnt, this.userProps);
 
   @override
-  _ClassDividState createState() =>
-      _ClassDividState(this.id, this.pw, this.classProps, this.userProps);
+  _ClassDividState createState() => _ClassDividState(
+      this.id, this.pw, this.classProps, this.doneCnt, this.userProps);
 }
 
 class _ClassDividState extends State<ClassDivid> with TickerProviderStateMixin {
-  var id, pw, classProps, userProps;
+  var id, pw, classProps, doneCnt, userProps;
   var assignmentProps;
-
-  _ClassDividState(this.id, this.pw, this.classProps, this.userProps);
+  double progressCnt = 0;
+  List<dynamic> assignment = [];
+  _ClassDividState(
+      this.id, this.pw, this.classProps, this.doneCnt, this.userProps);
 
   @override
   void initState() {
-    super.initState();
     requestAssignment(id, pw, classProps.classId).whenComplete(() {
       setState(() {});
     });
+    super.initState();
   }
 
-
-  List assignment=[];
   String nClassName = "";
-  double progress=0.1;
-  int progressCnt=0;
   Widget build(BuildContext context) {
     if (classProps.className.length > 16) {
       nClassName = classProps.className.substring(0, 16) + "...";
     } else {
       nClassName = classProps.className;
     }
-    if(!(assignmentProps==null)){
-    assignment = assignments(assignmentProps);
-    }
-    for(int i=0;i<assignment.length;i++){
-      if(assignment[i].state!="진행중"){ //진행중, 지남, 제출 인가..? 그거 구분하는게 있나..?
-        progressCnt++;
-      }
-    }
-    if(assignment.length==0 ||progressCnt==0){
-      progress=0.01;
-    }else{
-    progress = progressCnt/assignment.length;
-    }
+
     return GestureDetector(
-      onTap: () async {
+      onTap: () {
         Navigator.push(
             context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    MyAssignment(classProps, userProps, assignmentProps)));
+            PageTransition(
+                type: PageTransitionType.leftToRightWithFade,
+                child: MyAssignment(classProps, assignmentProps, doneCnt)));
       },
       child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 10),
+        margin: const EdgeInsets.symmetric(vertical: 7),
         decoration: BoxDecoration(
           color: Colors.white,
           border: Border.all(width: 2, color: Colors.grey.withOpacity(0.15)),
@@ -69,8 +56,8 @@ class _ClassDividState extends State<ClassDivid> with TickerProviderStateMixin {
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.2),
-              spreadRadius: 1,
-              blurRadius: 1,
+              spreadRadius: 2.5,
+              blurRadius: 1.5,
               offset: Offset(1, 3),
             )
           ],
@@ -100,7 +87,7 @@ class _ClassDividState extends State<ClassDivid> with TickerProviderStateMixin {
                   ]),
               Container(
                   alignment: Alignment.centerRight,
-                  child: CustomCircularBar(vsync: this,upperBound:progress )),
+                  child: CustomCircularBar(vsync: this, upperBound: doneCnt)),
             ],
           ),
         ),
@@ -111,5 +98,8 @@ class _ClassDividState extends State<ClassDivid> with TickerProviderStateMixin {
   requestAssignment(id, pw, cId) async {
     var crawl = new Crawl();
     assignmentProps = await crawl.crawlAssignments(id, pw, cId);
+    if (!(assignmentProps == null)) {
+      assignment = assignments(assignmentProps);
+    }
   }
 }
