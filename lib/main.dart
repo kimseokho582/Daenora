@@ -1,4 +1,4 @@
-import 'package:deanora/Widgets.dart';
+import 'package:deanora/Widgets/Widgets.dart';
 import 'package:deanora/screen/MyLogin.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';

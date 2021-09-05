@@ -1,10 +1,12 @@
 import 'dart:convert';
-import 'package:deanora/Widgets.dart';
-import 'package:deanora/classdivid.dart';
+import 'package:deanora/Widgets/Widgets.dart';
+import 'package:deanora/Widgets/classdivid.dart';
 import 'package:deanora/crawl/crawl.dart';
 import 'package:deanora/object/lecture.dart';
 import 'package:deanora/object/user.dart';
+import 'package:deanora/screen/MyLogin.dart';
 import 'package:deanora/screen/myAssignment.dart';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -119,124 +121,95 @@ class _MyClassState extends State<MyClass> {
     );
   }
 
-  Future<bool> _onWillPop() async {
-    print("끌꺼임?");
-    return (await showDialog(
-          context: context,
-          builder: (context) => new AlertDialog(
-            title: Text("Do you want to exit the app?"),
-            actions: <Widget>[
-              FlatButton(
-                child: Text("NO"),
-                onPressed: () => Navigator.pop(context, false),
-              ),
-              FlatButton(
-                child: Text("yes"),
-                onPressed: () => Navigator.pop(context, true),
-              )
-            ],
-          ),
-        )) ??
-        false;
-  }
-
-  Future<bool> _test() async {
-    // Navigator.of(context).pop(true);
-    return false;
-  }
-
   Widget build(BuildContext context) {
     var windowHeight = MediaQuery.of(context).size.height;
-    return WillPopScope(
-      onWillPop: _test,
-      child: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
-          child: MaterialApp(
-            debugShowCheckedModeBanner: false,
-            home: Scaffold(
-                appBar: myAppbar(context),
-                resizeToAvoidBottomInset: false,
-                body: Container(
-                  margin: const EdgeInsets.only(top: 3, left: 25, right: 25),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        height: 30,
-                        margin: const EdgeInsets.only(left: 10, bottom: 20),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.account_circle,
-                              color: Colors.blueGrey,
-                              size: 35,
-                            ),
-                            Text.rich(TextSpan(children: <TextSpan>[
-                              TextSpan(text: "  안녕하세요, "),
-                              TextSpan(
-                                text: "${user(userProps)[0].name}",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w900, fontSize: 18),
-                              ),
-                              TextSpan(text: "님")
-                            ])),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                          child: Text("내 강의실 List",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w900, fontSize: 18))),
-                      SizedBox(
-                        height: 40,
-                      ),
-                      Center(
-                        child: Container(
-                          height: windowHeight - 190,
-                          //height: 30,
-                          child: FutureBuilder(
-                            future: requestAssignment(id, pw, filteredNames),
-                            builder: (context, AsyncSnapshot<List> snap) {
-                              List? doneCntList = [];
-                              doneCntList = snap.data;
-                              if (snap.hasData) {
-                                return ListView.builder(
-                                  itemCount: filteredNames.length,
-                                  itemBuilder: (context, index) {
-                                    if (filteredNames != [] &&
-                                        filteredNames.length ==
-                                            doneCntList?.length) {
-                                      return ClassDivid(
-                                          id,
-                                          pw,
-                                          filteredNames[index] ?? "",
-                                          doneCntList![index] ?? "",
-                                          userProps);
-                                    } else {
-                                      return Text("");
-                                    }
-                                  },
-                                );
-                              } else if (snap.hasError) {
-                                return Text("Error");
-                              } else {
-                                return Container(
-                                    margin: const EdgeInsets.only(bottom: 460),
-                                    child: CircularProgressIndicator());
-                              }
-                            },
+    return GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          home: Scaffold(
+              appBar: myAppbar(context),
+              resizeToAvoidBottomInset: false,
+              body: Container(
+                margin: const EdgeInsets.only(top: 3, left: 25, right: 25),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      height: 30,
+                      margin: const EdgeInsets.only(left: 10, bottom: 20),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.account_circle,
+                            color: Colors.blueGrey,
+                            size: 35,
                           ),
+                          Text.rich(TextSpan(children: <TextSpan>[
+                            TextSpan(text: "  안녕하세요, "),
+                            TextSpan(
+                              text: "${user(userProps)[0].name}",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w900, fontSize: 18),
+                            ),
+                            TextSpan(text: "님")
+                          ])),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                        child: Text("내 강의실 List",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w900, fontSize: 18))),
+                    SizedBox(
+                      height: 40,
+                    ),
+                    Center(
+                      child: Container(
+                        height: windowHeight - 190,
+                        //height: 30,
+                        child: FutureBuilder(
+                          future: requestAssignment(id, pw, filteredNames),
+                          builder: (context, AsyncSnapshot<List> snap) {
+                            List? doneCntList = [];
+                            doneCntList = snap.data;
+                            if (snap.hasData) {
+                              return ListView.builder(
+                                itemCount: filteredNames.length,
+                                itemBuilder: (context, index) {
+                                  if (filteredNames != [] &&
+                                      filteredNames.length ==
+                                          doneCntList?.length) {
+                                    return ClassDivid(
+                                        id,
+                                        pw,
+                                        filteredNames[index] ?? "",
+                                        doneCntList![index] ?? "",
+                                        userProps);
+                                  } else {
+                                    return Text("");
+                                  }
+                                },
+                              );
+                            } else if (snap.hasError) {
+                              return Text("Error");
+                            } else {
+                              return Container(
+                                  margin: const EdgeInsets.only(bottom: 460),
+                                  child: CircularProgressIndicator());
+                            }
+                          },
                         ),
                       ),
-                    ],
-                  ),
-                )),
-          )),
-    );
+                    ),
+                  ],
+                ),
+              )),
+        ));
   }
 
   void _getNames(classProps) {
@@ -261,7 +234,7 @@ class _MyClassState extends State<MyClass> {
           assignment = assignments(assignmentProps);
           double tmp = 0.0;
           for (int i = 0; i < assignment.length; i++) {
-            if (assignment[i].state != "진행중") {
+            if (assignment[i].state == "") {
               tmp++;
             }
           }

@@ -1,6 +1,6 @@
-import 'package:deanora/Widgets.dart';
+import 'package:deanora/Widgets/Widgets.dart';
 import 'package:deanora/crawl/crawl.dart';
-import 'package:deanora/custom_circlular_bar.dart';
+import 'package:deanora/Widgets/custom_circlular_bar.dart';
 import 'package:deanora/screen/myAssignment.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
@@ -44,7 +44,8 @@ class _ClassDividState extends State<ClassDivid> with TickerProviderStateMixin {
         Navigator.push(
             context,
             PageTransition(
-                type: PageTransitionType.leftToRightWithFade,
+                type: PageTransitionType.bottomToTop,
+                duration: Duration(microseconds: 300),
                 child: MyAssignment(classProps, assignmentProps, doneCnt)));
       },
       child: Container(
@@ -56,9 +57,9 @@ class _ClassDividState extends State<ClassDivid> with TickerProviderStateMixin {
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.2),
-              spreadRadius: 2.5,
-              blurRadius: 1.5,
-              offset: Offset(1, 3),
+              spreadRadius: 1,
+              blurRadius: 4,
+              offset: Offset(3, 5),
             )
           ],
         ),

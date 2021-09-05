@@ -1,4 +1,5 @@
-import 'package:deanora/Widgets.dart';
+import 'package:deanora/Widgets/LoginDataCtrl.dart';
+import 'package:deanora/Widgets/Widgets.dart';
 import 'package:deanora/crawl/crawl.dart';
 import 'package:deanora/crawl/customException.dart';
 import 'package:deanora/screen/myClass.dart';
@@ -15,6 +16,7 @@ class _MyLoginState extends State<MyLogin> {
   final id = TextEditingController();
   final pw = TextEditingController();
   Widget loginfalse = new Text("");
+  var ctrl = new LoginDataCtrl();
   @override
   Widget build(BuildContext context) {
     var windowWidth = MediaQuery.of(context).size.width;
@@ -43,6 +45,10 @@ class _MyLoginState extends State<MyLogin> {
               ),
             ),
             loginfalse,
+            MaterialButton(
+                onPressed: () async =>
+                    {await ctrl.saveLoginData(id.text, pw.text)},
+                child: Text("hi")),
             SizedBox(
               height: 80.0,
             ),
@@ -87,7 +93,7 @@ class _MyLoginState extends State<MyLogin> {
                         loginfalse = Container(
                           margin: const EdgeInsets.only(left: 90, top: 5),
                           child: new Text(
-                            "로그인 실패",
+                            "입력한 정보가 일치하지 않습니다",
                             style: TextStyle(
                                 color: Colors.red, fontWeight: FontWeight.w800),
                           ),
