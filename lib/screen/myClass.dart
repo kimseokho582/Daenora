@@ -39,9 +39,9 @@ class _MyClassState extends State<MyClass> {
   PreferredSizeWidget myAppbar(BuildContext context) {
     var windowWidth = MediaQuery.of(context).size.width;
     return PreferredSize(
-      preferredSize: Size.fromHeight(30),
+      preferredSize: Size.fromHeight(40),
       child: new AppBar(
-        backgroundColor: Color(0xffFAFAFA),
+        backgroundColor: Colors.white,
         elevation: 0.0,
         title: bar,
         leading: new IconButton(
@@ -123,100 +123,106 @@ class _MyClassState extends State<MyClass> {
 
   Widget build(BuildContext context) {
     var windowHeight = MediaQuery.of(context).size.height;
-    return GestureDetector(
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
-        child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          home: Scaffold(
+        child: Container(
+          child: Scaffold(
               appBar: myAppbar(context),
               resizeToAvoidBottomInset: false,
               body: Container(
-                margin: const EdgeInsets.only(top: 3, left: 25, right: 25),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      height: 30,
-                      margin: const EdgeInsets.only(left: 10, bottom: 20),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.account_circle,
-                            color: Colors.blueGrey,
-                            size: 35,
-                          ),
-                          Text.rich(TextSpan(children: <TextSpan>[
-                            TextSpan(text: "  안녕하세요, "),
-                            TextSpan(
-                              text: "${user(userProps)[0].name}",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w900, fontSize: 18),
+                color: Colors.white,
+                child: Container(
+                margin: const EdgeInsets.only(top: 3, left: 20, right: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        height: 30,
+                        margin: const EdgeInsets.only(left: 10, bottom: 20),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.account_circle,
+                              color: Colors.blueGrey,
+                              size: 35,
                             ),
-                            TextSpan(text: "님")
-                          ])),
-                        ],
+                            Text.rich(TextSpan(children: <TextSpan>[
+                              TextSpan(text: "  안녕하세요, "),
+                              TextSpan(
+                                text: "${user(userProps)[0].name}",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w900, fontSize: 18),
+                              ),
+                              TextSpan(text: "님")
+                            ])),
+                          ],
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                        child: Text("내 강의실 List",
-                            style: TextStyle(
-                                fontWeight: FontWeight.w900, fontSize: 18))),
-                    SizedBox(
-                      height: 40,
-                    ),
-                    Center(
-                      child: Container(
-                        height: windowHeight - 190,
-                        //height: 30,
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(left:10),
+                          child: Text("내 강의실 List",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w900, fontSize: 18))),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      Center(
                         child: FutureBuilder(
                           future: requestAssignment(id, pw, filteredNames),
                           builder: (context, AsyncSnapshot<List> snap) {
                             List? doneCntList = [];
                             doneCntList = snap.data;
                             if (snap.hasData) {
-                              return ListView.builder(
-                                itemCount: filteredNames.length,
-                                itemBuilder: (context, index) {
-                                  if (filteredNames != [] &&
-                                      filteredNames.length ==
-                                          doneCntList?.length) {
-                                    return ClassDivid(
-                                        id,
-                                        pw,
-                                        filteredNames[index] ?? "",
-                                        doneCntList![index] ?? "",
-                                        userProps);
-                                  } else {
-                                    return Text("");
-                                  }
-                                },
+                              return SizedBox(
+                                   height: windowHeight - 190,
+                                child: ListView.builder(
+                                  itemCount: filteredNames.length,
+                                  itemBuilder: (context, index) {
+                                    if (filteredNames != [] &&
+                                        filteredNames.length ==
+                                            doneCntList?.length) {
+                                      return ClassDivid(
+                                          id,
+                                          pw,
+                                          filteredNames[index] ?? "",
+                                          doneCntList![index] ?? "",
+                                          userProps);
+                                    } else {
+                                      return Text("");
+                                    }
+                                  },
+                                ),
                               );
                             } else if (snap.hasError) {
                               return Text("Error");
                             } else {
-                              return Container(
-                                  margin: const EdgeInsets.only(bottom: 460),
-                                  child: CircularProgressIndicator());
+                              return SizedBox(
+                                width: 50,
+                                height: 50,
+                                child: CircularProgressIndicator());
                             }
                           },
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               )),
-        ));
+        ),
+      ),
+    );
   }
 
   void _getNames(classProps) {
     for (int i = 0; i < classes(classProps).length; i++) {
       names.add(classes(classProps)[i]);
     }
-
     setState(() {
       filteredNames = names;
       fname = names;

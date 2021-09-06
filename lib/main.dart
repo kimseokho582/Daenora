@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'dart:async';
 import 'dart:ui';
-
+import 'package:deanora/Widgets/LoginDataCtrl.dart';
 void main() {
   runApp(MyApp());
 }
@@ -14,6 +14,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -29,13 +30,13 @@ class _MyAppState extends State<MyApp> {
 
 class Cover extends StatefulWidget {
   const Cover({Key? key}) : super(key: key);
-
   @override
   _CoverState createState() => _CoverState();
 }
-
+   
 class _CoverState extends State<Cover> {
   Widget build(BuildContext context) {
+  
     var windowWidth = MediaQuery.of(context).size.width;
     //var windowHeight = MediaQuery.of(context).size.height;
     return Stack(
@@ -57,6 +58,7 @@ class _CoverState extends State<Cover> {
   @override
   void initState() {
     super.initState();
+    logintest();
     Timer(Duration(seconds: 1), () {
       print('hii');
       Navigator.pushReplacement(
@@ -69,5 +71,16 @@ class _CoverState extends State<Cover> {
         ),
       );
     });
+  }
+
+  logintest() async{
+     var ctrl = new LoginDataCtrl();
+     print(await ctrl.loadLoginData());
+    //  var assurance = await ctrl.loadLoginData();
+    //  var saved_id = assurance["user_id"];
+    //  var saved_pw = assurance["user_pw"];
+     print("뭔데");
+    //  print(assurance["user_id"]);
+    //  print(saved_pw);
   }
 }

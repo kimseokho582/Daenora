@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:deanora/Widgets/Widgets.dart';
 
 class MyAssignment extends StatefulWidget {
@@ -27,95 +28,99 @@ class _MyAssignmentState extends State<MyAssignment>
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                height: 240,
-                decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                        begin: Alignment.topRight,
-                        end: Alignment.bottomLeft,
-                        colors: <Color>[Color(0xff6D6CEB), Color(0xff7C4DF1)]),
-                    borderRadius: BorderRadius.only(
-                        bottomLeft: const Radius.circular(30.0),
-                        bottomRight: const Radius.circular(30.0))),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(left: 22, top: 10),
-                      child: GestureDetector(
-                          onTap: () => {
-                                Navigator.pop(context),
-                              },
-                          child: Icon(
-                            Icons.arrow_back,
-                            color: Colors.white,
-                            size: 20,
-                          )),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Center(
-                        child: Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 100),
-                      child: Text("${classProps.className}",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 23,
-                              fontWeight: FontWeight.w700),
-                          textAlign: TextAlign.center),
-                    )),
-                    SizedBox(
-                      height: 25,
-                    ),
-                    Center(
-                        child: Text("${classProps.profName} 교수님",
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 18))),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        doneNmiss(Color(0xffB2C3FF), "done  ", doneCnt),
-                        SizedBox(
-                          width: 23,
+          child: Container(
+            color:Colors.white,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  height: 245,
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                          begin: Alignment.topRight,
+                          end: Alignment.bottomLeft,
+                          colors: <Color>[Color(0xff6D6CEB), Color(0xff7C4DF1)]),
+                      borderRadius: BorderRadius.only(
+                          bottomLeft: const Radius.circular(30.0),
+                          bottomRight: const Radius.circular(30.0))),
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 225,
+                        child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Container(
+                              height: 30,
+                              margin: const EdgeInsets.only(left: 20, top: 3),
+                              child: GestureDetector(
+                                  onTap: () => {
+                                        Navigator.pop(context),
+                                      },
+                                  child: Icon(
+                                    Icons.arrow_back,
+                                    color: Colors.white,
+                                    size: 25,
+                                  )),
+                            ),
+                            Center(
+                                child: Container(
+                              margin: const EdgeInsets.symmetric(horizontal: 100),
+                              child: Text("${classProps.className}",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 23,
+                                      fontWeight: FontWeight.w700),
+                                  textAlign: TextAlign.center),
+                            )),
+                            Center(
+                                child: Text("${classProps.profName} 교수님",
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 18))),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                doneNmiss(Color(0xffB2C3FF), "done  ", doneCnt),
+                                SizedBox(
+                                  width: 23,
+                                ),
+                                doneNmiss(Color(0xffF2A7C5), "missed  ",
+                                    myAssignment.length - doneCnt),
+                              ],
+                            )
+                          ],
                         ),
-                        doneNmiss(Color(0xffF2A7C5), "missed  ",
-                            myAssignment.length - doneCnt),
-                      ],
-                    )
-                  ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              Container(
-                margin: const EdgeInsets.only(left: 24),
-                child: Text(
-                  "과제 목록",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+                SizedBox(
+                  height: 15,
                 ),
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 10),
-                height: MediaQuery.of(context).size.height - 320,
-                child: ListView.builder(
-                  itemCount: myAssignment.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return assignmentDivided(context, myAssignment[index]);
-                  },
+                Container(
+                  margin: const EdgeInsets.only(left: 24),
+                  child: Text(
+                    "과제 목록",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+                  ),
                 ),
-              )
-            ],
+                SizedBox(
+                  height: 15,
+                ),
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 10),
+                  height: MediaQuery.of(context).size.height - 325,
+                  child: ListView.builder(
+                    itemCount: myAssignment.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return assignmentDivided(context, myAssignment[index]);
+                    },
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -124,12 +129,20 @@ class _MyAssignmentState extends State<MyAssignment>
 }
 
 Widget assignmentDivided(BuildContext context, myAssignment) {
+  var dateformatter = new DateFormat('yyyy-MM-dd');
   Color boxColor = Color(0xffF2A7C5);
-  Color textColor = Color(0xff191919);
+  Color textColor;
   if (myAssignment.state != "진행중") {
     boxColor = Color(0xffB2C3FF);
-    textColor = Color(0xffD6D6D6);
   }
+  String today = dateformatter.format(DateTime.now());
+ if(today.compareTo(myAssignment.endDate)==1){
+    textColor = Color(0xffD6D6D6);
+   //지남
+ }else{
+  textColor = Color(0xff191919);
+   //안지남
+ }
 
   return Container(
     margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -140,10 +153,11 @@ Widget assignmentDivided(BuildContext context, myAssignment) {
           width: MediaQuery.of(context).size.width - 20,
           padding: const EdgeInsets.only(left: 30),
           decoration: BoxDecoration(
+            border: Border.all(width: 2, color: Colors.grey.withOpacity(0.02)),
               color: Colors.white,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.grey.withOpacity(0.1),
+                  color: Colors.grey.withOpacity(0.2),
                   spreadRadius: 1,
                   blurRadius: 1,
                   offset: Offset(1, 3),

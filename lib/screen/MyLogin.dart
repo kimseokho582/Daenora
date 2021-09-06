@@ -17,6 +17,7 @@ class _MyLoginState extends State<MyLogin> {
   final pw = TextEditingController();
   Widget loginfalse = new Text("");
   var ctrl = new LoginDataCtrl();
+  bool _isChecked = false;
   @override
   Widget build(BuildContext context) {
     var windowWidth = MediaQuery.of(context).size.width;
@@ -45,10 +46,32 @@ class _MyLoginState extends State<MyLogin> {
               ),
             ),
             loginfalse,
-            MaterialButton(
-                onPressed: () async =>
-                    {await ctrl.saveLoginData(id.text, pw.text)},
-                child: Text("hi")),
+            Checkbox(
+              value: _isChecked,
+              onChanged: (value) async {
+                if (value == true) {
+                  await ctrl.saveLoginData(id.text, pw.text);
+                  var ass =await ctrl.loadLoginData();
+                   print(ass["user_id"]);
+
+                   print(await ctrl.loadLoginData());
+                } else {
+                  await ctrl.removeLoginData();
+                  print(await ctrl.loadLoginData());
+                  // print("거짓");
+                }
+                setState(() {
+                  _isChecked = value!; //true가 들어감.
+                });
+              },
+            ),
+            // MaterialButton(
+            //     onPressed: () async =>
+            //         {print(await ctrl.saveLoginData(id.text, pw.text))},
+            //     child: Text("save")),
+            // MaterialButton(
+            //     onPressed: () async => {print(await ctrl.loadLoginData())},
+            //     child: Text("load")),
             SizedBox(
               height: 80.0,
             ),
@@ -57,7 +80,9 @@ class _MyLoginState extends State<MyLogin> {
                 child: ElevatedButton(
                   onPressed: () async {
                     FocusScope.of(context).requestFocus(FocusNode());
-
+                    if(_isChecked==true){
+                      print("저장할게요~");
+                    }
                     var crawl = new Crawl();
                     try {
                       var classes = await crawl.crawlClasses(id.text, pw.text);
@@ -70,7 +95,7 @@ class _MyLoginState extends State<MyLogin> {
                       //     "201663035", "Wjdtls753!");
                       // var user = await crawl.crawlUser(
                       //     "201663035", "Wjdtls753!");
-                      //print(user["name"]);
+                      print(user["name"]);
 
                       Navigator.push(
                           context,
@@ -135,4 +160,6 @@ class _MyLoginState extends State<MyLogin> {
       ),
     ));
   }
+
+  savedate(id, pw, cId) async {}
 }
