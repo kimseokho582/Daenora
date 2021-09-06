@@ -1,9 +1,9 @@
+import 'package:custom_check_box/custom_check_box.dart';
 import 'package:deanora/Widgets/LoginDataCtrl.dart';
 import 'package:deanora/Widgets/Widgets.dart';
 import 'package:deanora/crawl/crawl.dart';
 import 'package:deanora/crawl/customException.dart';
 import 'package:deanora/screen/myClass.dart';
-import 'package:deanora/screen/test.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 
@@ -15,7 +15,7 @@ class MyLogin extends StatefulWidget {
 class _MyLoginState extends State<MyLogin> {
   final id = TextEditingController();
   final pw = TextEditingController();
-  Widget loginfalse = new Text("");
+
   var ctrl = new LoginDataCtrl();
   bool _isChecked = false;
   @override
@@ -42,87 +42,94 @@ class _MyLoginState extends State<MyLogin> {
                     height: 10,
                   ),
                   loginTextF(pw, "비밀번호", "loginPwIcon", true),
+                  Container(height: 40, child: logindefault),
                 ],
               ),
             ),
-            loginfalse,
-            Checkbox(
-              value: _isChecked,
-              onChanged: (value) async {
-                if (value == true) {
-                  await ctrl.saveLoginData(id.text, pw.text);
-                  var ass =await ctrl.loadLoginData();
-                   print(ass["user_id"]);
-
-                   print(await ctrl.loadLoginData());
-                } else {
-                  await ctrl.removeLoginData();
-                  print(await ctrl.loadLoginData());
-                  // print("거짓");
-                }
-                setState(() {
-                  _isChecked = value!; //true가 들어감.
-                });
-              },
-            ),
-            // MaterialButton(
-            //     onPressed: () async =>
-            //         {print(await ctrl.saveLoginData(id.text, pw.text))},
-            //     child: Text("save")),
-            // MaterialButton(
-            //     onPressed: () async => {print(await ctrl.loadLoginData())},
-            //     child: Text("load")),
             SizedBox(
-              height: 80.0,
+              height: 40.0,
+            ),
+            Container(
+              margin: const EdgeInsets.only(right: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CustomCheckBox(
+                    value: _isChecked,
+                    shouldShowBorder: true,
+                    borderColor: Color(0xff8E53E9),
+                    checkedFillColor: Color(0xff8E53E9),
+                    borderRadius: 5,
+                    borderWidth: 2.3,
+                    checkBoxSize: 13,
+                    onChanged: (value) async {
+                      if (value == true) {
+                      } else {
+                        await ctrl.removeLoginData();
+                      }
+                      setState(() {
+                        _isChecked = value; //true가 들어감.
+                      });
+                    },
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        if (_isChecked == true) {
+                          _isChecked = false;
+                        } else {
+                          _isChecked = true;
+                        }
+                      });
+                    },
+                    child: Text(
+                      "로그인 상태 유지",
+                      style: TextStyle(color: Color(0xff707070)),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 5,
             ),
             Center(
               child: Container(
                 child: ElevatedButton(
                   onPressed: () async {
                     FocusScope.of(context).requestFocus(FocusNode());
-                    if(_isChecked==true){
+                    if (_isChecked == true) {
                       print("저장할게요~");
+                      await ctrl.saveLoginData(id.text, pw.text);
                     }
                     var crawl = new Crawl();
                     try {
                       var classes = await crawl.crawlClasses(id.text, pw.text);
                       var user = await crawl.crawlUser(id.text, pw.text);
-                      // var classes = await crawl.crawlClasses(
-                      //     "201663025", "Ghldnjs369!");
-                      // var user = await crawl.crawlUser(
-                      //     "201663025", "Ghldnjs369!");
-                      // var classes = await crawl.crawlClasses(
-                      //     "201663035", "Wjdtls753!");
-                      // var user = await crawl.crawlUser(
-                      //     "201663035", "Wjdtls753!");
-                      print(user["name"]);
 
-                      Navigator.push(
+                      Navigator.pushReplacement(
                           context,
                           PageTransition(
                             duration: Duration(milliseconds: 250),
                             type: PageTransitionType.fade,
                             child: MyClass(id.text, pw.text, classes, user),
-                            // MyClass("201663025", "Ghldnjs369!",
-                            //     classes, user),
-                            // MyClass("201663035", "Wjdtls753!",
-                            //     classes, user),
-                            //child: Test(obj),
                           ));
                       setState(() {
-                        loginfalse = new Text("");
+                        logindefault = new Text("");
                       });
                     } on CustomException catch (e) {
                       print('${e.code} ${e.message}');
+                      print(logindefault);
                       setState(() {
-                        loginfalse = Container(
-                          margin: const EdgeInsets.only(left: 90, top: 5),
-                          child: new Text(
-                            "입력한 정보가 일치하지 않습니다",
-                            style: TextStyle(
-                                color: Colors.red, fontWeight: FontWeight.w800),
-                          ),
-                        );
+                        if (logindefault != loginfault2 &&
+                            logindefault != loginfault &&
+                            logindefault != firstfault) {
+                          logindefault = firstfault;
+                        } else if (logindefault != loginfault) {
+                          logindefault = loginfault;
+                        } else if (logindefault != loginfault2) {
+                          logindefault = loginfault2;
+                        }
                       });
                     }
                   },

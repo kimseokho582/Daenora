@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:deanora/Widgets/LoginDataCtrl.dart';
 import 'package:deanora/Widgets/Widgets.dart';
 import 'package:deanora/Widgets/classdivid.dart';
 import 'package:deanora/crawl/crawl.dart';
@@ -37,6 +38,7 @@ class _MyClassState extends State<MyClass> {
   }
 
   PreferredSizeWidget myAppbar(BuildContext context) {
+    var ctrl = new LoginDataCtrl();
     var windowWidth = MediaQuery.of(context).size.width;
     return PreferredSize(
       preferredSize: Size.fromHeight(40),
@@ -46,8 +48,9 @@ class _MyClassState extends State<MyClass> {
         title: bar,
         leading: new IconButton(
           onPressed: () {
-            //print("뒤로가기 만들어야 하나?");
-            Navigator.pop(context);
+            ctrl.removeLoginData();
+            Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (context) => MyLogin()));
           },
           icon: Icon(Icons.arrow_back),
           color: Colors.grey,
@@ -134,7 +137,7 @@ class _MyClassState extends State<MyClass> {
               body: Container(
                 color: Colors.white,
                 child: Container(
-                margin: const EdgeInsets.only(top: 3, left: 20, right: 20),
+                  margin: const EdgeInsets.only(top: 3, left: 20, right: 20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -165,7 +168,7 @@ class _MyClassState extends State<MyClass> {
                         height: 10,
                       ),
                       Container(
-                        margin: const EdgeInsets.only(left:10),
+                          margin: const EdgeInsets.only(left: 10),
                           child: Text("내 강의실 List",
                               style: TextStyle(
                                   fontWeight: FontWeight.w900, fontSize: 18))),
@@ -180,7 +183,7 @@ class _MyClassState extends State<MyClass> {
                             doneCntList = snap.data;
                             if (snap.hasData) {
                               return SizedBox(
-                                   height: windowHeight - 190,
+                                height: windowHeight - 190,
                                 child: ListView.builder(
                                   itemCount: filteredNames.length,
                                   itemBuilder: (context, index) {
@@ -203,9 +206,9 @@ class _MyClassState extends State<MyClass> {
                               return Text("Error");
                             } else {
                               return SizedBox(
-                                width: 50,
-                                height: 50,
-                                child: CircularProgressIndicator());
+                                  width: 50,
+                                  height: 50,
+                                  child: CircularProgressIndicator());
                             }
                           },
                         ),

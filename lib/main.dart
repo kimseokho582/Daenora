@@ -1,10 +1,14 @@
 import 'package:deanora/Widgets/Widgets.dart';
+import 'package:deanora/crawl/crawl.dart';
+import 'package:deanora/crawl/customException.dart';
 import 'package:deanora/screen/MyLogin.dart';
+import 'package:deanora/screen/myClass.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'dart:async';
 import 'dart:ui';
 import 'package:deanora/Widgets/LoginDataCtrl.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -14,7 +18,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -33,10 +36,11 @@ class Cover extends StatefulWidget {
   @override
   _CoverState createState() => _CoverState();
 }
-   
+
+String saved_id = "", saved_pw = "";
+
 class _CoverState extends State<Cover> {
   Widget build(BuildContext context) {
-  
     var windowWidth = MediaQuery.of(context).size.width;
     //var windowHeight = MediaQuery.of(context).size.height;
     return Stack(
@@ -59,8 +63,42 @@ class _CoverState extends State<Cover> {
   void initState() {
     super.initState();
     logintest();
-    Timer(Duration(seconds: 1), () {
-      print('hii');
+    if (saved_id != 'null' && saved_pw != 'null') {
+    } else {
+      Timer(Duration(seconds: 1), () {
+        print('hii');
+        Navigator.pushReplacement(
+          context,
+          PageTransition(
+            duration: Duration(milliseconds: 800),
+            type: PageTransitionType.fade,
+            alignment: Alignment.topCenter,
+            child: MyLogin(),
+          ),
+        );
+      });
+    }
+  }
+
+  logintest() async {
+    var ctrl = new LoginDataCtrl();
+    var assurance = await ctrl.loadLoginData();
+    saved_id = assurance["user_id"] ?? "";
+    saved_pw = assurance["user_pw"] ?? "";
+    print(saved_pw);
+    var crawl = new Crawl();
+
+    try {
+      var classes = await crawl.crawlClasses(saved_id, saved_pw);
+      var user = await crawl.crawlUser(saved_id, saved_pw);
+      Navigator.pushReplacement(
+          context,
+          PageTransition(
+            duration: Duration(milliseconds: 250),
+            type: PageTransitionType.fade,
+            child: MyClass(saved_id, saved_pw, classes, user),
+          ));
+    } on CustomException catch (e) {
       Navigator.pushReplacement(
         context,
         PageTransition(
@@ -70,17 +108,6 @@ class _CoverState extends State<Cover> {
           child: MyLogin(),
         ),
       );
-    });
-  }
-
-  logintest() async{
-     var ctrl = new LoginDataCtrl();
-     print(await ctrl.loadLoginData());
-    //  var assurance = await ctrl.loadLoginData();
-    //  var saved_id = assurance["user_id"];
-    //  var saved_pw = assurance["user_pw"];
-     print("뭔데");
-    //  print(assurance["user_id"]);
-    //  print(saved_pw);
+    }
   }
 }

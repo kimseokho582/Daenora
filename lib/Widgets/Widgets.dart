@@ -5,6 +5,7 @@ import 'package:deanora/object/user.dart';
 import 'package:deanora/screen/myAssignment.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
+import 'package:blinking_text/blinking_text.dart';
 
 Container cover_Background() {
   return Container(
@@ -118,6 +119,31 @@ List assignments(props) {
   return assignment;
 }
 
+Widget logindefault = new Text("");
+Widget loginfault = Container(
+    child: BlinkText(
+  "입력한 정보가 일치하지 않습니다",
+  beginColor: Colors.red,
+  endColor: Colors.white,
+  times: 1,
+  duration: Duration(milliseconds: 400),
+  style:
+      TextStyle(color: Colors.red, fontWeight: FontWeight.w600, fontSize: 12),
+));
+Widget loginfault2 = new BlinkText(
+  "입력한 정보가 일치하지 않습니다",
+  beginColor: Colors.red,
+  endColor: Colors.white,
+  times: 1,
+  duration: Duration(milliseconds: 399),
+  style:
+      TextStyle(color: Colors.red, fontWeight: FontWeight.w600, fontSize: 12),
+);
+Widget firstfault = Text(
+  "입력한 정보가 일치하지 않습니다",
+  style:
+      TextStyle(color: Colors.red, fontWeight: FontWeight.w600, fontSize: 12),
+);
 // Widget classDivided(BuildContext context, id, pw, classProps, userProps) {
 //   print("클래스페이지 켜짐");
 

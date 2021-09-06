@@ -27,9 +27,10 @@ class _MyAssignmentState extends State<MyAssignment>
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+        resizeToAvoidBottomInset: false,
         body: SafeArea(
           child: Container(
-            color:Colors.white,
+            color: Colors.white,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -39,7 +40,10 @@ class _MyAssignmentState extends State<MyAssignment>
                       gradient: LinearGradient(
                           begin: Alignment.topRight,
                           end: Alignment.bottomLeft,
-                          colors: <Color>[Color(0xff6D6CEB), Color(0xff7C4DF1)]),
+                          colors: <Color>[
+                            Color(0xff6D6CEB),
+                            Color(0xff7C4DF1)
+                          ]),
                       borderRadius: BorderRadius.only(
                           bottomLeft: const Radius.circular(30.0),
                           bottomRight: const Radius.circular(30.0))),
@@ -48,7 +52,7 @@ class _MyAssignmentState extends State<MyAssignment>
                       Container(
                         height: 225,
                         child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             Container(
@@ -66,7 +70,8 @@ class _MyAssignmentState extends State<MyAssignment>
                             ),
                             Center(
                                 child: Container(
-                              margin: const EdgeInsets.symmetric(horizontal: 100),
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 100),
                               child: Text("${classProps.className}",
                                   style: TextStyle(
                                       color: Colors.white,
@@ -136,13 +141,13 @@ Widget assignmentDivided(BuildContext context, myAssignment) {
     boxColor = Color(0xffB2C3FF);
   }
   String today = dateformatter.format(DateTime.now());
- if(today.compareTo(myAssignment.endDate)==1){
+  if (today.compareTo(myAssignment.endDate) == 1) {
     textColor = Color(0xffD6D6D6);
-   //지남
- }else{
-  textColor = Color(0xff191919);
-   //안지남
- }
+    //지남
+  } else {
+    textColor = Color(0xff191919);
+    //안지남
+  }
 
   return Container(
     margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -153,7 +158,8 @@ Widget assignmentDivided(BuildContext context, myAssignment) {
           width: MediaQuery.of(context).size.width - 20,
           padding: const EdgeInsets.only(left: 30),
           decoration: BoxDecoration(
-            border: Border.all(width: 2, color: Colors.grey.withOpacity(0.02)),
+              border:
+                  Border.all(width: 2, color: Colors.grey.withOpacity(0.02)),
               color: Colors.white,
               boxShadow: [
                 BoxShadow(
