@@ -3,7 +3,7 @@ import 'package:deanora/Widgets/LoginDataCtrl.dart';
 import 'package:deanora/Widgets/Widgets.dart';
 import 'package:deanora/crawl/crawl.dart';
 import 'package:deanora/crawl/customException.dart';
-import 'package:deanora/screen/myClass.dart';
+import 'package:deanora/screen/MyClass.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 
@@ -22,7 +22,7 @@ class _MyLoginState extends State<MyLogin> {
   Widget build(BuildContext context) {
     var windowWidth = MediaQuery.of(context).size.width;
     return MaterialApp(
-        //debugShowCheckedModeBanner: false,
+        debugShowCheckedModeBanner: false,
         home: GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
@@ -34,7 +34,7 @@ class _MyLoginState extends State<MyLogin> {
             Center(
               child: Column(
                 children: [
-                  SizedBox(height: 110),
+                  SizedBox(height: 140),
                   putimg(105.0, 105.0, "loginLogo"),
                   SizedBox(height: 60),
                   loginTextF(id, "학번", "loginIdIcon", false),
@@ -42,6 +42,9 @@ class _MyLoginState extends State<MyLogin> {
                     height: 10,
                   ),
                   loginTextF(pw, "비밀번호", "loginPwIcon", true),
+                  SizedBox(
+                    height: 15,
+                  ),
                   Container(height: 40, child: logindefault),
                 ],
               ),

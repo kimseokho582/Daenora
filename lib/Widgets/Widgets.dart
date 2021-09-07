@@ -2,10 +2,11 @@ import 'package:deanora/crawl/crawl.dart';
 import 'package:deanora/object/assignment.dart';
 import 'package:deanora/object/lecture.dart';
 import 'package:deanora/object/user.dart';
-import 'package:deanora/screen/myAssignment.dart';
+import 'package:deanora/screen/MyAssignment.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'package:blinking_text/blinking_text.dart';
+
 
 Container cover_Background() {
   return Container(
@@ -17,7 +18,11 @@ Container cover_Background() {
   );
 }
 
-// ignore: non_constant_identifier_names
+/**
+ * [w] img width
+ * [h] img height
+ * [name] img just name not address
+ */
 Container putimg(w, h, name) {
   return Container(
       child: (Image.asset(
@@ -26,6 +31,12 @@ Container putimg(w, h, name) {
     height: h,
   )));
 }
+/**
+ * [_controller] id or pw controller
+ * [hinttext] Input Text
+ * [icon] Input Icon
+ * [obscure] true or false //bool
+ */
 
 Container loginTextF(_controller, hintext, icon, obscure) {
   return Container(
@@ -36,9 +47,9 @@ Container loginTextF(_controller, hintext, icon, obscure) {
         child: Stack(
           children: [
             TextField(
-                onChanged: (text) {
-                  print(text);
-                },
+                // onChanged: (text) {
+                //   print(text);
+                // },
                 controller: _controller,
                 obscureText: obscure,
                 decoration: InputDecoration(
@@ -74,21 +85,26 @@ Container loginTextF(_controller, hintext, icon, obscure) {
   );
 }
 
-BoxDecoration classContainerDeco() {
-  return BoxDecoration(
-    color: Colors.white,
-    borderRadius: BorderRadius.circular(10),
-    boxShadow: [
-      BoxShadow(
-        color: Colors.grey.withOpacity(0.5),
-        spreadRadius: 5,
-        blurRadius: 7,
-        offset: Offset(0, 3),
-      )
-    ],
-  );
-}
 
+// BoxDecoration classContainerDeco() {
+//   return BoxDecoration(
+//     color: Colors.white,
+//     borderRadius: BorderRadius.circular(10),
+//     boxShadow: [
+//       BoxShadow(
+//         color: Colors.grey.withOpacity(0.5),
+//         spreadRadius: 5,
+//         blurRadius: 7,
+//         offset: Offset(0, 3),
+//       )
+//     ],
+//   );
+// }
+
+
+/**
+ * [props] crawl.crawlClasses(id.text, pw.text) //classPrpps
+ */
 List classes(props) {
   List classes = [];
   props
@@ -101,6 +117,9 @@ List classes(props) {
   return classes;
 }
 
+/**
+ * [props] crawl.crawlUser(id.text, pw.text) //userPrpps
+ */
 List user(props) {
   List user = [];
   user.add(User(props["name"], props["studentId"]));
@@ -108,6 +127,9 @@ List user(props) {
   return user;
 }
 
+/**
+ * [props] await crawl.crawlAssignments(id, pw, cId); //assignmentProps
+ */
 List assignments(props) {
   List assignment = [];
   props
@@ -119,6 +141,7 @@ List assignments(props) {
   return assignment;
 }
 
+//for blinking login fault alert
 Widget logindefault = new Text("");
 Widget loginfault = Container(
     child: BlinkText(
@@ -126,66 +149,49 @@ Widget loginfault = Container(
   beginColor: Colors.red,
   endColor: Colors.white,
   times: 1,
-  duration: Duration(milliseconds: 400),
+  duration: Duration(milliseconds: 300),
   style:
-      TextStyle(color: Colors.red, fontWeight: FontWeight.w600, fontSize: 12),
+      TextStyle(color: Colors.red, fontWeight: FontWeight.w600, fontSize: 13.5),
 ));
 Widget loginfault2 = new BlinkText(
   "입력한 정보가 일치하지 않습니다",
   beginColor: Colors.red,
   endColor: Colors.white,
   times: 1,
-  duration: Duration(milliseconds: 399),
+  duration: Duration(milliseconds: 300),
   style:
-      TextStyle(color: Colors.red, fontWeight: FontWeight.w600, fontSize: 12),
+      TextStyle(color: Colors.red, fontWeight: FontWeight.w600, fontSize: 13.5),
 );
 Widget firstfault = Text(
   "입력한 정보가 일치하지 않습니다",
   style:
       TextStyle(color: Colors.red, fontWeight: FontWeight.w600, fontSize: 12),
 );
-// Widget classDivided(BuildContext context, id, pw, classProps, userProps) {
-//   print("클래스페이지 켜짐");
 
-//   return GestureDetector(
-//     onTap: () async {
-//       var crawl = new Crawl();
-//       var assignment = await crawl.crawlAssignments(id, pw, classProps.classId);
-//       Navigator.push(
-//           context,
-//           MaterialPageRoute(
-//               builder: (context) =>
-//                   MyAssignment(classProps, userProps, assignment)));
-//     },
-//     child: Container(
-//       margin: const EdgeInsets.symmetric(vertical: 10),
-//       decoration: BoxDecoration(
-//         color: Colors.white,
-//         border: Border.all(width: 2, color: Colors.grey.withOpacity(0.15)),
-//         borderRadius: BorderRadius.circular(10),
-//         boxShadow: [
-//           BoxShadow(
-//             color: Colors.grey.withOpacity(0.2),
-//             spreadRadius: 1,
-//             blurRadius: 1,
-//             offset: Offset(1, 3),
-//           )
-//         ],
-//       ),
-//       child: Container(
-//         margin: const EdgeInsets.all(25),
-//         child: Row(
-//           children: [
-//             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-//               Text('${classProps.className}'),
-//               SizedBox(
-//                 height: 5,
-//               ),
-//               Text(' ${classProps.profName} 교수님')
-//             ]),
-//           ],
-//         ),
-//       ),
-//     ),
-//   );
-// }
+
+
+Future<List> requestAssignment(id, pw, props) async {
+    var crawl = new Crawl();
+    List<dynamic> assignment = [];
+    List doneCnt = [];
+    if (props != null) {
+      for (int i = 0; i < props.length; i++) {
+        var assignmentProps =
+            await crawl.crawlAssignments(id, pw, props[i].classId);
+        if (assignmentProps.length > 0) {
+          assignment = assignments(assignmentProps);
+          double tmp = 0.0;
+          for (int i = 0; i < assignment.length; i++) {
+            if (assignment[i].state == "") {
+              tmp++;
+            }
+          }
+          doneCnt.add(tmp / assignment.length);
+        } else {
+          doneCnt.add(0.0);
+        }
+      }
+      return doneCnt;
+    }
+    return [];
+  }

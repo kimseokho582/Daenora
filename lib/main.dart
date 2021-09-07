@@ -2,7 +2,7 @@ import 'package:deanora/Widgets/Widgets.dart';
 import 'package:deanora/crawl/crawl.dart';
 import 'package:deanora/crawl/customException.dart';
 import 'package:deanora/screen/MyLogin.dart';
-import 'package:deanora/screen/myClass.dart';
+import 'package:deanora/screen/MyClass.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'dart:async';
@@ -42,7 +42,7 @@ String saved_id = "", saved_pw = "";
 class _CoverState extends State<Cover> {
   Widget build(BuildContext context) {
     var windowWidth = MediaQuery.of(context).size.width;
-    //var windowHeight = MediaQuery.of(context).size.height;
+
     return Stack(
       children: <Widget>[
         Positioned(child: cover_Background()),
@@ -66,7 +66,7 @@ class _CoverState extends State<Cover> {
     if (saved_id != 'null' && saved_pw != 'null') {
     } else {
       Timer(Duration(seconds: 1), () {
-        print('hii');
+        print('first_login');
         Navigator.pushReplacement(
           context,
           PageTransition(
@@ -91,6 +91,7 @@ class _CoverState extends State<Cover> {
     try {
       var classes = await crawl.crawlClasses(saved_id, saved_pw);
       var user = await crawl.crawlUser(saved_id, saved_pw);
+      print("Saved_login");
       Navigator.pushReplacement(
           context,
           PageTransition(
