@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'package:blinking_text/blinking_text.dart';
 
-
 Container cover_Background() {
   return Container(
     decoration: BoxDecoration(
@@ -85,7 +84,6 @@ Container loginTextF(_controller, hintext, icon, obscure) {
   );
 }
 
-
 // BoxDecoration classContainerDeco() {
 //   return BoxDecoration(
 //     color: Colors.white,
@@ -100,7 +98,6 @@ Container loginTextF(_controller, hintext, icon, obscure) {
 //     ],
 //   );
 // }
-
 
 /**
  * [props] crawl.crawlClasses(id.text, pw.text) //classPrpps
@@ -151,7 +148,7 @@ Widget loginfault = Container(
   times: 1,
   duration: Duration(milliseconds: 300),
   style:
-      TextStyle(color: Colors.red, fontWeight: FontWeight.w600, fontSize: 13.5),
+      TextStyle(color: Colors.red, fontWeight: FontWeight.w600, fontSize: 12),
 ));
 Widget loginfault2 = new BlinkText(
   "입력한 정보가 일치하지 않습니다",
@@ -160,7 +157,7 @@ Widget loginfault2 = new BlinkText(
   times: 1,
   duration: Duration(milliseconds: 300),
   style:
-      TextStyle(color: Colors.red, fontWeight: FontWeight.w600, fontSize: 13.5),
+      TextStyle(color: Colors.red, fontWeight: FontWeight.w600, fontSize: 12),
 );
 Widget firstfault = Text(
   "입력한 정보가 일치하지 않습니다",
@@ -168,30 +165,27 @@ Widget firstfault = Text(
       TextStyle(color: Colors.red, fontWeight: FontWeight.w600, fontSize: 12),
 );
 
-
-
 Future<List> requestAssignment(id, pw, props) async {
-    var crawl = new Crawl();
-    List<dynamic> assignment = [];
-    List doneCnt = [];
-    if (props != null) {
-      for (int i = 0; i < props.length; i++) {
-        var assignmentProps =
-            await crawl.crawlAssignments(id, pw, props[i].classId);
-        if (assignmentProps.length > 0) {
-          assignment = assignments(assignmentProps);
-          double tmp = 0.0;
-          for (int i = 0; i < assignment.length; i++) {
-            if (assignment[i].state == "") {
-              tmp++;
-            }
+  var crawl = new Crawl(id, pw);
+  List<dynamic> assignment = [];
+  List doneCnt = [];
+  if (props != null) {
+    for (int i = 0; i < props.length; i++) {
+      var assignmentProps = await crawl.crawlAssignments(props[i].classId);
+      if (assignmentProps.length > 0) {
+        assignment = assignments(assignmentProps);
+        double tmp = 0.0;
+        for (int i = 0; i < assignment.length; i++) {
+          if (assignment[i].state == "제출완료") {
+            tmp++;
           }
-          doneCnt.add(tmp / assignment.length);
-        } else {
-          doneCnt.add(0.0);
         }
+        doneCnt.add(tmp / assignment.length);
+      } else {
+        doneCnt.add(0.0);
       }
-      return doneCnt;
     }
-    return [];
+    return doneCnt;
   }
+  return [];
+}

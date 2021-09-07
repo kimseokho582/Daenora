@@ -21,7 +21,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'deanora',
+        title: '냥냠대',
         theme: ThemeData(
             brightness: Brightness.light,
             primaryColor: Colors.black,
@@ -85,12 +85,11 @@ class _CoverState extends State<Cover> {
     var assurance = await ctrl.loadLoginData();
     saved_id = assurance["user_id"] ?? "";
     saved_pw = assurance["user_pw"] ?? "";
-    print(saved_pw);
-    var crawl = new Crawl();
+    var crawl = new Crawl(saved_id, saved_pw);
 
     try {
-      var classes = await crawl.crawlClasses(saved_id, saved_pw);
-      var user = await crawl.crawlUser(saved_id, saved_pw);
+      var classes = await crawl.crawlClasses();
+      var user = await crawl.crawlUser();
       print("Saved_login");
       Navigator.pushReplacement(
           context,

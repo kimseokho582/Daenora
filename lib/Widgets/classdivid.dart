@@ -49,7 +49,7 @@ class _ClassDividState extends State<ClassDivid> with TickerProviderStateMixin {
                 child: MyAssignment(classProps, assignmentProps, doneCnt)));
       },
       child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 7,horizontal: 7),
+        margin: const EdgeInsets.symmetric(vertical: 7, horizontal: 7),
         decoration: BoxDecoration(
           color: Colors.white,
           border: Border.all(width: 2, color: Colors.grey.withOpacity(0.03)),
@@ -97,8 +97,8 @@ class _ClassDividState extends State<ClassDivid> with TickerProviderStateMixin {
   }
 
   requestAssignment(id, pw, cId) async {
-    var crawl = new Crawl();
-    assignmentProps = await crawl.crawlAssignments(id, pw, cId);
+    var crawl = new Crawl(id, pw);
+    assignmentProps = await crawl.crawlAssignments(cId);
     if (!(assignmentProps == null)) {
       assignment = assignments(assignmentProps);
     }

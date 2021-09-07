@@ -5,7 +5,6 @@ import 'package:deanora/Widgets/Classdivid.dart';
 import 'package:deanora/screen/MyLogin.dart';
 import 'package:flutter/material.dart';
 
-
 class MyClass extends StatefulWidget {
   var id, pw, classProps, userProps;
 
@@ -18,6 +17,8 @@ class MyClass extends StatefulWidget {
 class _MyClassState extends State<MyClass> {
   var id, pw, classProps, userProps;
   List names = [];
+  List<dynamic> assignment = [];
+  String _searchText = "";
   List filteredNames = [];
   List fname = [];
   Icon searchIcon = new Icon(Icons.search);
@@ -30,7 +31,6 @@ class _MyClassState extends State<MyClass> {
     this._getNames(classProps);
   }
 
-
   Widget build(BuildContext context) {
     var windowHeight = MediaQuery.of(context).size.height;
     return MaterialApp(
@@ -39,7 +39,7 @@ class _MyClassState extends State<MyClass> {
         onTap: () => FocusScope.of(context).unfocus(),
         child: Container(
           child: Scaffold(
-              appBar:ClassAppbar(),
+              appBar: myAppbar(context),
               resizeToAvoidBottomInset: false,
               body: Container(
                 color: Colors.white,
@@ -125,6 +125,93 @@ class _MyClassState extends State<MyClass> {
                 ),
               )),
         ),
+      ),
+    );
+  }
+
+  PreferredSizeWidget myAppbar(BuildContext context) {
+    var ctrl = new LoginDataCtrl();
+    var windowWidth = MediaQuery.of(context).size.width;
+    return PreferredSize(
+      preferredSize: Size.fromHeight(40),
+      child: new AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0.0,
+        title: bar,
+        leading: new IconButton(
+          onPressed: () {
+            ctrl.removeLoginData();
+            Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (context) => MyLogin()));
+          },
+          icon: Icon(Icons.arrow_back),
+          color: Colors.grey,
+        ),
+        actions: <Widget>[
+          new IconButton(
+            onPressed: () {
+              setState(() {
+                if (this.searchIcon.icon == Icons.search) {
+                  searchIcon = new Icon(Icons.close);
+                  bar = Container(
+                      width: windowWidth - 70,
+                      height: 30,
+                      child: Stack(
+                        children: [
+                          TextField(
+                            autofocus: true,
+                            onChanged: (text) {
+                              _searchText = text;
+                              print(_searchText);
+                              if (!(_searchText == "")) {
+                                List tmp = [];
+
+                                for (int i = 0; i < fname.length; i++) {
+                                  if (fname[i]
+                                          .className
+                                          .contains(_searchText) ||
+                                      fname[i].profName.contains(_searchText)) {
+                                    tmp.add(fname[i]);
+                                  }
+                                }
+                                setState(() {
+                                  filteredNames = tmp;
+                                });
+                              } else {
+                                setState(() {
+                                  filteredNames = fname;
+                                });
+                              }
+                            },
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            child: Container(
+                              height: 1,
+                              width: 300,
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(colors: <Color>[
+                                  Color(0xff8C65EC),
+                                  Color(0xff6D6CEB)
+                                ]),
+                              ),
+                            ),
+                          )
+                        ],
+                      ));
+                } else {
+                  setState(() {
+                    bar = new Text("");
+                    searchIcon = new Icon(Icons.search);
+                    filteredNames = fname;
+                  });
+                }
+              });
+            },
+            icon: searchIcon,
+            color: Colors.grey,
+          )
+        ],
       ),
     );
   }

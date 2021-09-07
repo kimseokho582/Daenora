@@ -24,6 +24,14 @@ class _MyAssignmentState extends State<MyAssignment>
   Widget build(BuildContext context) {
     List<dynamic> myAssignment = assignments(assignmentProps);
     int doneCnt = (progress * myAssignment.length).toInt();
+    Widget _child = new Text("");
+    setState(() {
+      if (assignmentProps.length > 0) {
+        _child = haveassignment(myAssignment);
+      } else {
+        _child = notassignment;
+      }
+    });
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -117,12 +125,7 @@ class _MyAssignmentState extends State<MyAssignment>
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 10),
                   height: MediaQuery.of(context).size.height - 325,
-                  child: ListView.builder(
-                    itemCount: myAssignment.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return assignmentDivided(context, myAssignment[index]);
-                    },
-                  ),
+                  child: _child,
                 )
               ],
             ),
@@ -133,11 +136,23 @@ class _MyAssignmentState extends State<MyAssignment>
   }
 }
 
+Widget notassignment = new Center(
+  child: Text("아직 과제가 없습니다"),
+);
+Widget haveassignment(myAssignment) {
+  return ListView.builder(
+    itemCount: myAssignment.length,
+    itemBuilder: (BuildContext context, int index) {
+      return assignmentDivided(context, myAssignment[index]);
+    },
+  );
+}
+
 Widget assignmentDivided(BuildContext context, myAssignment) {
   var dateformatter = new DateFormat('yyyy-MM-dd');
   Color boxColor = Color(0xffF2A7C5);
   Color textColor;
-  if (myAssignment.state != "진행중") {
+  if (myAssignment.state == "제출완료") {
     boxColor = Color(0xffB2C3FF);
   }
   String today = dateformatter.format(DateTime.now());
