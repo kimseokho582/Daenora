@@ -4,6 +4,9 @@ import 'package:deanora/Widgets/Widgets.dart';
 import 'package:deanora/Widgets/Classdivid.dart';
 import 'package:deanora/screen/MyLogin.dart';
 import 'package:flutter/material.dart';
+import 'dart:math' as math;
+
+import 'package:page_transition/page_transition.dart';
 
 class MyClass extends StatefulWidget {
   var id, pw, classProps, userProps;
@@ -36,7 +39,13 @@ class _MyClassState extends State<MyClass> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
+        onTap: () => {
+          FocusScope.of(context).unfocus(),
+          setState(() {
+            bar = new Text("");
+            searchIcon = new Icon(Icons.search);
+          })
+        },
         child: Container(
           child: Scaffold(
               appBar: myAppbar(context),
@@ -91,22 +100,25 @@ class _MyClassState extends State<MyClass> {
                             if (snap.hasData) {
                               return SizedBox(
                                 height: windowHeight - 190,
-                                child: ListView.builder(
-                                  itemCount: filteredNames.length,
-                                  itemBuilder: (context, index) {
-                                    if (filteredNames != [] &&
-                                        filteredNames.length ==
-                                            doneCntList?.length) {
-                                      return ClassDivid(
-                                          id,
-                                          pw,
-                                          filteredNames[index] ?? "",
-                                          doneCntList![index] ?? "",
-                                          userProps);
-                                    } else {
-                                      return Text("");
-                                    }
-                                  },
+                                child: RefreshIndicator(
+                                  onRefresh: _refresh,
+                                  child: ListView.builder(
+                                    itemCount: filteredNames.length,
+                                    itemBuilder: (context, index) {
+                                      if (filteredNames != [] &&
+                                          filteredNames.length ==
+                                              doneCntList?.length) {
+                                        return ClassDivid(
+                                            id,
+                                            pw,
+                                            filteredNames[index] ?? "",
+                                            doneCntList![index] ?? "",
+                                            userProps);
+                                      } else {
+                                        return Text("");
+                                      }
+                                    },
+                                  ),
                                 ),
                               );
                             } else if (snap.hasError) {
@@ -129,6 +141,16 @@ class _MyClassState extends State<MyClass> {
     );
   }
 
+  Future<void> _refresh() async {
+    Navigator.pushReplacement(
+        context,
+        PageTransition(
+          duration: Duration(milliseconds: 250),
+          type: PageTransitionType.fade,
+          child: MyClass(this.id, this.pw, this.classProps, this.userProps),
+        ));
+  }
+
   PreferredSizeWidget myAppbar(BuildContext context) {
     var ctrl = new LoginDataCtrl();
     var windowWidth = MediaQuery.of(context).size.width;
@@ -144,7 +166,13 @@ class _MyClassState extends State<MyClass> {
             Navigator.pushReplacement(
                 context, MaterialPageRoute(builder: (context) => MyLogin()));
           },
-          icon: Icon(Icons.arrow_back),
+          icon: Transform(
+              alignment: Alignment.center,
+              transform: Matrix4.rotationY(math.pi),
+              child: Icon(
+                Icons.logout,
+                size: 22,
+              )),
           color: Colors.grey,
         ),
         actions: <Widget>[

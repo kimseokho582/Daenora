@@ -1,3 +1,4 @@
+import 'package:deanora/Widgets/Tutorial.dart';
 import 'package:deanora/Widgets/Widgets.dart';
 import 'package:deanora/crawl/crawl.dart';
 import 'package:deanora/crawl/customException.dart';
@@ -7,9 +8,14 @@ import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'dart:async';
 import 'dart:ui';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:deanora/Widgets/LoginDataCtrl.dart';
 
-void main() {
+int? isviewed;
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  isviewed = prefs.getInt('Tutorial');
   runApp(MyApp());
 }
 
@@ -63,21 +69,6 @@ class _CoverState extends State<Cover> {
   void initState() {
     super.initState();
     logintest();
-    if (saved_id != 'null' && saved_pw != 'null') {
-    } else {
-      Timer(Duration(seconds: 1), () {
-        print('first_login');
-        Navigator.pushReplacement(
-          context,
-          PageTransition(
-            duration: Duration(milliseconds: 800),
-            type: PageTransitionType.fade,
-            alignment: Alignment.topCenter,
-            child: MyLogin(),
-          ),
-        );
-      });
-    }
   }
 
   logintest() async {
@@ -99,15 +90,21 @@ class _CoverState extends State<Cover> {
             child: MyClass(saved_id, saved_pw, classes, user),
           ));
     } on CustomException catch (e) {
-      Navigator.pushReplacement(
-        context,
-        PageTransition(
-          duration: Duration(milliseconds: 800),
-          type: PageTransitionType.fade,
-          alignment: Alignment.topCenter,
-          child: MyLogin(),
-        ),
-      );
+      print("요기야?");
+
+      Timer(Duration(milliseconds: 700), () {
+        print(saved_id);
+        print(saved_pw);
+        Navigator.pushReplacement(
+          context,
+          PageTransition(
+            duration: Duration(milliseconds: 800),
+            type: PageTransitionType.fade,
+            alignment: Alignment.topCenter,
+            child: isviewed != 0 ? Tutorial() : MyLogin(),
+          ),
+        );
+      });
     }
   }
 }

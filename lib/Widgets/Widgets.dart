@@ -17,11 +17,9 @@ Container cover_Background() {
   );
 }
 
-/**
- * [w] img width
- * [h] img height
- * [name] img just name not address
- */
+/// [w] img width
+/// [h] img height
+/// [name] img just name not address
 Container putimg(w, h, name) {
   return Container(
       child: (Image.asset(
@@ -30,12 +28,11 @@ Container putimg(w, h, name) {
     height: h,
   )));
 }
-/**
- * [_controller] id or pw controller
- * [hinttext] Input Text
- * [icon] Input Icon
- * [obscure] true or false //bool
- */
+
+/// [_controller] id or pw controller
+/// [hinttext] Input Text
+/// [icon] Input Icon
+/// [obscure] true or false //bool
 
 Container loginTextF(_controller, hintext, icon, obscure) {
   return Container(
@@ -84,24 +81,7 @@ Container loginTextF(_controller, hintext, icon, obscure) {
   );
 }
 
-// BoxDecoration classContainerDeco() {
-//   return BoxDecoration(
-//     color: Colors.white,
-//     borderRadius: BorderRadius.circular(10),
-//     boxShadow: [
-//       BoxShadow(
-//         color: Colors.grey.withOpacity(0.5),
-//         spreadRadius: 5,
-//         blurRadius: 7,
-//         offset: Offset(0, 3),
-//       )
-//     ],
-//   );
-// }
-
-/**
- * [props] crawl.crawlClasses(id.text, pw.text) //classPrpps
- */
+/// [props] crawl.crawlClasses(id.text, pw.text) //classPrpps
 List classes(props) {
   List classes = [];
   props
@@ -114,9 +94,7 @@ List classes(props) {
   return classes;
 }
 
-/**
- * [props] crawl.crawlUser(id.text, pw.text) //userPrpps
- */
+/// [props] crawl.crawlUser(id.text, pw.text) //userPrpps
 List user(props) {
   List user = [];
   user.add(User(props["name"], props["studentId"]));
@@ -124,9 +102,7 @@ List user(props) {
   return user;
 }
 
-/**
- * [props] await crawl.crawlAssignments(id, pw, cId); //assignmentProps
- */
+/// [props] await crawl.crawlAssignments(id, pw, cId); //assignmentProps
 List assignments(props) {
   List assignment = [];
   props
