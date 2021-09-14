@@ -4,5 +4,4 @@ class Lecture {
   String classId;
 
   Lecture(this.className, this.profName, this.classId);
-
 }

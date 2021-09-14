@@ -32,13 +32,9 @@ class _ClassDividState extends State<ClassDivid> with TickerProviderStateMixin {
   }
 
   String nClassName = "";
-  Widget build(BuildContext context) {
-    if (classProps.className.length > 16) {
-      nClassName = classProps.className.substring(0, 16) + "...";
-    } else {
-      nClassName = classProps.className;
-    }
 
+  Widget build(BuildContext context) {
+    var windowWidth = MediaQuery.of(context).size.width;
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -72,12 +68,18 @@ class _ClassDividState extends State<ClassDivid> with TickerProviderStateMixin {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Text(
-                      nClassName,
-                      style: TextStyle(
-                          fontSize: 15,
-                          color: Color(0xff707070),
-                          fontWeight: FontWeight.w800),
+                    Container(
+                      width: windowWidth - 205,
+                      child: Text(
+                        classProps.className,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        softWrap: false,
+                        style: TextStyle(
+                            fontSize: 15,
+                            color: Color(0xff707070),
+                            fontWeight: FontWeight.w800),
+                      ),
                     ),
                     SizedBox(
                       height: 10,

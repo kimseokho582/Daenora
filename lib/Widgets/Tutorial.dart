@@ -37,7 +37,11 @@ class _TutorialState extends State<Tutorial> {
                     Navigator.pushReplacement(context,
                         MaterialPageRoute(builder: (context) => MyLogin()));
                   },
-                  child: Text("Done"),
+                  child: Text(
+                    "Done",
+                    style: TextStyle(
+                        color: Color(0xff191919), fontWeight: FontWeight.w900),
+                  ),
                 );
               } else {
                 doneOrnot = new TextButton(
@@ -64,7 +68,11 @@ class _TutorialState extends State<Tutorial> {
                 Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (context) => MyLogin()));
               },
-              child: Text("Skip"),
+              child: Text(
+                "Skip",
+                style: TextStyle(
+                    color: Color(0xff191919), fontWeight: FontWeight.w900),
+              ),
             ),
             SizedBox(
                 height: 50,
@@ -85,8 +93,8 @@ class _TutorialState extends State<Tutorial> {
                                 decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     color: (snapshot.data == index)
-                                        ? Colors.white
-                                        : Colors.grey),
+                                        ? Color(0xff745BD1)
+                                        : Color(0xffD9B4FF)),
                               );
                             });
                       }

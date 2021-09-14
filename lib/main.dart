@@ -48,19 +48,31 @@ String saved_id = "", saved_pw = "";
 class _CoverState extends State<Cover> {
   Widget build(BuildContext context) {
     var windowWidth = MediaQuery.of(context).size.width;
+    var windowHeight = MediaQuery.of(context).size.height;
 
     return Stack(
       children: <Widget>[
         Positioned(child: cover_Background()),
-        Align(
-          alignment: Alignment(0.0, -0.18),
+        Positioned(
+          bottom: windowHeight / 2,
+          left: windowWidth / 2 - windowWidth * 0.3 / 2,
           child: putimg(windowWidth * 0.3, windowWidth * 0.3, "coverLogo"),
         ),
-        Align(
-          alignment: Alignment(0.0, 0.16),
+        Positioned(
+          bottom: windowHeight / 2 - windowWidth * 0.3 * 0.416 - 50,
+          left: windowWidth / 2 - windowWidth * 0.3 / 2,
           child: putimg(
               windowWidth * 0.3, windowWidth * 0.3 * 0.416, "coverTitle"),
-        ),
+        )
+        // Align(
+        //   alignment: Alignment(0.0, -0.18),
+        //   child: putimg(windowWidth * 0.3, windowWidth * 0.3, "coverLogo"),
+        // ),
+        // Align(
+        //   alignment: Alignment(0.0, 0.16),
+        //   child: putimg(
+        //       windowWidth * 0.3, windowWidth * 0.3 * 0.416, "coverTitle"),
+        // ),
       ],
     );
   }
@@ -69,6 +81,21 @@ class _CoverState extends State<Cover> {
   void initState() {
     super.initState();
     logintest();
+    if (saved_id != 'null' && saved_pw != 'null') {
+    } else {
+      Timer(Duration(seconds: 1), () {
+        print('first_login');
+        Navigator.pushReplacement(
+          context,
+          PageTransition(
+            duration: Duration(milliseconds: 800),
+            type: PageTransitionType.fade,
+            alignment: Alignment.topCenter,
+            child: MyLogin(),
+          ),
+        );
+      });
+    }
   }
 
   logintest() async {
@@ -90,11 +117,7 @@ class _CoverState extends State<Cover> {
             child: MyClass(saved_id, saved_pw, classes, user),
           ));
     } on CustomException catch (e) {
-      print("요기야?");
-
-      Timer(Duration(milliseconds: 700), () {
-        print(saved_id);
-        print(saved_pw);
+      Timer(Duration(milliseconds: 1000), () {
         Navigator.pushReplacement(
           context,
           PageTransition(

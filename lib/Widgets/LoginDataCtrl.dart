@@ -9,9 +9,8 @@ class LoginDataCtrl {
 
   Future<Map<String, String>> loadLoginData() async {
     final prefs = await SharedPreferences.getInstance();
-    
-    
-     return{
+
+    return {
       'user_id': prefs.getString('user_id') ?? '',
       'user_pw': prefs.getString('user_pw') ?? ''
     };

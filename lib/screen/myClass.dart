@@ -37,6 +37,7 @@ class _MyClassState extends State<MyClass> {
   Widget build(BuildContext context) {
     var windowHeight = MediaQuery.of(context).size.height;
     return MaterialApp(
+      theme: ThemeData(primaryColor: Colors.lightGreen),
       debugShowCheckedModeBanner: false,
       home: GestureDetector(
         onTap: () => {
@@ -48,6 +49,7 @@ class _MyClassState extends State<MyClass> {
         },
         child: Container(
           child: Scaffold(
+              drawer: Drawer(),
               appBar: myAppbar(context),
               resizeToAvoidBottomInset: false,
               body: Container(
@@ -160,21 +162,21 @@ class _MyClassState extends State<MyClass> {
         backgroundColor: Colors.white,
         elevation: 0.0,
         title: bar,
-        leading: new IconButton(
-          onPressed: () {
-            ctrl.removeLoginData();
-            Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (context) => MyLogin()));
-          },
-          icon: Transform(
-              alignment: Alignment.center,
-              transform: Matrix4.rotationY(math.pi),
-              child: Icon(
-                Icons.logout,
-                size: 22,
-              )),
-          color: Colors.grey,
-        ),
+        // leading: new IconButton(
+        //   onPressed: () {
+        //     ctrl.removeLoginData();
+        //     Navigator.pushReplacement(
+        //         context, MaterialPageRoute(builder: (context) => MyLogin()));
+        //   },
+        //   icon: Transform(
+        //       alignment: Alignment.center,
+        //       transform: Matrix4.rotationY(math.pi),
+        //       child: Icon(
+        //         Icons.logout,
+        //         size: 22,
+        //       )),
+        //   color: Colors.grey,
+        // ),
         actions: <Widget>[
           new IconButton(
             onPressed: () {

@@ -3,25 +3,27 @@ import 'package:deanora/screen/MyLogin.dart';
 import 'package:flutter/material.dart';
 
 class ClassAppbar extends StatefulWidget implements PreferredSizeWidget {
-    ClassAppbar({Key? key}) : preferredSize = Size.fromHeight(40), super(key: key);
+  ClassAppbar({Key? key})
+      : preferredSize = Size.fromHeight(40),
+        super(key: key);
 
-    @override
-    final Size preferredSize; // default is 56.0
+  @override
+  final Size preferredSize; // default is 56.0
 
-    @override
-    _ClassAppbarState createState() => _ClassAppbarState();
+  @override
+  _ClassAppbarState createState() => _ClassAppbarState();
 }
 
-class _ClassAppbarState extends State<ClassAppbar>{
-Widget bar = new Text("");
-List names = [];
+class _ClassAppbarState extends State<ClassAppbar> {
+  Widget bar = new Text("");
+  List names = [];
   List filteredNames = [];
   List fname = [];
   String _searchText = "";
   Icon searchIcon = new Icon(Icons.search);
-    @override
-    Widget build(BuildContext context) {
-        var ctrl = new LoginDataCtrl();
+  @override
+  Widget build(BuildContext context) {
+    var ctrl = new LoginDataCtrl();
     var windowWidth = MediaQuery.of(context).size.width;
     return PreferredSize(
       preferredSize: Size.fromHeight(40),
@@ -105,10 +107,5 @@ List names = [];
         ],
       ),
     );
-    }
+  }
 }
-
-
-
-
-  
