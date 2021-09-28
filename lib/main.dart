@@ -37,7 +37,7 @@ class _MyAppState extends State<MyApp> {
             primaryColor: Colors.black,
             accentColor: Colors.white),
         debugShowCheckedModeBanner: false,
-        home: Cover());
+        home: MyCalendar());
   }
 }
 

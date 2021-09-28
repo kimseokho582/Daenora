@@ -12,9 +12,15 @@ class MyCalendar extends StatefulWidget {
 class _MyCalendarState extends State<MyCalendar> {
   List<Calendar> calendar = CustomCalendar()
       .getMonthCalendar(10, 2021, startWeekDay: StartWeekDay.sunday);
+  DateTime _currentDateTime =
+      DateTime(DateTime.now().year, DateTime.now().month);
+  DateTime _selectDateTime =
+      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
   @override
   Widget build(BuildContext context) {
-    calendar.map((e) => print(e.date)).toList();
+    print(_currentDateTime);
+    print(_selectDateTime);
+    //calendar.map((e) => print(e.date)).toList();
     return Container(
       child: Text("여긴 달력"),
     );
