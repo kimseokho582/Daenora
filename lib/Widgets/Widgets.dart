@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:deanora/crawl/crawl.dart';
+import 'package:deanora/crawl/customException.dart';
 import 'package:deanora/object/assignment.dart';
 import 'package:deanora/object/lecture.dart';
 import 'package:deanora/object/user.dart';
@@ -89,9 +90,6 @@ List classes(props) {
       .map((x) =>
           {classes.add(Lecture(x["className"], x["profName"], x["classId"]))})
       .toList();
-  //classes.map((e) => {Text(e.className)}).toList();
-  //print(classes[0].classId);
-
   return classes;
 }
 
@@ -143,27 +141,31 @@ Widget firstfault = Text(
 );
 
 Future<List> requestAssignment(id, pw, props) async {
-    throw Error();
-  var crawl = new Crawl(id, pw);
-  List<dynamic> assignment = [];
-  List doneCnt = [];
-  if (props != null) {
-    for (int i = 0; i < props.length; i++) {
-      var assignmentProps = await crawl.crawlAssignments(props[i].classId);
-      if (assignmentProps.length > 0) {
-        assignment = assignments(assignmentProps);
-        double tmp = 0.0;
-        for (int i = 0; i < assignment.length; i++) {
-          if (assignment[i].state == "제출완료") {
-            tmp++;
+  
+  try {
+    var crawl = new Crawl(id, pw);
+    List<dynamic> assignment = [];
+    List doneCnt = [];
+    if (props != null) {
+      for (int i = 0; i < props.length; i++) {
+        var assignmentProps = await crawl.crawlAssignments(props[i].classId);
+        if (assignmentProps.length > 0) {
+          assignment = assignments(assignmentProps);
+          double tmp = 0.0;
+          for (int i = 0; i < assignment.length; i++) {
+            if (assignment[i].state == "제출완료") {
+              tmp++;
+            }
           }
+          doneCnt.add(tmp / assignment.length);
+        } else {
+          doneCnt.add(0.0);
         }
-        doneCnt.add(tmp / assignment.length);
-      } else {
-        doneCnt.add(0.0);
       }
+      return doneCnt;
     }
-    return doneCnt;
+    return [];
+  } catch (e) {
+    return Future.error(e);
   }
-  return [];
 }
