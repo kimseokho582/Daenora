@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:deanora/crawl/crawl.dart';
 import 'package:deanora/object/assignment.dart';
 import 'package:deanora/object/lecture.dart';
@@ -142,6 +143,7 @@ Widget firstfault = Text(
 );
 
 Future<List> requestAssignment(id, pw, props) async {
+    throw Error();
   var crawl = new Crawl(id, pw);
   List<dynamic> assignment = [];
   List doneCnt = [];
