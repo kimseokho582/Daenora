@@ -123,18 +123,12 @@ class _MyClassState extends State<MyClass> {
                                 ),
                               );
                             } else if (snap.hasError) {
-<<<<<<< HEAD
                               return Column(
                                 children: [
                                   Text("Error"),
                                   Text(snap.error.toString()),
                                 ],
                               );
-=======
-                              String? tmp = snap.error.toString();
-                              print(tmp);
-                              return Text(tmp);
->>>>>>> 33cc9e2f66fe6a3d737147c2293343c47dc3ad38
                             } else {
                               return SizedBox(
                                   width: 50,
