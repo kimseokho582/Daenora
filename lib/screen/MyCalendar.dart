@@ -10,6 +10,8 @@ class MyCalendar extends StatefulWidget {
 }
 
 class _MyCalendarState extends State<MyCalendar> {
+  CalendarViews _currentView = CalendarViews.dates;
+  late int midYear;
   final List<String> _weekDays = [
     'SUN',
     "MON",
@@ -61,16 +63,16 @@ class _MyCalendarState extends State<MyCalendar> {
         children: [
           Container(
             margin: EdgeInsets.all(20),
-            height: MediaQuery.of(context).size.height * 0.6,
-            width: 300,
-            
+            height: MediaQuery.of(context).size.height * 0.5,
             decoration: BoxDecoration(
               color: Colors.grey,
               borderRadius: BorderRadius.circular(20),
             ),
             child: _dateView(),
           ),
-          Center(child: Text("내역"),)
+          Center(
+            child: Text("내역"),
+          )
         ],
       ),
     );
@@ -89,7 +91,8 @@ class _MyCalendarState extends State<MyCalendar> {
               child: InkWell(
             onTap: () {
               setState(() {
-                //_currentView = CalendarViews.months
+                // explained in later stages
+                _currentView = CalendarViews.months;
               });
             },
             child: Center(
@@ -102,24 +105,39 @@ class _MyCalendarState extends State<MyCalendar> {
               ),
             ),
           )),
-          _toggleBtn(false),
+          _toggleBtn(true),
         ]),
-        SizedBox(
-          height: 20,
-        ),
-        Divider(
-          color: Colors.white,
-        ),
-        SizedBox(
-          height: 20,
-        ),
         Flexible(child: _calendarBody()),
       ],
     );
   }
 
   Widget _toggleBtn(bool next) {
-    return Container();
+    return InkWell(
+      // explained in later stages
+      onTap: () {
+        if (_currentView == CalendarViews.dates) {
+          setState(() => (next) ? _getNextMonth() : _getPrevMonth());
+        } else if (_currentView == CalendarViews.year) {
+          if (next) {
+            midYear =
+                (midYear == null) ? _currentDateTime.year + 9 : midYear + 9;
+          } else {
+            midYear =
+                (midYear == null) ? _currentDateTime.year - 9 : midYear - 9;
+          }
+          setState(() {});
+        }
+      },
+      child: Container(
+        width: 50,
+        height: 50,
+        child: Icon(
+          (next) ? Icons.arrow_forward_ios : Icons.arrow_back_ios,
+          color: Colors.white,
+        ),
+      ),
+    );
   }
 
   Widget _calendarBody() {
@@ -129,6 +147,8 @@ class _MyCalendarState extends State<MyCalendar> {
       padding: EdgeInsets.zero,
       itemCount: _sequentialDates.length + 7, //dates+weekday
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        childAspectRatio: MediaQuery.of(context).size.width /
+            (MediaQuery.of(context).size.height / 2),
         crossAxisCount: 7,
         mainAxisSpacing: 0,
         crossAxisSpacing: 0,
@@ -188,20 +208,26 @@ class _MyCalendarState extends State<MyCalendar> {
         }
       },
       child: Container(
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(100),
-        color:Colors.red
-        ),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(100)),
         child: Center(
-          child: Text(
-            '${calendarDate.date.day}',
-            style: TextStyle(
-              color: (calendarDate.thisMonth)
-                  ? (calendarDate.date.weekday == DateTime.sunday)
-                      ? Colors.yellow
-                      : Colors.white
-                  : (calendarDate.date.weekday == DateTime.sunday)
-                      ? Colors.yellow.withOpacity(0.5)
-                      : Colors.white.withOpacity(0.5),
+          child: Container(
+            height: 20,
+            width: 20,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(100), color: Colors.blue),
+            child: Center(
+              child: Text(
+                '${calendarDate.date.day}',
+                style: TextStyle(
+                  color: (calendarDate.thisMonth)
+                      ? (calendarDate.date.weekday == DateTime.sunday)
+                          ? Colors.yellow
+                          : Colors.white
+                      : (calendarDate.date.weekday == DateTime.sunday)
+                          ? Colors.yellow.withOpacity(0.5)
+                          : Colors.white.withOpacity(0.5),
+                ),
+              ),
             ),
           ),
         ),
@@ -209,3 +235,5 @@ class _MyCalendarState extends State<MyCalendar> {
     );
   }
 }
+
+enum CalendarViews { dates, months, year }
