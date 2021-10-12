@@ -47,7 +47,7 @@ class _MyCalendarState extends State<MyCalendar> {
   ];
   List<Calendar> _sequentialDates = [];
   late DateTime _currentDateTime, _selectDateTime;
-  String _scheduleInput = "",_schduleFrom="",_schduleUntill="";
+  String _scheduleInput = "", _schduleFrom = "", _schduleUntill = "";
 
   @override
   void initState() {
@@ -72,6 +72,7 @@ class _MyCalendarState extends State<MyCalendar> {
     //calendar.map((e) => print(e.date)).toList();
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Column(
         children: [
           Container(
@@ -83,12 +84,72 @@ class _MyCalendarState extends State<MyCalendar> {
             ),
             child: _dateView(),
           ),
+          ElevatedButton(
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                        title: Text("일정"),
+                        content: Column(
+                          children: [
+                            SizedBox(
+                              height: 100,
+                              child: CupertinoDatePicker(
+                                initialDateTime: DateFormat('yyyy-MM-dd')
+                                    .parse('2021-09-01'),
+                                mode: CupertinoDatePickerMode.date,
+                                onDateTimeChanged: (dateTime) {
+                                  _schduleFrom = DateFormat('yyyy-MM-dd')
+                                      .format(dateTime)
+                                      .toString();
+                                },
+                              ),
+                            ),
+                            SizedBox(
+                              height: 50,
+                            ),
+                            SizedBox(
+                              height: 100,
+                              child: CupertinoDatePicker(
+                                initialDateTime: DateFormat('yyyy-MM-dd')
+                                    .parse('2021-09-01'),
+                                mode: CupertinoDatePickerMode.date,
+                                onDateTimeChanged: (dateTime) {
+                                  _schduleUntill = DateFormat('yyyy-MM-dd')
+                                      .format(dateTime)
+                                      .toString();
+                                },
+                              ),
+                            ),
+                            TextField(
+                              onChanged: (String value) {
+                                _scheduleInput = value;
+                              },
+                            ),
+                          ],
+                        ),
+                        actions: [
+                          ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                _schedule.add(Pair(_scheduleInput,
+                                    _schduleFrom + "/" + _schduleUntill));
+                              });
+                            },
+                            child: Text("Add"),
+                          )
+                        ]);
+                  });
+            },
+            child: Icon(Icons.add),
+          ),
           TextField(
             controller: _addSchedule,
           ),
           Center(
             child: Container(
-              height: 300,
+              height: 200,
               child: ListView.builder(
                 itemCount: _schedule.length,
                 itemBuilder: (BuildContext context, int index) {
