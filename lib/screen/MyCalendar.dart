@@ -1,4 +1,5 @@
 import 'package:deanora/Widgets/MakeCalendar.dart';
+import 'package:deanora/object/AcademinCalendar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -11,17 +12,12 @@ class MyCalendar extends StatefulWidget {
   _MyCalendarState createState() => _MyCalendarState();
 }
 
-class Pair<T1, Datetime> {
-  final T1 _schduleString;
-  final Datetime _schduleDate;
-  Pair(this._schduleString, this._schduleDate);
-}
-
 class _MyCalendarState extends State<MyCalendar> {
   CalendarViews _currentView = CalendarViews.dates;
   late int midYear;
+
+  List<Pair> tmp = schedule.cast<Pair>();
   final _addSchedule = TextEditingController();
-  List<Pair> _schedule = [];
   final List<String> _weekDays = [
     'SUN',
     "MON",
@@ -47,6 +43,8 @@ class _MyCalendarState extends State<MyCalendar> {
   ];
   List<Calendar> _sequentialDates = [];
   late DateTime _currentDateTime, _selectDateTime;
+  String _selectedYM = "";
+  List<String> _selectedYMList = [];
   String _scheduleInput = "", _schduleFrom = "", _schduleUntill = "";
 
   @override
@@ -54,9 +52,15 @@ class _MyCalendarState extends State<MyCalendar> {
     super.initState();
     final date = DateTime.now();
     _currentDateTime = DateTime(date.year, date.month);
+    _selectedYM = DateFormat('yyyy-MM').format(_currentDateTime);
     _selectDateTime = DateTime(date.year, date.month, date.day);
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       setState(() => _getCalendar());
+    });
+    tmp.forEach((e) {
+      if (_selectedYM == e.schduleDate.substring(0, 7)) {
+        _selectedYMList.add(e.schduleString);
+      }
     });
   }
 
@@ -67,10 +71,12 @@ class _MyCalendarState extends State<MyCalendar> {
   }
 
   Widget build(BuildContext context) {
-    //print(_currentDateTime);
+    print(_currentDateTime);
+    //print(_selectedYMList);
     //print(_selectDateTime);
     //calendar.map((e) => print(e.date)).toList();
-
+    //print(tmp[0].schduleDate);
+    //print(_currentView);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Column(
@@ -84,90 +90,15 @@ class _MyCalendarState extends State<MyCalendar> {
             ),
             child: _dateView(),
           ),
-          ElevatedButton(
-            onPressed: () {
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                        title: Text("일정"),
-                        content: Column(
-                          children: [
-                            SizedBox(
-                              height: 100,
-                              child: CupertinoDatePicker(
-                                initialDateTime: DateFormat('yyyy-MM-dd')
-                                    .parse('2021-09-01'),
-                                mode: CupertinoDatePickerMode.date,
-                                onDateTimeChanged: (dateTime) {
-                                  _schduleFrom = DateFormat('yyyy-MM-dd')
-                                      .format(dateTime)
-                                      .toString();
-                                },
-                              ),
-                            ),
-                            SizedBox(
-                              height: 50,
-                            ),
-                            SizedBox(
-                              height: 100,
-                              child: CupertinoDatePicker(
-                                initialDateTime: DateFormat('yyyy-MM-dd')
-                                    .parse('2021-09-01'),
-                                mode: CupertinoDatePickerMode.date,
-                                onDateTimeChanged: (dateTime) {
-                                  _schduleUntill = DateFormat('yyyy-MM-dd')
-                                      .format(dateTime)
-                                      .toString();
-                                },
-                              ),
-                            ),
-                            TextField(
-                              onChanged: (String value) {
-                                _scheduleInput = value;
-                              },
-                            ),
-                          ],
-                        ),
-                        actions: [
-                          ElevatedButton(
-                            onPressed: () {
-                              setState(() {
-                                _schedule.add(Pair(_scheduleInput,
-                                    _schduleFrom + "/" + _schduleUntill));
-                              });
-                            },
-                            child: Text("Add"),
-                          )
-                        ]);
-                  });
-            },
-            child: Icon(Icons.add),
-          ),
-          TextField(
-            controller: _addSchedule,
-          ),
-          Center(
-            child: Container(
-              height: 200,
-              child: ListView.builder(
-                itemCount: _schedule.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Dismissible(
-                      key: Key(_schedule[index]._schduleString),
-                      child: Card(
-                          child: ListTile(
-                        title: Column(
-                          children: [
-                            Text(_schedule[index]._schduleString),
-                            Text(_schedule[index]._schduleDate),
-                          ],
-                        ),
-                      )));
-                },
-              ),
+          Container(
+            height: 400,
+            child: ListView.builder(
+              itemCount: _selectedYMList.length,
+              itemBuilder: (context, index) {
+                return Text("${_selectedYMList[index]} ${DateFormat('EEEE').format(_currentDateTime)}");
+              },
             ),
-          )
+          ),
         ],
       ),
     );
@@ -186,7 +117,6 @@ class _MyCalendarState extends State<MyCalendar> {
               child: InkWell(
             onTap: () {
               setState(() {
-                // explained in later stages
                 _currentView = CalendarViews.months;
               });
             },
@@ -209,10 +139,18 @@ class _MyCalendarState extends State<MyCalendar> {
 
   Widget _toggleBtn(bool next) {
     return InkWell(
-      // explained in later stages
       onTap: () {
         if (_currentView == CalendarViews.dates) {
-          setState(() => (next) ? _getNextMonth() : _getPrevMonth());
+          _selectedYMList.clear();
+          setState(() => {
+                (next) ? _getNextMonth() : _getPrevMonth(),
+                _selectedYM = DateFormat('yyyy-MM').format(_currentDateTime),
+                tmp.forEach((e) {
+                  if (_selectedYM == e.schduleDate.substring(0, 7)) {
+                    _selectedYMList.add(e.schduleString);
+                  }
+                })
+              });
         } else if (_currentView == CalendarViews.year) {
           if (next) {
             midYear =
