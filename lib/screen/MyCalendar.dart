@@ -83,58 +83,6 @@ class _MyCalendarState extends State<MyCalendar> {
             ),
             child: _dateView(),
           ),
-          ElevatedButton(
-            onPressed: () {
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                        title: Text("일정"),
-                        content: Column(
-                          children: [
-                            SizedBox(
-                              height: 300,
-                              child: CupertinoDatePicker(
-                                initialDateTime: DateFormat('yyyy-MM-dd').parse('2021-09-01'),
-                                mode:CupertinoDatePickerMode.date,
-                                onDateTimeChanged: (dateTime) {
-                                  _schduleFrom = DateFormat('yyyy-MM-dd').format(dateTime).toString();
-                                },
-                              ),
-                            ),
-                            SizedBox(height: 100,),
-                            SizedBox(
-                              height: 250,
-                              child: CupertinoDatePicker(
-                                initialDateTime: DateFormat('yyyy-MM-dd').parse('2021-09-01'),
-                                mode:CupertinoDatePickerMode.date,
-                                onDateTimeChanged: (dateTime) {
-                                  _schduleUntill = DateFormat('yyyy-MM-dd').format(dateTime).toString();
-                                 
-                                },
-                              ),
-                            ),
-                            TextField(
-                              onChanged: (String value) {
-                                _scheduleInput = value;
-                              },
-                            ),
-                          ],
-                        ),
-                        actions: [
-                          ElevatedButton(
-                            onPressed: () {
-                              setState(() {
-                                _schedule.add(Pair(_scheduleInput, _schduleFrom+"/"+_schduleUntill));
-                              });
-                            },
-                            child: Text("Add"),
-                          )
-                        ]);
-                  });
-            },
-            child: Icon(Icons.add),
-          ),
           TextField(
             controller: _addSchedule,
           ),
