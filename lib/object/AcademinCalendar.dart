@@ -1,4 +1,4 @@
-class Pair<T1, Datetime> {
+class Pair<Datetime,T1> {
   final Datetime schduleDate;
   final T1 schduleString;
   Pair(this.schduleDate, this.schduleString);
