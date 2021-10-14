@@ -11,15 +11,15 @@ class MyCalendar extends StatefulWidget {
   _MyCalendarState createState() => _MyCalendarState();
 }
 
-class Pair<DateTime,String>{
-  DateTime date;
+class Pair<List, String> {
+  List date;
   String schdule;
-  Pair(this.date,this.schdule);
+  Pair(this.date, this.schdule);
 }
+
 class _MyCalendarState extends State<MyCalendar> {
   CalendarViews _currentView = CalendarViews.dates;
   late int midYear;
-
 
   final List<String> _weekDays = [
     'SUN',
@@ -44,9 +44,9 @@ class _MyCalendarState extends State<MyCalendar> {
     'November',
     'December'
   ];
-  List<Pair>_selected=[];
+  List<Pair> _selected = [];
   List<Calendar> _sequentialDates = [];
-  List<DateTime>_selectedDate=[];
+  List<DateTime> _selectedDate = [];
   late DateTime _currentDateTime, _selectDateTime;
   List<String> _selectedSchdule = [];
   String _scheduleInput = "", _schduleFrom = "", _schduleUntill = "";
@@ -60,32 +60,36 @@ class _MyCalendarState extends State<MyCalendar> {
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       setState(() => _getCalendar());
     });
-   
-
   }
 
   void _getCalendar() {
     _sequentialDates = CustomCalendar().getMonthCalendar(
         _currentDateTime.month, _currentDateTime.year,
         startWeekDay: StartWeekDay.sunday);
-     _getSelectedSchdule();
+    _getSelectedSchdule();
   }
 
-  void _getSelectedSchdule(){
-    _selectedSchdule.clear();
-    _sequentialDates.forEach((e) {
-      if(e.checkedSchdule!=""){
-        if(e.thisMonth){
-        _selected.add(Pair(e.date,e.checkedSchdule));
-        _selectedSchdule.add(e.checkedSchdule);
-        _selectedDate.add(e.date);
-        }
-      }
-     });
+  void _getSelectedSchdule() {
+    _selected.clear();
+    // _sequentialDates.forEach((e) {
+    //   List tmpList = [];
+    //   if (e.thisMonth) {
+    //     if (e.checkedSchedule != "") {
+    //       DateTime dateTmp =e.date;
+    //      do{
+    //         tmpList.add(dateTmp);
+    //         dateTmp =
+    //             new DateTime(dateTmp.year, dateTmp.month, dateTmp.day + 1);
+    //       } while(DateFormat('yyyy-MM-dd').format(dateTmp).toString().compareTo(e.untilRange)!=1);
+    //       print(tmpList);
+    //       _selected.add(Pair(tmpList, e.checkedSchedule));
+    //     }
+    //   }
+    // });
   }
 
   Widget build(BuildContext context) {
-   // print(_currentDateTime);
+    // print(_currentDateTime);
     //print(_selectedYMList);
     //print(_selectDateTime);
     //calendar.map((e) => print(e.date)).toList();
@@ -107,9 +111,10 @@ class _MyCalendarState extends State<MyCalendar> {
           Container(
             height: 400,
             child: ListView.builder(
-              itemCount: _selectedSchdule.length,
+              itemCount: _selected.length,
               itemBuilder: (context, index) {
-                return Text("${_selected[index].schdule} ${DateFormat('MM.dd').format(_selected[index].date)}");
+                return Text(
+                    "${_selected[index].schdule} ${DateFormat('MM.dd').format(_selected[index].date[0])} ~ ${DateFormat('MM.dd').format(_selected[index].date[_selected[index].date.length - 1])}");
               },
             ),
           ),
@@ -235,13 +240,26 @@ class _MyCalendarState extends State<MyCalendar> {
   }
 
   Widget _calendarDates(Calendar calendarDate) {
-    if(calendarDate.checkedSchdule!=""){
-      if(calendarDate.thisMonth){
-        print("${calendarDate.checkedSchdule} 진짜");
-      }else{
-      print(calendarDate.checkedSchdule);
+    Color _color = Colors.grey;
+    if (calendarDate.thisMonth) {
+      if (calendarDate.middle) {
+        _color = Colors.pink;
+      } else if (calendarDate.left) {
+        _color = Colors.blue;
+      } else if (calendarDate.right) {
+        _color = Colors.blue;
+      } else if (calendarDate.single) {
+        _color = Colors.green;
       }
     }
+
+    // if (calendarDate.checkedSchdule != "") {
+    //   if (calendarDate.thisMonth) {
+    //     print("${calendarDate.checkedSchdule} 진짜");
+    //   } else {
+    //     print(calendarDate.checkedSchdule);
+    //   }
+    // }
     return InkWell(
       onTap: () {
         print(calendarDate.date);
@@ -261,7 +279,9 @@ class _MyCalendarState extends State<MyCalendar> {
             height: 40,
             width: 40,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(100), color:(calendarDate.checked&&calendarDate.thisMonth)?Colors.red:Colors.grey),
+              borderRadius: BorderRadius.circular(100),
+              color: _color,
+            ),
             child: Center(
               child: Text(
                 '${calendarDate.date.day}',
