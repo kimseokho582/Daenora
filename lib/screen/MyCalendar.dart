@@ -11,10 +11,10 @@ class MyCalendar extends StatefulWidget {
   _MyCalendarState createState() => _MyCalendarState();
 }
 
-class Pair<List, String> {
+class PairList<List, String> {
   List date;
   String schdule;
-  Pair(this.date, this.schdule);
+  PairList(this.date, this.schdule);
 }
 
 class _MyCalendarState extends State<MyCalendar> {
@@ -44,12 +44,11 @@ class _MyCalendarState extends State<MyCalendar> {
     'November',
     'December'
   ];
-  List<Pair> _selected = [];
+  List<PairList> _selected = [];
   List<Calendar> _sequentialDates = [];
   List<DateTime> _selectedDate = [];
   late DateTime _currentDateTime, _selectDateTime;
   List<String> _selectedSchdule = [];
-  String _scheduleInput = "", _schduleFrom = "", _schduleUntill = "";
 
   @override
   void initState() {
@@ -66,35 +65,18 @@ class _MyCalendarState extends State<MyCalendar> {
     _sequentialDates = CustomCalendar().getMonthCalendar(
         _currentDateTime.month, _currentDateTime.year,
         startWeekDay: StartWeekDay.sunday);
-    _getSelectedSchdule();
+    _getCalendarSelected();
   }
 
-  void _getSelectedSchdule() {
-    _selected.clear();
-    // _sequentialDates.forEach((e) {
-    //   List tmpList = [];
-    //   if (e.thisMonth) {
-    //     if (e.checkedSchedule != "") {
-    //       DateTime dateTmp =e.date;
-    //      do{
-    //         tmpList.add(dateTmp);
-    //         dateTmp =
-    //             new DateTime(dateTmp.year, dateTmp.month, dateTmp.day + 1);
-    //       } while(DateFormat('yyyy-MM-dd').format(dateTmp).toString().compareTo(e.untilRange)!=1);
-    //       print(tmpList);
-    //       _selected.add(Pair(tmpList, e.checkedSchedule));
-    //     }
-    //   }
-    // });
+  void _getCalendarSelected() {
+    _sequentialDates.forEach((e) {
+      if (e.checkSchedule.schdule != "" && e.thisMonth) {
+        _selected.add(PairList(e.checkSchedule.date, e.checkSchedule.schdule));
+      }
+    });
   }
 
   Widget build(BuildContext context) {
-    // print(_currentDateTime);
-    //print(_selectedYMList);
-    //print(_selectDateTime);
-    //calendar.map((e) => print(e.date)).toList();
-    //print(tmp[0].schduleDate);
-    //print(_currentView);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Column(
@@ -253,16 +235,9 @@ class _MyCalendarState extends State<MyCalendar> {
       }
     }
 
-    // if (calendarDate.checkedSchdule != "") {
-    //   if (calendarDate.thisMonth) {
-    //     print("${calendarDate.checkedSchdule} 진짜");
-    //   } else {
-    //     print(calendarDate.checkedSchdule);
-    //   }
-    // }
     return InkWell(
       onTap: () {
-        print(calendarDate.date);
+        //print(calendarDate.date);
         if (_selectDateTime != calendarDate.date) {
           if (calendarDate.nextMonth) {
             _getNextMonth();

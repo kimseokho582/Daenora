@@ -162,12 +162,13 @@ class CustomCalendar {
           List _tmpList = [];
           DateTime _dateTmp = calendar[j].date;
           int cnt = 0;
+          calendar[j].checkSchedule.schdule = _schdule[i].schduleString;
           if (_schdule[i].schduleDate.length > 11) {
             do {
               if (_tmpList.length == 0) {
-                calendar[j+cnt].left = true;
+                calendar[j + cnt].left = true;
               } else {
-                    calendar[j+cnt].middle=true;
+                calendar[j + cnt].middle = true;
               }
               _tmpList.add(_dateTmp);
               _dateTmp =
@@ -178,8 +179,8 @@ class CustomCalendar {
                     .toString()
                     .compareTo(_schdule[i].schduleDate.substring(11, 21)) !=
                 1);
-                          calendar[j+cnt-1].middle=false;
-          calendar[j+cnt-1].right=true;
+            calendar[j + cnt - 1].middle = false;
+            calendar[j + cnt - 1].right = true;
           } else {
             calendar[j].single = true;
             _tmpList.add(_dateTmp);
@@ -188,11 +189,6 @@ class CustomCalendar {
         }
       }
     }
-    for (int j = 0; j < calendar.length; j++) {
-      print(calendar[j].checkSchedule.date);
-    }
-    //print(month);
-    //print(calendar[10].date);
     return calendar;
   }
 }
