@@ -1,7 +1,7 @@
 import 'package:deanora/object/AcademinCalendar.dart';
 import 'package:intl/intl.dart';
 
-class PairList<List, String> {
+class PairList<T1, T2> {
   List date;
   String schdule;
   PairList(this.date, this.schdule);
@@ -9,7 +9,7 @@ class PairList<List, String> {
 
 class Calendar {
   final DateTime date;
-  PairList checkSchedule;
+  List<PairList> checkSchedule;
   final bool thisMonth;
   final bool prevMonth;
   final bool nextMonth;
@@ -63,12 +63,11 @@ class CustomCalendar {
     if (_isLeapYear(year) && month == DateTime.february) totalDays++;
 
     for (int i = 0; i < totalDays; i++) {
-      calendar.add(
-        Calendar(
-            date: DateTime(year, month, i + 1),
-            thisMonth: true,
-            checkSchedule: PairList([], "")),
-      );
+      calendar.add(Calendar(
+        date: DateTime(year, month, i + 1),
+        thisMonth: true,
+        checkSchedule: [PairList([], "")],
+      ));
     }
 
     if ((startWeekDay == StartWeekDay.sunday &&
@@ -94,12 +93,12 @@ class CustomCalendar {
 
       for (int i = totalDays; i > leftDays; i--) {
         calendar.insert(
-          0,
-          Calendar(
+            0,
+            Calendar(
               date: DateTime(otherYear, otherMonth, i),
               prevMonth: true,
-              checkSchedule: PairList([], "")),
-        );
+              checkSchedule: [PairList([], "")],
+            ));
       }
     }
 
@@ -129,11 +128,12 @@ class CustomCalendar {
           Calendar(
               date: DateTime(otherYear, otherMonth, i + 1),
               nextMonth: true,
-              checkSchedule: PairList([], "")),
+              checkSchedule: [PairList([], "")]),
         );
       }
     }
     int _rangeX = 0, _rangeY = 0;
+
     for (int i = 0; i < _schdule.length; i++) {
       if (DateFormat('yyyy-MM-dd')
               .format(calendar[0].date)
@@ -154,7 +154,6 @@ class CustomCalendar {
         break;
       }
     }
-
     for (int i = _rangeX; i <= _rangeY; i++) {
       for (int j = 0; j < calendar.length; j++) {
         if (_schdule[i].schduleDate.substring(0, 10) ==
@@ -162,11 +161,7 @@ class CustomCalendar {
           List _tmpList = [];
           DateTime _dateTmp = calendar[j].date;
           int cnt = 0;
-<<<<<<< HEAD
-          calendar[j].checkSchedule.schdule = _schdule[i].schduleString;
-=======
-          calendar[j].checkSchedule.schdule=_schdule[i].schduleString;
->>>>>>> origin/master
+
           if (_schdule[i].schduleDate.length > 11) {
             do {
               if (_tmpList.length == 0) {
@@ -189,14 +184,20 @@ class CustomCalendar {
             calendar[j].single = true;
             _tmpList.add(_dateTmp);
           }
-          calendar[j].checkSchedule.date = _tmpList;
+
+          calendar[j]
+              .checkSchedule
+              .add(PairList(_tmpList, _schdule[i].schduleString));
         }
       }
     }
-<<<<<<< HEAD
-=======
+    // for (int i = 0; i < calendar.length; i++) {
+    //   for (int j = 0; j < calendar[i].checkSchedule.length; j++) {
+    //     print(
+    //         "${calendar[i].checkSchedule[j].date} ${calendar[i].checkSchedule[j].schdule}");
+    //   }
+    // }
 
->>>>>>> origin/master
     return calendar;
   }
 }

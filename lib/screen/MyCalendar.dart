@@ -11,7 +11,7 @@ class MyCalendar extends StatefulWidget {
   _MyCalendarState createState() => _MyCalendarState();
 }
 
-class PairList<List, String> {
+class PairList<T1, T2> {
   List date;
   String schdule;
   PairList(this.date, this.schdule);
@@ -44,6 +44,16 @@ class _MyCalendarState extends State<MyCalendar> {
     'November',
     'December'
   ];
+
+  final List<Color> _colors = [
+    Colors.red,
+    Colors.blue,
+    Colors.green,
+    Colors.pink,
+    Colors.deepOrange,
+    Colors.deepOrangeAccent,
+    Colors.yellow,
+  ];
   List<PairList> _selected = [];
   List<Calendar> _sequentialDates = [];
   List<DateTime> _selectedDate = [];
@@ -72,11 +82,21 @@ class _MyCalendarState extends State<MyCalendar> {
     _selected.clear();
     _sequentialDates.forEach((e) {
       if (e.thisMonth) {
-        if (e.checkSchedule.schdule != "") {
-          _selected
-              .add(PairList(e.checkSchedule.date, e.checkSchedule.schdule));
-        }
+        e.checkSchedule.forEach((v) {
+          if (v.schdule != "") {
+            // print(v.date);
+            _selected.add(PairList(v.date, v.schdule));
+          }
+        });
+        // e.checkSchedule.forEach((ee) {
+        //   //print(ee);
+        //
+        // });
+
       }
+    });
+    _selected.forEach((element) {
+      print("${element.schdule} ${element.date} }");
     });
   }
 
@@ -235,22 +255,22 @@ class _MyCalendarState extends State<MyCalendar> {
 
     BoxDecoration calendarBoxDeco() {
       if (calendarDate.thisMonth) {
-        if (calendarDate.left) {
-          return BoxDecoration(
-              color: Colors.red,
-              borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(100),
-                  topLeft: Radius.circular(100)));
-        }
         if (calendarDate.right) {
           return BoxDecoration(
-              color: Colors.red,
+              color: _colors[1],
               borderRadius: BorderRadius.only(
                   bottomRight: Radius.circular(100),
                   topRight: Radius.circular(100)));
         }
+        if (calendarDate.left) {
+          return BoxDecoration(
+              color: _colors[2],
+              borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(100),
+                  topLeft: Radius.circular(100)));
+        }
         if (calendarDate.middle) {
-          return BoxDecoration(color: Colors.red);
+          return BoxDecoration(color: _colors[3]);
         } else {
           return BoxDecoration(color: Colors.grey);
         }
@@ -261,7 +281,6 @@ class _MyCalendarState extends State<MyCalendar> {
 
     return InkWell(
       onTap: () {
-        //print(calendarDate.date);
         if (_selectDateTime != calendarDate.date) {
           if (calendarDate.nextMonth) {
             _getNextMonth();
