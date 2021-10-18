@@ -71,30 +71,16 @@ class _MyCalendarState extends State<MyCalendar> {
 
   void _getSelectedSchdule() {
     _selected.clear();
-    // _sequentialDates.forEach((e) {
-    //   List tmpList = [];
-    //   if (e.thisMonth) {
-    //     if (e.checkedSchedule != "") {
-    //       DateTime dateTmp =e.date;
-    //      do{
-    //         tmpList.add(dateTmp);
-    //         dateTmp =
-    //             new DateTime(dateTmp.year, dateTmp.month, dateTmp.day + 1);
-    //       } while(DateFormat('yyyy-MM-dd').format(dateTmp).toString().compareTo(e.untilRange)!=1);
-    //       print(tmpList);
-    //       _selected.add(Pair(tmpList, e.checkedSchedule));
-    //     }
-    //   }
-    // });
+    _sequentialDates.forEach((e) {
+      if (e.thisMonth) {
+        if (e.checkSchedule.schdule != "") {
+          _selected.add(Pair(e.checkSchedule.date, e.checkSchedule.schdule));
+        }
+      }
+    });
   }
 
   Widget build(BuildContext context) {
-    // print(_currentDateTime);
-    //print(_selectedYMList);
-    //print(_selectDateTime);
-    //calendar.map((e) => print(e.date)).toList();
-    //print(tmp[0].schduleDate);
-    //print(_currentView);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Column(
@@ -240,26 +226,39 @@ class _MyCalendarState extends State<MyCalendar> {
   }
 
   Widget _calendarDates(Calendar calendarDate) {
-    Color _color = Colors.grey;
+    Color _color = Colors.transparent;
     if (calendarDate.thisMonth) {
-      if (calendarDate.middle) {
-        _color = Colors.pink;
-      } else if (calendarDate.left) {
-        _color = Colors.blue;
-      } else if (calendarDate.right) {
-        _color = Colors.blue;
-      } else if (calendarDate.single) {
+     if (calendarDate.single) {
         _color = Colors.green;
       }
     }
 
-    // if (calendarDate.checkedSchdule != "") {
-    //   if (calendarDate.thisMonth) {
-    //     print("${calendarDate.checkedSchdule} 진짜");
-    //   } else {
-    //     print(calendarDate.checkedSchdule);
-    //   }
-    // }
+    BoxDecoration calendarBoxDeco() {
+      if (calendarDate.thisMonth) {
+         if (calendarDate.left) {
+          return BoxDecoration(
+              color: Colors.red,
+              borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(100),
+                  topLeft: Radius.circular(100)));
+        } 
+        if (calendarDate.right) {
+          return BoxDecoration(
+              color: Colors.red,
+              borderRadius: BorderRadius.only(
+                  bottomRight: Radius.circular(100),
+                  topRight: Radius.circular(100)));
+        } 
+        if (calendarDate.middle) {
+          return BoxDecoration(color: Colors.red);
+        } else {
+          return BoxDecoration(color: Colors.grey);
+        }
+      } else {
+          return BoxDecoration(color: Colors.grey);
+        }
+    }
+
     return InkWell(
       onTap: () {
         print(calendarDate.date);
@@ -273,11 +272,11 @@ class _MyCalendarState extends State<MyCalendar> {
         }
       },
       child: Container(
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(100)),
+        decoration: calendarBoxDeco(),
         child: Center(
           child: Container(
-            height: 40,
-            width: 40,
+            height: 50,
+            width: 50,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(100),
               color: _color,

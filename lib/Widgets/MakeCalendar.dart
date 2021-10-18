@@ -162,6 +162,7 @@ class CustomCalendar {
           List _tmpList = [];
           DateTime _dateTmp = calendar[j].date;
           int cnt = 0;
+          calendar[j].checkSchedule.schdule=_schdule[i].schduleString;
           if (_schdule[i].schduleDate.length > 11) {
             do {
               if (_tmpList.length == 0) {
@@ -188,11 +189,7 @@ class CustomCalendar {
         }
       }
     }
-    for (int j = 0; j < calendar.length; j++) {
-      print(calendar[j].checkSchedule.date);
-    }
-    //print(month);
-    //print(calendar[10].date);
+
     return calendar;
   }
 }
