@@ -65,13 +65,17 @@ class _MyCalendarState extends State<MyCalendar> {
     _sequentialDates = CustomCalendar().getMonthCalendar(
         _currentDateTime.month, _currentDateTime.year,
         startWeekDay: StartWeekDay.sunday);
-    _getCalendarSelected();
+    _getSelectedSchdule();
   }
 
-  void _getCalendarSelected() {
+  void _getSelectedSchdule() {
+    _selected.clear();
     _sequentialDates.forEach((e) {
-      if (e.checkSchedule.schdule != "" && e.thisMonth) {
-        _selected.add(PairList(e.checkSchedule.date, e.checkSchedule.schdule));
+      if (e.thisMonth) {
+        if (e.checkSchedule.schdule != "") {
+          _selected
+              .add(PairList(e.checkSchedule.date, e.checkSchedule.schdule));
+        }
       }
     });
   }
@@ -222,16 +226,36 @@ class _MyCalendarState extends State<MyCalendar> {
   }
 
   Widget _calendarDates(Calendar calendarDate) {
-    Color _color = Colors.grey;
+    Color _color = Colors.transparent;
     if (calendarDate.thisMonth) {
-      if (calendarDate.middle) {
-        _color = Colors.pink;
-      } else if (calendarDate.left) {
-        _color = Colors.blue;
-      } else if (calendarDate.right) {
-        _color = Colors.blue;
-      } else if (calendarDate.single) {
+      if (calendarDate.single) {
         _color = Colors.green;
+      }
+    }
+
+    BoxDecoration calendarBoxDeco() {
+      if (calendarDate.thisMonth) {
+        if (calendarDate.left) {
+          return BoxDecoration(
+              color: Colors.red,
+              borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(100),
+                  topLeft: Radius.circular(100)));
+        }
+        if (calendarDate.right) {
+          return BoxDecoration(
+              color: Colors.red,
+              borderRadius: BorderRadius.only(
+                  bottomRight: Radius.circular(100),
+                  topRight: Radius.circular(100)));
+        }
+        if (calendarDate.middle) {
+          return BoxDecoration(color: Colors.red);
+        } else {
+          return BoxDecoration(color: Colors.grey);
+        }
+      } else {
+        return BoxDecoration(color: Colors.grey);
       }
     }
 
@@ -248,11 +272,11 @@ class _MyCalendarState extends State<MyCalendar> {
         }
       },
       child: Container(
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(100)),
+        decoration: calendarBoxDeco(),
         child: Center(
           child: Container(
-            height: 40,
-            width: 40,
+            height: 50,
+            width: 50,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(100),
               color: _color,
