@@ -9,10 +9,10 @@ class PairList<List, String> {
 
 class Calendar {
   final DateTime date;
+  PairList checkSchedule;
   final bool thisMonth;
   final bool prevMonth;
   final bool nextMonth;
-  PairList checkSchedule;
   bool single;
   bool left;
   bool middle;
@@ -20,10 +20,10 @@ class Calendar {
 
   Calendar({
     required this.date,
+    required this.checkSchedule,
     this.thisMonth = false,
     this.prevMonth = false,
     this.nextMonth = false,
-    required this.checkSchedule,
     this.single = false,
     this.left = false,
     this.middle = false,
