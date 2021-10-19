@@ -84,15 +84,9 @@ class _MyCalendarState extends State<MyCalendar> {
       if (e.thisMonth) {
         e.checkSchedule.forEach((v) {
           if (v.schdule != "") {
-            // print(v.date);
             _selected.add(PairList(v.date, v.schdule));
           }
         });
-        // e.checkSchedule.forEach((ee) {
-        //   //print(ee);
-        //
-        // });
-
       }
     });
     _selected.forEach((element) {
@@ -165,6 +159,7 @@ class _MyCalendarState extends State<MyCalendar> {
   Widget _toggleBtn(bool next) {
     return InkWell(
       onTap: () {
+        
         if (_currentView == CalendarViews.dates) {
           setState(() => {
                 (next) ? _getNextMonth() : _getPrevMonth(),
@@ -172,10 +167,10 @@ class _MyCalendarState extends State<MyCalendar> {
         } else if (_currentView == CalendarViews.year) {
           if (next) {
             midYear =
-                (midYear == null) ? _currentDateTime.year + 9 : midYear + 9;
+                (midYear == 0) ? _currentDateTime.year + 9 : midYear + 9;
           } else {
             midYear =
-                (midYear == null) ? _currentDateTime.year - 9 : midYear - 9;
+                (midYear == 0) ? _currentDateTime.year - 9 : midYear - 9;
           }
           setState(() {});
         }
@@ -257,20 +252,20 @@ class _MyCalendarState extends State<MyCalendar> {
       if (calendarDate.thisMonth) {
         if (calendarDate.right) {
           return BoxDecoration(
-              color: _colors[1],
+              color: _colors[calendarDate.number%7],
               borderRadius: BorderRadius.only(
                   bottomRight: Radius.circular(100),
                   topRight: Radius.circular(100)));
         }
         if (calendarDate.left) {
           return BoxDecoration(
-              color: _colors[2],
+              color: _colors[calendarDate.number%7],
               borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(100),
                   topLeft: Radius.circular(100)));
         }
         if (calendarDate.middle) {
-          return BoxDecoration(color: _colors[3]);
+          return BoxDecoration(color: _colors[calendarDate.number%7]);
         } else {
           return BoxDecoration(color: Colors.grey);
         }

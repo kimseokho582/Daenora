@@ -17,6 +17,7 @@ class Calendar {
   bool left;
   bool middle;
   bool right;
+  int number;
 
   Calendar({
     required this.date,
@@ -28,6 +29,7 @@ class Calendar {
     this.left = false,
     this.middle = false,
     this.right = false,
+    this.number =0,
   });
 }
 
@@ -154,7 +156,8 @@ class CustomCalendar {
         break;
       }
     }
-    for (int i = _rangeX; i <= _rangeY; i++) {
+    int count=1;
+   for (int i = _rangeX; i <= _rangeY; i++) {
       for (int j = 0; j < calendar.length; j++) {
         if (_schdule[i].schduleDate.substring(0, 10) ==
             DateFormat('yyyy-MM-dd').format(calendar[j].date).toString()) {
@@ -172,7 +175,7 @@ class CustomCalendar {
               _tmpList.add(_dateTmp);
               _dateTmp =
                   new DateTime(_dateTmp.year, _dateTmp.month, _dateTmp.day + 1);
-              cnt++;
+             cnt++;
             } while (DateFormat('yyyy-MM-dd')
                     .format(_dateTmp)
                     .toString()
@@ -188,6 +191,8 @@ class CustomCalendar {
           calendar[j]
               .checkSchedule
               .add(PairList(_tmpList, _schdule[i].schduleString));
+        calendar[j].number=count;
+        count++;
         }
       }
     }
@@ -197,7 +202,6 @@ class CustomCalendar {
     //         "${calendar[i].checkSchedule[j].date} ${calendar[i].checkSchedule[j].schdule}");
     //   }
     // }
-
     return calendar;
   }
 }
