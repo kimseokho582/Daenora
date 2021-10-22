@@ -47,11 +47,11 @@ class _MyCalendarState extends State<MyCalendar> {
 
   final List<Color> _colors = [
     Colors.red,
-    Colors.blue,
+    Colors.deepOrangeAccent,
     Colors.green,
+    Colors.blue,
     Colors.pink,
     Colors.deepOrange,
-    Colors.deepOrangeAccent,
     Colors.yellow,
   ];
   List<PairList> _selected = [];
@@ -82,6 +82,7 @@ class _MyCalendarState extends State<MyCalendar> {
     _selected.clear();
     _sequentialDates.forEach((e) {
       if (e.thisMonth) {
+        print(e.number);
         e.checkSchedule.forEach((v) {
           if (v.schdule != "") {
             _selected.add(PairList(v.date, v.schdule));
@@ -286,10 +287,11 @@ class _MyCalendarState extends State<MyCalendar> {
         }
       },
       child: Container(
+        height:10,
         decoration: calendarBoxDeco(),
         child: Center(
           child: Container(
-            height: 50,
+            height: 30,
             width: 50,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(100),

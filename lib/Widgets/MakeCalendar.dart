@@ -172,6 +172,7 @@ class CustomCalendar {
               } else {
                 calendar[j + cnt].middle = true;
               }
+              calendar[j+cnt].number=count;
               _tmpList.add(_dateTmp);
               _dateTmp =
                   new DateTime(_dateTmp.year, _dateTmp.month, _dateTmp.day + 1);
@@ -185,13 +186,14 @@ class CustomCalendar {
             calendar[j + cnt - 1].right = true;
           } else {
             calendar[j].single = true;
+            calendar[j].number=count;
             _tmpList.add(_dateTmp);
           }
 
           calendar[j]
               .checkSchedule
               .add(PairList(_tmpList, _schdule[i].schduleString));
-        calendar[j].number=count;
+     
         count++;
         }
       }
