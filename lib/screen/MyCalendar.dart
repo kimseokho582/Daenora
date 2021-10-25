@@ -21,15 +21,7 @@ class _MyCalendarState extends State<MyCalendar> {
   CalendarViews _currentView = CalendarViews.dates;
   late int midYear;
 
-  final List<String> _weekDays = [
-    'SUN',
-    "MON",
-    'TUE',
-    'WED',
-    'THU',
-    'FRI',
-    'SAT'
-  ];
+  final List<String> _weekDays = ['S', "M", 'T', 'W', 'T', 'F', 'S'];
   final List<String> _monthNames = [
     'January',
     'February',
@@ -46,13 +38,22 @@ class _MyCalendarState extends State<MyCalendar> {
   ];
 
   final List<Color> _colors = [
-    Colors.red,
-    Colors.deepOrangeAccent,
-    Colors.green,
-    Colors.blue,
-    Colors.pink,
-    Colors.deepOrange,
-    Colors.yellow,
+    // Colors.green,
+    // Colors.blue,
+    // Colors.pink,
+    // Colors.deepOrange,
+    // Colors.yellow,
+    // Colors.pink,
+    // Colors.deepOrange,
+    // Colors.yellow,
+    Color(0xffFBE8FF),
+    Color(0xffE8F3FF),
+    Color(0xffFBE8FF),
+    Color(0xffE8F3FF),
+    Color(0xffFBE8FF),
+    Color(0xffE8F3FF),
+    Color(0xffFBE8FF),
+    Color(0xffE8F3FF),
   ];
   List<PairList> _selected = [];
   List<Calendar> _sequentialDates = [];
@@ -101,16 +102,18 @@ class _MyCalendarState extends State<MyCalendar> {
       body: Column(
         children: [
           Container(
-            margin: EdgeInsets.all(20),
-            height: MediaQuery.of(context).size.height * 0.5,
+            //  margin: EdgeInsets.all(10),
+            height: 340,
             decoration: BoxDecoration(
-              color: Colors.grey,
-              borderRadius: BorderRadius.circular(20),
+              color: Colors.white70,
+              borderRadius: BorderRadius.only(
+                  bottomRight: Radius.circular(30),
+                  bottomLeft: Radius.circular(30)),
             ),
             child: _dateView(),
           ),
           Container(
-            height: 400,
+            height: 300,
             child: ListView.builder(
               itemCount: _selected.length,
               itemBuilder: (context, index) {
@@ -144,7 +147,7 @@ class _MyCalendarState extends State<MyCalendar> {
               child: Text(
                 '${_monthNames[_currentDateTime.month - 1]}  ${_currentDateTime.year}',
                 style: TextStyle(
-                    color: Colors.white,
+                    color: Color(0xffBABABA),
                     fontSize: 18,
                     fontWeight: FontWeight.w700),
               ),
@@ -152,7 +155,7 @@ class _MyCalendarState extends State<MyCalendar> {
           )),
           _toggleBtn(true),
         ]),
-        Flexible(child: _calendarBody()),
+        _calendarBody(),
       ],
     );
   }
@@ -160,18 +163,15 @@ class _MyCalendarState extends State<MyCalendar> {
   Widget _toggleBtn(bool next) {
     return InkWell(
       onTap: () {
-        
         if (_currentView == CalendarViews.dates) {
           setState(() => {
                 (next) ? _getNextMonth() : _getPrevMonth(),
               });
         } else if (_currentView == CalendarViews.year) {
           if (next) {
-            midYear =
-                (midYear == 0) ? _currentDateTime.year + 9 : midYear + 9;
+            midYear = (midYear == 0) ? _currentDateTime.year + 9 : midYear + 9;
           } else {
-            midYear =
-                (midYear == 0) ? _currentDateTime.year - 9 : midYear - 9;
+            midYear = (midYear == 0) ? _currentDateTime.year - 9 : midYear - 9;
           }
           setState(() {});
         }
@@ -181,7 +181,7 @@ class _MyCalendarState extends State<MyCalendar> {
         height: 50,
         child: Icon(
           (next) ? Icons.arrow_forward_ios : Icons.arrow_back_ios,
-          color: Colors.white,
+          color: Colors.black,
         ),
       ),
     );
@@ -189,32 +189,34 @@ class _MyCalendarState extends State<MyCalendar> {
 
   Widget _calendarBody() {
     if (_sequentialDates == null) return Text("Calendar Error");
-    return GridView.builder(
-      shrinkWrap: true,
-      padding: EdgeInsets.zero,
-      itemCount: _sequentialDates.length + 7, //dates+weekday
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        childAspectRatio: MediaQuery.of(context).size.width /
-            (MediaQuery.of(context).size.height / 2.2),
-        crossAxisCount: 7,
-        mainAxisSpacing: 0,
-        crossAxisSpacing: 0,
+    return Container(
+      margin: EdgeInsets.only(bottom: 10, left: 30, right: 30),
+      child: GridView.builder(
+        shrinkWrap: true,
+        padding: EdgeInsets.zero,
+        itemCount: _sequentialDates.length + 7, //dates+weekday
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          childAspectRatio: MediaQuery.of(context).size.width /
+              (MediaQuery.of(context).size.height / 2.2),
+          crossAxisCount: 7,
+          mainAxisSpacing: 0,
+          crossAxisSpacing: 0,
+        ),
+        itemBuilder: (context, index) {
+          if (index < 7) return _weekDayTitle(index);
+          return _calendarDates(_sequentialDates[index - 7]);
+        },
       ),
-      itemBuilder: (context, index) {
-        if (index < 7) return _weekDayTitle(index);
-        return _calendarDates(_sequentialDates[index - 7]);
-      },
     );
   }
 
   Widget _weekDayTitle(int index) {
     return Container(
-      color: Colors.blue,
       padding: EdgeInsets.zero,
       child: Center(
         child: Text(
           _weekDays[index],
-          style: TextStyle(color: Colors.yellow, fontSize: 12),
+          style: TextStyle(color: Color(0xffBABABA), fontSize: 12),
         ),
       ),
     );
@@ -242,20 +244,19 @@ class _MyCalendarState extends State<MyCalendar> {
   }
 
   Widget _calendarDates(Calendar calendarDate) {
-    Color _color = Colors.transparent;
-    if (calendarDate.thisMonth) {
-      if (calendarDate.single) {
-        _color = Colors.green;
-      }
-    }
+    Color _color = _colors[calendarDate.number % 7];
 
-    BoxDecoration testtt(){
-      if(calendarDate.single){
-        return BoxDecoration(
-            color: _colors[calendarDate.number%7],
+    BoxDecoration testtt() {
+      if (calendarDate.thisMonth) {
+        if (calendarDate.single) {
+          return BoxDecoration(
+            color: _colors[(calendarDate.number + 4) % 7],
             borderRadius: BorderRadius.circular(100),
           );
-      }else{
+        } else {
+          return BoxDecoration(color: Colors.transparent);
+        }
+      } else {
         return BoxDecoration(color: Colors.transparent);
       }
     }
@@ -264,31 +265,27 @@ class _MyCalendarState extends State<MyCalendar> {
       if (calendarDate.thisMonth) {
         if (calendarDate.right) {
           return BoxDecoration(
-              color: _colors[calendarDate.number%7],
+              color: _color,
               borderRadius: BorderRadius.only(
                   bottomRight: Radius.circular(100),
                   topRight: Radius.circular(100)));
-        }
-        if (calendarDate.left) {
+        } else if (calendarDate.left) {
           return BoxDecoration(
-              color: _colors[calendarDate.number%7],
+              color: _color,
               borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(100),
                   topLeft: Radius.circular(100)));
-        }
-        if (calendarDate.middle) {
-          return BoxDecoration(color: _colors[calendarDate.number%7]);
-        }else if(calendarDate.single){
+        } else if (calendarDate.middle) {
+          return BoxDecoration(color: _color);
+        } else {
           return BoxDecoration(
-            color: _colors[calendarDate.number%7],
-            borderRadius: BorderRadius.circular(100),
+            color: Colors.white,
           );
-        } 
-        else {
-          return BoxDecoration(color: Colors.grey);
         }
       } else {
-        return BoxDecoration(color: Colors.grey);
+        return BoxDecoration(
+          color: Colors.white,
+        );
       }
     }
 
@@ -303,36 +300,33 @@ class _MyCalendarState extends State<MyCalendar> {
           setState(() => _selectDateTime = calendarDate.date);
         }
       },
-      child: Container(
-        child: Center(
-          child: Container(
-            height: 40,
-            width: 65,
-            decoration:calendarBoxDeco(),
-            child: Center(
-              child: Container(
-                height: 40,
-                width: 40,
-                decoration:testtt(),
-                child: Center(
-                  child: Text(
-                    '${calendarDate.date.day}',
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: (calendarDate.thisMonth)
-                          ? (calendarDate.date.weekday == DateTime.sunday)
-                              ? Colors.yellow
-                              : Colors.white
-                          : (calendarDate.date.weekday == DateTime.sunday)
-                              ? Colors.yellow.withOpacity(0.5)
-                              : Colors.white.withOpacity(0.5),
-                    ),
-                  ),
-                ),
-              ),
+      child: Stack(
+        children: [
+          Center(
+            child: Container(
+              height: 30,
+              width: double.infinity,
+              decoration: calendarBoxDeco(),
             ),
           ),
-        ),
+          Center(
+            child: Container(
+              height: 30,
+              width: 30,
+              decoration: testtt(),
+            ),
+          ),
+          Center(
+            child: Text(
+              '${calendarDate.date.day}',
+              style: TextStyle(
+                  fontSize: 15,
+                  color: (calendarDate.thisMonth)
+                      ? Color(0xffBABABA)
+                      : Colors.white),
+            ),
+          ),
+        ],
       ),
     );
   }

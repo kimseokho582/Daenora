@@ -29,7 +29,7 @@ class Calendar {
     this.left = false,
     this.middle = false,
     this.right = false,
-    this.number =0,
+    this.number = 0,
   });
 }
 
@@ -156,8 +156,8 @@ class CustomCalendar {
         break;
       }
     }
-    int count=1;
-   for (int i = _rangeX; i <= _rangeY; i++) {
+    int count = 1;
+    for (int i = _rangeX; i <= _rangeY; i++) {
       for (int j = 0; j < calendar.length; j++) {
         if (_schdule[i].schduleDate.substring(0, 10) ==
             DateFormat('yyyy-MM-dd').format(calendar[j].date).toString()) {
@@ -172,11 +172,13 @@ class CustomCalendar {
               } else {
                 calendar[j + cnt].middle = true;
               }
-              calendar[j+cnt].number=count;
+              if (calendar[j + cnt].number == 0) {
+                calendar[j + cnt].number = count;
+              }
               _tmpList.add(_dateTmp);
               _dateTmp =
                   new DateTime(_dateTmp.year, _dateTmp.month, _dateTmp.day + 1);
-             cnt++;
+              cnt++;
             } while (DateFormat('yyyy-MM-dd')
                     .format(_dateTmp)
                     .toString()
@@ -186,15 +188,17 @@ class CustomCalendar {
             calendar[j + cnt - 1].right = true;
           } else {
             calendar[j].single = true;
-            calendar[j].number=count;
+            if (calendar[j].number == 0) {
+              calendar[j].number = count;
+            }
             _tmpList.add(_dateTmp);
           }
 
           calendar[j]
               .checkSchedule
               .add(PairList(_tmpList, _schdule[i].schduleString));
-     
-        count++;
+
+          count++;
         }
       }
     }
