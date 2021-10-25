@@ -249,6 +249,17 @@ class _MyCalendarState extends State<MyCalendar> {
       }
     }
 
+    BoxDecoration testtt(){
+      if(calendarDate.single){
+        return BoxDecoration(
+            color: _colors[calendarDate.number%7],
+            borderRadius: BorderRadius.circular(100),
+          );
+      }else{
+        return BoxDecoration(color: Colors.transparent);
+      }
+    }
+
     BoxDecoration calendarBoxDeco() {
       if (calendarDate.thisMonth) {
         if (calendarDate.right) {
@@ -267,7 +278,13 @@ class _MyCalendarState extends State<MyCalendar> {
         }
         if (calendarDate.middle) {
           return BoxDecoration(color: _colors[calendarDate.number%7]);
-        } else {
+        }else if(calendarDate.single){
+          return BoxDecoration(
+            color: _colors[calendarDate.number%7],
+            borderRadius: BorderRadius.circular(100),
+          );
+        } 
+        else {
           return BoxDecoration(color: Colors.grey);
         }
       } else {
@@ -287,28 +304,30 @@ class _MyCalendarState extends State<MyCalendar> {
         }
       },
       child: Container(
-        height:10,
-        decoration: calendarBoxDeco(),
         child: Center(
           child: Container(
-            height: 30,
-            width: 50,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(100),
-              color: _color,
-            ),
+            height: 40,
+            width: 65,
+            decoration:calendarBoxDeco(),
             child: Center(
-              child: Text(
-                '${calendarDate.date.day}',
-                style: TextStyle(
-                  fontSize: 20,
-                  color: (calendarDate.thisMonth)
-                      ? (calendarDate.date.weekday == DateTime.sunday)
-                          ? Colors.yellow
-                          : Colors.white
-                      : (calendarDate.date.weekday == DateTime.sunday)
-                          ? Colors.yellow.withOpacity(0.5)
-                          : Colors.white.withOpacity(0.5),
+              child: Container(
+                height: 40,
+                width: 40,
+                decoration:testtt(),
+                child: Center(
+                  child: Text(
+                    '${calendarDate.date.day}',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: (calendarDate.thisMonth)
+                          ? (calendarDate.date.weekday == DateTime.sunday)
+                              ? Colors.yellow
+                              : Colors.white
+                          : (calendarDate.date.weekday == DateTime.sunday)
+                              ? Colors.yellow.withOpacity(0.5)
+                              : Colors.white.withOpacity(0.5),
+                    ),
+                  ),
                 ),
               ),
             ),
