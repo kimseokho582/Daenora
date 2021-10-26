@@ -2,6 +2,7 @@ import 'package:deanora/Widgets/MakeCalendar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:intl/intl.dart';
 
 class MyCalendar extends StatefulWidget {
@@ -11,10 +12,11 @@ class MyCalendar extends StatefulWidget {
   _MyCalendarState createState() => _MyCalendarState();
 }
 
-class PairList<T1, T2> {
+class PairList<T1, T2, T3> {
   List date;
   String schdule;
-  PairList(this.date, this.schdule);
+  int num;
+  PairList(this.date, this.schdule, this.num);
 }
 
 class _MyCalendarState extends State<MyCalendar> {
@@ -60,11 +62,13 @@ class _MyCalendarState extends State<MyCalendar> {
   List<DateTime> _selectedDate = [];
   late DateTime _currentDateTime, _selectDateTime;
   List<String> _selectedSchdule = [];
+  late DateTime date;
+  late Color _color;
 
   @override
   void initState() {
     super.initState();
-    final date = DateTime.now();
+    date = DateTime.now();
     _currentDateTime = DateTime(date.year, date.month);
     _selectDateTime = DateTime(date.year, date.month, date.day);
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
@@ -86,7 +90,7 @@ class _MyCalendarState extends State<MyCalendar> {
         print(e.number);
         e.checkSchedule.forEach((v) {
           if (v.schdule != "") {
-            _selected.add(PairList(v.date, v.schdule));
+            _selected.add(PairList(v.date, v.schdule, e.number));
           }
         });
       }
@@ -99,30 +103,95 @@ class _MyCalendarState extends State<MyCalendar> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: Column(
-        children: [
-          Container(
-            //  margin: EdgeInsets.all(10),
-            height: 340,
-            decoration: BoxDecoration(
-              color: Colors.white70,
-              borderRadius: BorderRadius.only(
-                  bottomRight: Radius.circular(30),
-                  bottomLeft: Radius.circular(30)),
+      body: Container(
+        color: Color(0xffF9F9F9),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: 10,
             ),
-            child: _dateView(),
-          ),
-          Container(
-            height: 300,
-            child: ListView.builder(
-              itemCount: _selected.length,
-              itemBuilder: (context, index) {
-                return Text(
-                    "${_selected[index].schdule} ${DateFormat('MM.dd').format(_selected[index].date[0])} ~ ${DateFormat('MM.dd').format(_selected[index].date[_selected[index].date.length - 1])}");
-              },
+            Container(
+              //  margin: EdgeInsets.all(10),
+              height: MediaQuery.of(context).size.height * 0.5,
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.1),
+                    spreadRadius: 1,
+                    blurRadius: 1,
+                    offset: Offset(1, 3),
+                  )
+                ],
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                    bottomRight: Radius.circular(30),
+                    bottomLeft: Radius.circular(30)),
+              ),
+              child: _dateView(),
             ),
-          ),
-        ],
+            Container(
+                height: 30,
+                margin: EdgeInsets.all(10),
+                child: Text(
+                  "${_currentDateTime.year}년 ${_currentDateTime.month}월 학사일정",
+                  style: TextStyle(fontWeight: FontWeight.w800, fontSize: 15),
+                )),
+            Container(
+              height: MediaQuery.of(context).size.height * 0.5 - 65,
+              child: ListView.builder(
+                itemCount: _selected.length,
+                itemBuilder: (context, index) {
+                  print(_selected[index].date);
+                  return Container(
+                    margin: EdgeInsets.only(bottom: 10, left: 20, right: 20),
+                    height: 90,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.1),
+                          spreadRadius: 1,
+                          blurRadius: 1,
+                          offset: Offset(1, 3),
+                        )
+                      ],
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                            margin: EdgeInsets.all(15),
+                            height: 25,
+                            width: 25,
+                            decoration: BoxDecoration(
+                              color: (_selected[index].date.length > 1)
+                                  ? _colors[_selected[index].num % 7]
+                                  : _colors[(_selected[index].num + 4) % 7],
+                              borderRadius: BorderRadius.circular(100),
+                            )),
+                        SizedBox(width: 15),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text("${_selected[index].schdule}", style: TextStyle(color:Color(0xff707070)),),
+                            Container(
+                              child:  (_selected[index].date.length > 1)?
+                              Text(
+                                  "${DateFormat('MM. dd').format(_selected[index].date[0])}~ ${DateFormat('MM. dd').format(_selected[index].date[_selected[index].date.length - 1])}", style: TextStyle(color:Color(0xff707070))):Text(
+                                  "${DateFormat('MM. dd').format(_selected[index].date[0])}", style: TextStyle(color:Color(0xff707070))),
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -147,7 +216,7 @@ class _MyCalendarState extends State<MyCalendar> {
               child: Text(
                 '${_monthNames[_currentDateTime.month - 1]}  ${_currentDateTime.year}',
                 style: TextStyle(
-                    color: Color(0xffBABABA),
+                    color: Color(0xff191919),
                     fontSize: 18,
                     fontWeight: FontWeight.w700),
               ),
@@ -181,7 +250,7 @@ class _MyCalendarState extends State<MyCalendar> {
         height: 50,
         child: Icon(
           (next) ? Icons.arrow_forward_ios : Icons.arrow_back_ios,
-          color: Colors.black,
+          color: Color(0xff707070),
         ),
       ),
     );
@@ -244,7 +313,7 @@ class _MyCalendarState extends State<MyCalendar> {
   }
 
   Widget _calendarDates(Calendar calendarDate) {
-    Color _color = _colors[calendarDate.number % 7];
+    _color = _colors[calendarDate.number % 7];
 
     BoxDecoration testtt() {
       if (calendarDate.thisMonth) {
