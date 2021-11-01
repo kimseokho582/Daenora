@@ -40,22 +40,14 @@ class _MyCalendarState extends State<MyCalendar> {
   ];
 
   final List<Color> _colors = [
-    // Colors.green,
-    // Colors.blue,
-    // Colors.pink,
-    // Colors.deepOrange,
-    // Colors.yellow,
-    // Colors.pink,
-    // Colors.deepOrange,
-    // Colors.yellow,
-    Color(0xffFBE8FF),
-    Color(0xffE8F3FF),
-    Color(0xffFBE8FF),
-    Color(0xffE8F3FF),
-    Color(0xffFBE8FF),
-    Color(0xffE8F3FF),
-    Color(0xffFBE8FF),
-    Color(0xffE8F3FF),
+    Color(0xffffefe8),
+    Color(0xfffffce8),
+    Color(0xffeaffe8),
+    Color(0xffe8f3ff),
+    Color(0xffffe8e8),
+    Color(0xffefefef),
+    Color(0xffe9e8ff),
+    Color(0xfffbe8ff),
   ];
   List<PairList> _selected = [];
   List<Calendar> _sequentialDates = [];
@@ -87,16 +79,12 @@ class _MyCalendarState extends State<MyCalendar> {
     _selected.clear();
     _sequentialDates.forEach((e) {
       if (e.thisMonth) {
-        print(e.number);
         e.checkSchedule.forEach((v) {
           if (v.schdule != "") {
             _selected.add(PairList(v.date, v.schdule, e.number));
           }
         });
       }
-    });
-    _selected.forEach((element) {
-      print("${element.schdule} ${element.date} }");
     });
   }
 
@@ -142,7 +130,7 @@ class _MyCalendarState extends State<MyCalendar> {
               child: ListView.builder(
                 itemCount: _selected.length,
                 itemBuilder: (context, index) {
-                  print(_selected[index].date);
+                  // print(_selected[index].date);
                   return Container(
                     margin: EdgeInsets.only(bottom: 10, left: 20, right: 20),
                     height: 90,
@@ -166,8 +154,8 @@ class _MyCalendarState extends State<MyCalendar> {
                             width: 25,
                             decoration: BoxDecoration(
                               color: (_selected[index].date.length > 1)
-                                  ? _colors[_selected[index].num % 7]
-                                  : _colors[(_selected[index].num + 4) % 7],
+                                  ? _colors[_selected[index].num % 8]
+                                  : _colors[(_selected[index].num + 4) % 8],
                               borderRadius: BorderRadius.circular(100),
                             )),
                         SizedBox(width: 15),
@@ -175,12 +163,20 @@ class _MyCalendarState extends State<MyCalendar> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Text("${_selected[index].schdule}", style: TextStyle(color:Color(0xff707070)),),
+                            Text(
+                              "${_selected[index].schdule}",
+                              style: TextStyle(color: Color(0xff707070)),
+                            ),
                             Container(
-                              child:  (_selected[index].date.length > 1)?
-                              Text(
-                                  "${DateFormat('MM. dd').format(_selected[index].date[0])}~ ${DateFormat('MM. dd').format(_selected[index].date[_selected[index].date.length - 1])}", style: TextStyle(color:Color(0xff707070))):Text(
-                                  "${DateFormat('MM. dd').format(_selected[index].date[0])}", style: TextStyle(color:Color(0xff707070))),
+                              child: (_selected[index].date.length > 1)
+                                  ? Text(
+                                      "${DateFormat('MM. dd').format(_selected[index].date[0])}~ ${DateFormat('MM. dd').format(_selected[index].date[_selected[index].date.length - 1])}",
+                                      style:
+                                          TextStyle(color: Color(0xff707070)))
+                                  : Text(
+                                      "${DateFormat('MM. dd').format(_selected[index].date[0])}",
+                                      style:
+                                          TextStyle(color: Color(0xff707070))),
                             )
                           ],
                         ),
@@ -313,51 +309,178 @@ class _MyCalendarState extends State<MyCalendar> {
   }
 
   Widget _calendarDates(Calendar calendarDate) {
-    _color = _colors[calendarDate.number % 7];
+    _color = _colors[calendarDate.number % 8];
 
-    BoxDecoration testtt() {
+    // BoxDecoration testtt() {
+    //   if (calendarDate.thisMonth) {
+    //     if (calendarDate.single) {
+    //       return BoxDecoration(
+    //         color: _colors[(calendarDate.number + 4) % 8],
+    //         borderRadius: BorderRadius.circular(100),
+    //       );
+    //     } else {
+    //       return BoxDecoration(color: Colors.transparent);
+    //     }
+    //   } else {
+    //     return BoxDecoration(color: Colors.transparent);
+    //   }
+    // }
+
+    // BoxDecoration calendarBoxDeco() {
+    //   if (calendarDate.thisMonth) {
+    //     if (calendarDate.right) {
+    //       return BoxDecoration(
+    //           color: _color,
+    //           borderRadius: BorderRadius.only(
+    //               bottomRight: Radius.circular(100),
+    //               topRight: Radius.circular(100)));
+    //     } else if (calendarDate.left) {
+    //       return BoxDecoration(
+    //           color: _color,
+    //           borderRadius: BorderRadius.only(
+    //               bottomLeft: Radius.circular(100),
+    //               topLeft: Radius.circular(100)));
+    //     } else if (calendarDate.middle) {
+    //       return BoxDecoration(color: _color);
+    //     } else {
+    //       return BoxDecoration(
+    //         color: Colors.white,
+    //       );
+    //     }
+    //   } else {
+    //     return BoxDecoration(
+    //       color: Colors.white,
+    //     );
+    //   }
+    // }
+
+    List<Widget> _children = [];
+    print(calendarDate.snc.length);
+      calendarDate.snc.sort((a,b)=>b.color.compareTo(a.color));
+    for (int i = 0; i < calendarDate.snc.length; i++) {
       if (calendarDate.thisMonth) {
-        if (calendarDate.single) {
-          return BoxDecoration(
-            color: _colors[(calendarDate.number + 4) % 7],
-            borderRadius: BorderRadius.circular(100),
-          );
-        } else {
-          return BoxDecoration(color: Colors.transparent);
+        if (calendarDate.snc[i].shape == 2) {
+          _children.add(Center(
+            child: Opacity(
+              opacity: (i>1)?1:0.8,
+              child: Container(
+                height: 30,
+                width: double.infinity,
+                decoration:
+                    BoxDecoration(color: _colors[calendarDate.snc[i].color % 8]),
+              ),
+            ),
+          ));
         }
-      } else {
-        return BoxDecoration(color: Colors.transparent);
+        if (calendarDate.snc[i].shape == 1) {
+          _children.add(Center(
+            child: Opacity(
+              opacity: (i>1)?1:0.8,
+              child: Container(
+                height: 30,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                    color: _colors[calendarDate.snc[i].color % 8],
+                    borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(100),
+                        topLeft: Radius.circular(100))),
+              ),
+            ),
+          ));
+        }
+        if (calendarDate.snc[i].shape == 3) {
+          _children.add(Center(
+            child: Opacity(
+              opacity: (i>1)?1:0.8,
+              child: Container(
+                height: 30,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: _colors[calendarDate.snc[i].color % 8],
+                  borderRadius: BorderRadius.only(
+                      bottomRight: Radius.circular(100),
+                      topRight: Radius.circular(100)),
+                ),
+              ),
+            ),
+          ));
+        }
+        if (calendarDate.snc[i].shape == 4) {
+          _children.add(Center(
+            child: Container(
+              height: 30,
+              width: 30,
+              decoration: BoxDecoration(
+                color: _colors[calendarDate.snc[i].color % 8],
+                borderRadius: BorderRadius.circular(100),
+              ),
+            ),
+          ));
+        }
       }
     }
-
-    BoxDecoration calendarBoxDeco() {
-      if (calendarDate.thisMonth) {
-        if (calendarDate.right) {
-          return BoxDecoration(
-              color: _color,
-              borderRadius: BorderRadius.only(
-                  bottomRight: Radius.circular(100),
-                  topRight: Radius.circular(100)));
-        } else if (calendarDate.left) {
-          return BoxDecoration(
-              color: _color,
-              borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(100),
-                  topLeft: Radius.circular(100)));
-        } else if (calendarDate.middle) {
-          return BoxDecoration(color: _color);
-        } else {
-          return BoxDecoration(
-            color: Colors.white,
-          );
-        }
-      } else {
-        return BoxDecoration(
-          color: Colors.white,
-        );
-      }
-    }
-
+    // if (calendarDate.thisMonth) {
+    //   if (calendarDate.middle) {
+    //     _children.add(Center(
+    //       child: Container(
+    //         height: 30,
+    //         width: double.infinity,
+    //         decoration: BoxDecoration(color: Colors.red),
+    //       ),
+    //     ));
+    //   }
+    //   if (calendarDate.right) {
+    //     _children.add(Center(
+    //       child: Container(
+    //         height: 30,
+    //         width: double.infinity,
+    //         decoration: BoxDecoration(
+    //             borderRadius: BorderRadius.only(
+    //                 bottomRight: Radius.circular(100),
+    //                 topRight: Radius.circular(100)),
+    //             color: _color),
+    //       ),
+    //     ));
+    //   }
+    //   if (calendarDate.left) {
+    //     _children.add(Center(
+    //       child: Container(
+    //         height: 30,
+    //         width: double.infinity,
+    //         decoration: BoxDecoration(
+    //             color: _color,
+    //             borderRadius: BorderRadius.only(
+    //                 bottomLeft: Radius.circular(100),
+    //                 topLeft: Radius.circular(100))),
+    //       ),
+    //     ));
+    //   }
+    // }
+    // if (calendarDate.thisMonth) {
+    //   if (calendarDate.single) {
+    //     _children.add(Center(
+    //       child: Container(
+    //         height: 30,
+    //         width: 30,
+    //         decoration: BoxDecoration(
+    //           color: _colors[(calendarDate.number + 4) % 8],
+    //           borderRadius: BorderRadius.circular(100),
+    //         ),
+    //       ),
+    //     ));
+    //   }
+    // }
+    _children.add(
+      Center(
+        child: Text(
+          '${calendarDate.date.day}',
+          style: TextStyle(
+              fontSize: 15,
+              color:
+                  (calendarDate.thisMonth) ? Color(0xffBABABA) : Colors.white),
+        ),
+      ),
+    );
     return InkWell(
       onTap: () {
         if (_selectDateTime != calendarDate.date) {
@@ -369,34 +492,34 @@ class _MyCalendarState extends State<MyCalendar> {
           setState(() => _selectDateTime = calendarDate.date);
         }
       },
-      child: Stack(
-        children: [
-          Center(
-            child: Container(
-              height: 30,
-              width: double.infinity,
-              decoration: calendarBoxDeco(),
-            ),
+      child: Stack(children: _children
+          // children: [
+          //   Center(
+          //     child: Container(
+          //       height: 30,
+          //       width: double.infinity,
+          //       decoration: calendarBoxDeco(),
+          //     ),
+          //   ),
+          //   Center(
+          //     child: Container(
+          //       height: 30,
+          //       width: 30,
+          //       decoration: testtt(),
+          //     ),
+          //   ),
+          //   Center(
+          //     child: Text(
+          //       '${calendarDate.date.day}',
+          //       style: TextStyle(
+          //           fontSize: 15,
+          //           color: (calendarDate.thisMonth)
+          //               ? Color(0xffBABABA)
+          //               : Colors.white),
+          //     ),
+          //   ),
+          // ],
           ),
-          Center(
-            child: Container(
-              height: 30,
-              width: 30,
-              decoration: testtt(),
-            ),
-          ),
-          Center(
-            child: Text(
-              '${calendarDate.date.day}',
-              style: TextStyle(
-                  fontSize: 15,
-                  color: (calendarDate.thisMonth)
-                      ? Color(0xffBABABA)
-                      : Colors.white),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

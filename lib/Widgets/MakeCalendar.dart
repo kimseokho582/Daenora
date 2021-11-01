@@ -7,9 +7,16 @@ class PairList<T1, T2> {
   PairList(this.date, this.schdule);
 }
 
+class PairSnC<T1, T2> {
+  int shape;
+  int color;
+  PairSnC(this.shape, this.color);
+}
+
 class Calendar {
   final DateTime date;
   List<PairList> checkSchedule;
+  List<PairSnC> snc;
   final bool thisMonth;
   final bool prevMonth;
   final bool nextMonth;
@@ -22,6 +29,7 @@ class Calendar {
   Calendar({
     required this.date,
     required this.checkSchedule,
+    required this.snc,
     this.thisMonth = false,
     this.prevMonth = false,
     this.nextMonth = false,
@@ -69,6 +77,7 @@ class CustomCalendar {
         date: DateTime(year, month, i + 1),
         thisMonth: true,
         checkSchedule: [PairList([], "")],
+        snc: [PairSnC(-1, -1)],
       ));
     }
 
@@ -100,6 +109,7 @@ class CustomCalendar {
               date: DateTime(otherYear, otherMonth, i),
               prevMonth: true,
               checkSchedule: [PairList([], "")],
+              snc: [PairSnC(-1, -1)],
             ));
       }
     }
@@ -130,6 +140,7 @@ class CustomCalendar {
           Calendar(
               date: DateTime(otherYear, otherMonth, i + 1),
               nextMonth: true,
+              snc: [PairSnC(-1, -1)],
               checkSchedule: [PairList([], "")]),
         );
       }
@@ -169,8 +180,10 @@ class CustomCalendar {
             do {
               if (_tmpList.length == 0) {
                 calendar[j + cnt].left = true;
+                calendar[j+cnt].snc.add(PairSnC(1, count));
               } else {
                 calendar[j + cnt].middle = true;
+                calendar[j+cnt].snc.add(PairSnC(2, count));
               }
               if (calendar[j + cnt].number == 0) {
                 calendar[j + cnt].number = count;
@@ -186,8 +199,10 @@ class CustomCalendar {
                 1);
             calendar[j + cnt - 1].middle = false;
             calendar[j + cnt - 1].right = true;
+            calendar[j+cnt-1].snc[calendar[j+cnt-1].snc.length-1].shape=3;
           } else {
             calendar[j].single = true;
+            calendar[j].snc.add(PairSnC(4, count));
             if (calendar[j].number == 0) {
               calendar[j].number = count;
             }
