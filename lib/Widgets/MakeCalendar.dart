@@ -1,4 +1,5 @@
 import 'package:deanora/object/AcademinCalendar.dart';
+import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 
 class PairList<T1, T2> {
@@ -9,8 +10,9 @@ class PairList<T1, T2> {
 
 class PairSnC<T1, T2> {
   int shape;
-  int color;
-  PairSnC(this.shape, this.color);
+  Color color;
+  int order;
+  PairSnC(this.shape, this.color, this.order);
 }
 
 class Calendar {
@@ -65,7 +67,16 @@ class CustomCalendar {
       throw ArgumentError('Invalid year or month');
 
     List<Calendar> calendar = [];
-
+    final List<Color> _colors = [
+      Color(0xffffefe8),
+      Color(0xfffffce8),
+      Color(0xffeaffe8),
+      Color(0xffe8f3ff),
+      Color(0xffffe8e8),
+      Color(0xffefefef),
+      Color(0xffe9e8ff),
+      Color(0xfffbe8ff),
+    ];
     int otherYear;
     int otherMonth;
     int leftDays;
@@ -77,7 +88,7 @@ class CustomCalendar {
         date: DateTime(year, month, i + 1),
         thisMonth: true,
         checkSchedule: [PairList([], "")],
-        snc: [PairSnC(-1, -1)],
+        snc: [PairSnC(-1, Color(0xffFFFFFF), -1)],
       ));
     }
 
@@ -109,7 +120,7 @@ class CustomCalendar {
               date: DateTime(otherYear, otherMonth, i),
               prevMonth: true,
               checkSchedule: [PairList([], "")],
-              snc: [PairSnC(-1, -1)],
+              snc: [PairSnC(-1, Color(0xffFFFFFF), -1)],
             ));
       }
     }
@@ -140,12 +151,16 @@ class CustomCalendar {
           Calendar(
               date: DateTime(otherYear, otherMonth, i + 1),
               nextMonth: true,
-              snc: [PairSnC(-1, -1)],
+              snc: [PairSnC(-1, Color(0xffFFFFFF), -1)],
               checkSchedule: [PairList([], "")]),
         );
       }
     }
     int _rangeX = 0, _rangeY = 0;
+
+    if (_schdule.length == 0) {
+      return [];
+    }
 
     for (int i = 0; i < _schdule.length; i++) {
       if (DateFormat('yyyy-MM-dd')
@@ -167,7 +182,7 @@ class CustomCalendar {
         break;
       }
     }
-    int count = 1;
+    int count = 0;
     for (int i = _rangeX; i <= _rangeY; i++) {
       for (int j = 0; j < calendar.length; j++) {
         if (_schdule[i].schduleDate.substring(0, 10) ==
@@ -175,54 +190,56 @@ class CustomCalendar {
           List _tmpList = [];
           DateTime _dateTmp = calendar[j].date;
           int cnt = 0;
-
-          if (_schdule[i].schduleDate.length > 11) {
-            do {
-              if (_tmpList.length == 0) {
-                calendar[j + cnt].left = true;
-                calendar[j+cnt].snc.add(PairSnC(1, count));
-              } else {
-                calendar[j + cnt].middle = true;
-                calendar[j+cnt].snc.add(PairSnC(2, count));
-              }
-              if (calendar[j + cnt].number == 0) {
-                calendar[j + cnt].number = count;
+          if (calendar[j].thisMonth) {
+            if (_schdule[i].schduleDate.length > 11) {
+              do {
+                if (_tmpList.length == 0) {
+                  calendar[j + cnt].left = true;
+                  calendar[j + cnt]
+                      .snc
+                      .add(PairSnC(1, _colors[count % 8], count));
+                } else {
+                  calendar[j + cnt].middle = true;
+                  calendar[j + cnt]
+                      .snc
+                      .add(PairSnC(3, _colors[count % 8], count));
+                }
+                if (calendar[j + cnt].number == 0) {
+                  calendar[j + cnt].number = count;
+                }
+                _tmpList.add(_dateTmp);
+                _dateTmp = new DateTime(
+                    _dateTmp.year, _dateTmp.month, _dateTmp.day + 1);
+                cnt++;
+              } while (DateFormat('yyyy-MM-dd')
+                      .format(_dateTmp)
+                      .toString()
+                      .compareTo(_schdule[i].schduleDate.substring(11, 21)) !=
+                  1);
+              calendar[j + cnt - 1].middle = false;
+              calendar[j + cnt - 1].right = true;
+              calendar[j + cnt - 1]
+                  .snc[calendar[j + cnt - 1].snc.length - 1]
+                  .shape = 2;
+            } else {
+              calendar[j].single = true;
+              calendar[j].snc.add(PairSnC(4, _colors[count % 8], count));
+              if (calendar[j].number == 0) {
+                calendar[j].number = count;
               }
               _tmpList.add(_dateTmp);
-              _dateTmp =
-                  new DateTime(_dateTmp.year, _dateTmp.month, _dateTmp.day + 1);
-              cnt++;
-            } while (DateFormat('yyyy-MM-dd')
-                    .format(_dateTmp)
-                    .toString()
-                    .compareTo(_schdule[i].schduleDate.substring(11, 21)) !=
-                1);
-            calendar[j + cnt - 1].middle = false;
-            calendar[j + cnt - 1].right = true;
-            calendar[j+cnt-1].snc[calendar[j+cnt-1].snc.length-1].shape=3;
-          } else {
-            calendar[j].single = true;
-            calendar[j].snc.add(PairSnC(4, count));
-            if (calendar[j].number == 0) {
-              calendar[j].number = count;
             }
-            _tmpList.add(_dateTmp);
+
+            calendar[j]
+                .checkSchedule
+                .add(PairList(_tmpList, _schdule[i].schduleString));
+
+            count++;
           }
-
-          calendar[j]
-              .checkSchedule
-              .add(PairList(_tmpList, _schdule[i].schduleString));
-
-          count++;
         }
       }
     }
-    // for (int i = 0; i < calendar.length; i++) {
-    //   for (int j = 0; j < calendar[i].checkSchedule.length; j++) {
-    //     print(
-    //         "${calendar[i].checkSchedule[j].date} ${calendar[i].checkSchedule[j].schdule}");
-    //   }
-    // }
+
     return calendar;
   }
 }

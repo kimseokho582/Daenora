@@ -15,8 +15,8 @@ class MyCalendar extends StatefulWidget {
 class PairList<T1, T2, T3> {
   List date;
   String schdule;
-  int num;
-  PairList(this.date, this.schdule, this.num);
+  List<PairSnC> color;
+  PairList(this.date, this.schdule, this.color);
 }
 
 class _MyCalendarState extends State<MyCalendar> {
@@ -25,18 +25,18 @@ class _MyCalendarState extends State<MyCalendar> {
 
   final List<String> _weekDays = ['S', "M", 'T', 'W', 'T', 'F', 'S'];
   final List<String> _monthNames = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December'
+    'JAN',
+    'FEB',
+    'MAR',
+    'APR',
+    'MAY',
+    'JUN',
+    'JUL',
+    'AUG',
+    'SEP',
+    'OCT',
+    'NOV',
+    'DEC'
   ];
 
   final List<Color> _colors = [
@@ -51,11 +51,8 @@ class _MyCalendarState extends State<MyCalendar> {
   ];
   List<PairList> _selected = [];
   List<Calendar> _sequentialDates = [];
-  List<DateTime> _selectedDate = [];
   late DateTime _currentDateTime, _selectDateTime;
-  List<String> _selectedSchdule = [];
   late DateTime date;
-  late Color _color;
 
   @override
   void initState() {
@@ -81,7 +78,7 @@ class _MyCalendarState extends State<MyCalendar> {
       if (e.thisMonth) {
         e.checkSchedule.forEach((v) {
           if (v.schdule != "") {
-            _selected.add(PairList(v.date, v.schdule, e.number));
+            _selected.add(PairList(v.date, v.schdule, e.snc));
           }
         });
       }
@@ -97,10 +94,9 @@ class _MyCalendarState extends State<MyCalendar> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
-              height: 10,
+              height: 20,
             ),
             Container(
-              //  margin: EdgeInsets.all(10),
               height: MediaQuery.of(context).size.height * 0.5,
               decoration: BoxDecoration(
                 boxShadow: [
@@ -119,18 +115,17 @@ class _MyCalendarState extends State<MyCalendar> {
               child: _dateView(),
             ),
             Container(
-                height: 30,
-                margin: EdgeInsets.all(10),
+                height: 20,
+                margin: EdgeInsets.only(left: 20, top: 15, bottom: 15),
                 child: Text(
                   "${_currentDateTime.year}년 ${_currentDateTime.month}월 학사일정",
                   style: TextStyle(fontWeight: FontWeight.w800, fontSize: 15),
                 )),
             Container(
-              height: MediaQuery.of(context).size.height * 0.5 - 65,
+              height: MediaQuery.of(context).size.height * 0.5 - 75,
               child: ListView.builder(
                 itemCount: _selected.length,
                 itemBuilder: (context, index) {
-                  // print(_selected[index].date);
                   return Container(
                     margin: EdgeInsets.only(bottom: 10, left: 20, right: 20),
                     height: 90,
@@ -153,9 +148,7 @@ class _MyCalendarState extends State<MyCalendar> {
                             height: 25,
                             width: 25,
                             decoration: BoxDecoration(
-                              color: (_selected[index].date.length > 1)
-                                  ? _colors[_selected[index].num % 8]
-                                  : _colors[(_selected[index].num + 4) % 8],
+                              color: _colors[index % 8],
                               borderRadius: BorderRadius.circular(100),
                             )),
                         SizedBox(width: 15),
@@ -163,9 +156,13 @@ class _MyCalendarState extends State<MyCalendar> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
+                            SizedBox(),
                             Text(
                               "${_selected[index].schdule}",
-                              style: TextStyle(color: Color(0xff707070)),
+                              style: TextStyle(
+                                  color: Color(0xff707070),
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w800),
                             ),
                             Container(
                               child: (_selected[index].date.length > 1)
@@ -177,7 +174,8 @@ class _MyCalendarState extends State<MyCalendar> {
                                       "${DateFormat('MM. dd').format(_selected[index].date[0])}",
                                       style:
                                           TextStyle(color: Color(0xff707070))),
-                            )
+                            ),
+                            SizedBox(),
                           ],
                         ),
                       ],
@@ -232,13 +230,6 @@ class _MyCalendarState extends State<MyCalendar> {
           setState(() => {
                 (next) ? _getNextMonth() : _getPrevMonth(),
               });
-        } else if (_currentView == CalendarViews.year) {
-          if (next) {
-            midYear = (midYear == 0) ? _currentDateTime.year + 9 : midYear + 9;
-          } else {
-            midYear = (midYear == 0) ? _currentDateTime.year - 9 : midYear - 9;
-          }
-          setState(() {});
         }
       },
       child: Container(
@@ -309,109 +300,57 @@ class _MyCalendarState extends State<MyCalendar> {
   }
 
   Widget _calendarDates(Calendar calendarDate) {
-    _color = _colors[calendarDate.number % 8];
-
-    // BoxDecoration testtt() {
-    //   if (calendarDate.thisMonth) {
-    //     if (calendarDate.single) {
-    //       return BoxDecoration(
-    //         color: _colors[(calendarDate.number + 4) % 8],
-    //         borderRadius: BorderRadius.circular(100),
-    //       );
-    //     } else {
-    //       return BoxDecoration(color: Colors.transparent);
-    //     }
-    //   } else {
-    //     return BoxDecoration(color: Colors.transparent);
-    //   }
-    // }
-
-    // BoxDecoration calendarBoxDeco() {
-    //   if (calendarDate.thisMonth) {
-    //     if (calendarDate.right) {
-    //       return BoxDecoration(
-    //           color: _color,
-    //           borderRadius: BorderRadius.only(
-    //               bottomRight: Radius.circular(100),
-    //               topRight: Radius.circular(100)));
-    //     } else if (calendarDate.left) {
-    //       return BoxDecoration(
-    //           color: _color,
-    //           borderRadius: BorderRadius.only(
-    //               bottomLeft: Radius.circular(100),
-    //               topLeft: Radius.circular(100)));
-    //     } else if (calendarDate.middle) {
-    //       return BoxDecoration(color: _color);
-    //     } else {
-    //       return BoxDecoration(
-    //         color: Colors.white,
-    //       );
-    //     }
-    //   } else {
-    //     return BoxDecoration(
-    //       color: Colors.white,
-    //     );
-    //   }
-    // }
-
     List<Widget> _children = [];
-    print(calendarDate.snc.length);
-      calendarDate.snc.sort((a,b)=>b.color.compareTo(a.color));
+    calendarDate.snc.sort((a, b) => b.order.compareTo(a.order));
     for (int i = 0; i < calendarDate.snc.length; i++) {
       if (calendarDate.thisMonth) {
-        if (calendarDate.snc[i].shape == 2) {
+        if (calendarDate.snc[i].shape == 3) {
           _children.add(Center(
-            child: Opacity(
-              opacity: (i>1)?1:0.8,
-              child: Container(
-                height: 30,
-                width: double.infinity,
-                decoration:
-                    BoxDecoration(color: _colors[calendarDate.snc[i].color % 8]),
-              ),
+            child: Container(
+              height: 30,
+              width: double.infinity,
+              decoration: BoxDecoration(color: calendarDate.snc[i].color),
             ),
           ));
         }
         if (calendarDate.snc[i].shape == 1) {
           _children.add(Center(
-            child: Opacity(
-              opacity: (i>1)?1:0.8,
-              child: Container(
-                height: 30,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                    color: _colors[calendarDate.snc[i].color % 8],
-                    borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(100),
-                        topLeft: Radius.circular(100))),
-              ),
-            ),
-          ));
-        }
-        if (calendarDate.snc[i].shape == 3) {
-          _children.add(Center(
-            child: Opacity(
-              opacity: (i>1)?1:0.8,
-              child: Container(
-                height: 30,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: _colors[calendarDate.snc[i].color % 8],
+            child: Container(
+              height: 30,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                  color: calendarDate.snc[i].color,
                   borderRadius: BorderRadius.only(
-                      bottomRight: Radius.circular(100),
-                      topRight: Radius.circular(100)),
-                ),
+                      bottomLeft: Radius.circular(100),
+                      topLeft: Radius.circular(100))),
+            ),
+          ));
+        }
+        if (calendarDate.snc[i].shape == 2) {
+          _children.add(Center(
+            child: Container(
+              height: 30,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: calendarDate.snc[i].color,
+                borderRadius: BorderRadius.only(
+                    bottomRight: Radius.circular(100),
+                    topRight: Radius.circular(100)),
               ),
             ),
           ));
         }
+      }
+    }
+    for (int i = 0; i < calendarDate.snc.length; i++) {
+      if (calendarDate.thisMonth) {
         if (calendarDate.snc[i].shape == 4) {
           _children.add(Center(
             child: Container(
               height: 30,
               width: 30,
               decoration: BoxDecoration(
-                color: _colors[calendarDate.snc[i].color % 8],
+                color: calendarDate.snc[i].color,
                 borderRadius: BorderRadius.circular(100),
               ),
             ),
@@ -419,57 +358,6 @@ class _MyCalendarState extends State<MyCalendar> {
         }
       }
     }
-    // if (calendarDate.thisMonth) {
-    //   if (calendarDate.middle) {
-    //     _children.add(Center(
-    //       child: Container(
-    //         height: 30,
-    //         width: double.infinity,
-    //         decoration: BoxDecoration(color: Colors.red),
-    //       ),
-    //     ));
-    //   }
-    //   if (calendarDate.right) {
-    //     _children.add(Center(
-    //       child: Container(
-    //         height: 30,
-    //         width: double.infinity,
-    //         decoration: BoxDecoration(
-    //             borderRadius: BorderRadius.only(
-    //                 bottomRight: Radius.circular(100),
-    //                 topRight: Radius.circular(100)),
-    //             color: _color),
-    //       ),
-    //     ));
-    //   }
-    //   if (calendarDate.left) {
-    //     _children.add(Center(
-    //       child: Container(
-    //         height: 30,
-    //         width: double.infinity,
-    //         decoration: BoxDecoration(
-    //             color: _color,
-    //             borderRadius: BorderRadius.only(
-    //                 bottomLeft: Radius.circular(100),
-    //                 topLeft: Radius.circular(100))),
-    //       ),
-    //     ));
-    //   }
-    // }
-    // if (calendarDate.thisMonth) {
-    //   if (calendarDate.single) {
-    //     _children.add(Center(
-    //       child: Container(
-    //         height: 30,
-    //         width: 30,
-    //         decoration: BoxDecoration(
-    //           color: _colors[(calendarDate.number + 4) % 8],
-    //           borderRadius: BorderRadius.circular(100),
-    //         ),
-    //       ),
-    //     ));
-    //   }
-    // }
     _children.add(
       Center(
         child: Text(
@@ -492,34 +380,7 @@ class _MyCalendarState extends State<MyCalendar> {
           setState(() => _selectDateTime = calendarDate.date);
         }
       },
-      child: Stack(children: _children
-          // children: [
-          //   Center(
-          //     child: Container(
-          //       height: 30,
-          //       width: double.infinity,
-          //       decoration: calendarBoxDeco(),
-          //     ),
-          //   ),
-          //   Center(
-          //     child: Container(
-          //       height: 30,
-          //       width: 30,
-          //       decoration: testtt(),
-          //     ),
-          //   ),
-          //   Center(
-          //     child: Text(
-          //       '${calendarDate.date.day}',
-          //       style: TextStyle(
-          //           fontSize: 15,
-          //           color: (calendarDate.thisMonth)
-          //               ? Color(0xffBABABA)
-          //               : Colors.white),
-          //     ),
-          //   ),
-          // ],
-          ),
+      child: Stack(children: _children),
     );
   }
 }

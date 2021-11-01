@@ -39,7 +39,7 @@ class _MyClassState extends State<MyClass> {
     var windowHeight = MediaQuery.of(context).size.height;
     return MaterialApp(
       theme: ThemeData(primaryColor: Colors.lightGreen),
-      debugShowCheckedModeBanner: false,
+      //debugShowCheckedModeBanner: false,
       home: GestureDetector(
         onTap: () => {
           FocusScope.of(context).unfocus(),
