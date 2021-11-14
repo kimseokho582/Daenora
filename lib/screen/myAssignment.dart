@@ -22,6 +22,7 @@ class _MyAssignmentState extends State<MyAssignment>
   }
 
   Widget build(BuildContext context) {
+    print(progress);
     List<dynamic> myAssignment = assignments(assignmentProps);
     int doneCnt = (progress * myAssignment.length).toInt();
     Widget _child = new Text("");

@@ -7,6 +7,7 @@ import 'package:deanora/crawl/customException.dart';
 import 'package:deanora/screen/MyCalendar.dart';
 import 'package:deanora/screen/MyLogin.dart';
 import 'package:deanora/screen/MyClass.dart';
+import 'package:deanora/screen/MyMenu.dart';
 import 'package:deanora/screen/Test.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
@@ -37,7 +38,9 @@ class _MyAppState extends State<MyApp> {
             primaryColor: Colors.black,
             accentColor: Colors.white),
         debugShowCheckedModeBanner: false,
-        home: Cover());
+        home: Cover()
+        // home: MyMenu(),
+        );
   }
 }
 
@@ -46,8 +49,6 @@ class Cover extends StatefulWidget {
   @override
   _CoverState createState() => _CoverState();
 }
-
-String saved_id = "", saved_pw = "";
 
 class _CoverState extends State<Cover> {
   Widget build(BuildContext context) {
@@ -75,54 +76,16 @@ class _CoverState extends State<Cover> {
   @override
   void initState() {
     super.initState();
-    logintest();
-    if (saved_id != 'null' && saved_pw != 'null') {
-    } else {
-      Timer(Duration(seconds: 1), () {
-        print('first_login');
-        Navigator.pushReplacement(
-          context,
-          PageTransition(
-            duration: Duration(milliseconds: 800),
-            type: PageTransitionType.fade,
-            alignment: Alignment.topCenter,
-            child: MyLogin(),
-          ),
-        );
-      });
-    }
-  }
-
-  logintest() async {
-    var ctrl = new LoginDataCtrl();
-    var assurance = await ctrl.loadLoginData();
-    saved_id = assurance["user_id"] ?? "";
-    saved_pw = assurance["user_pw"] ?? "";
-    var crawl = new Crawl(saved_id, saved_pw);
-
-    try {
-      var classes = await crawl.crawlClasses();
-      var user = await crawl.crawlUser();
-      print("Saved_login");
+    Timer(Duration(seconds: 1), () {
       Navigator.pushReplacement(
-          context,
-          PageTransition(
-            duration: Duration(milliseconds: 250),
-            type: PageTransitionType.fade,
-            child: MyClass(saved_id, saved_pw, classes, user),
-          ));
-    } on CustomException catch (e) {
-      Timer(Duration(milliseconds: 1000), () {
-        Navigator.pushReplacement(
-          context,
-          PageTransition(
-            duration: Duration(milliseconds: 800),
-            type: PageTransitionType.fade,
-            alignment: Alignment.topCenter,
-            child: isviewed != 0 ? Tutorial() : MyLogin(),
-          ),
-        );
-      });
-    }
+        context,
+        PageTransition(
+          duration: Duration(milliseconds: 800),
+          type: PageTransitionType.fade,
+          alignment: Alignment.topCenter,
+          child: MyMenu(),
+        ),
+      );
+    });
   }
 }
