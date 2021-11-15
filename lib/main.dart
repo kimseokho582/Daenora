@@ -4,6 +4,7 @@ import 'package:deanora/Widgets/Tutorial.dart';
 import 'package:deanora/Widgets/Widgets.dart';
 import 'package:deanora/crawl/crawl.dart';
 import 'package:deanora/crawl/customException.dart';
+import 'package:deanora/screen/ApiTest.dart';
 import 'package:deanora/screen/MyCalendar.dart';
 import 'package:deanora/screen/MyLogin.dart';
 import 'package:deanora/screen/MyClass.dart';
@@ -15,12 +16,15 @@ import 'dart:async';
 import 'dart:ui';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:deanora/Widgets/LoginDataCtrl.dart';
+import 'package:kakao_flutter_sdk/all.dart';
 
 int? isviewed;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   isviewed = prefs.getInt('Tutorial');
+  KakaoContext.clientId = "13ae9c058a3730139cb75ca886110d5a";
+  KakaoContext.javascriptClientId = "7757b31611d5699d11f7d5ee10b4cd9c";
   runApp(MyApp());
 }
 
@@ -39,8 +43,8 @@ class _MyAppState extends State<MyApp> {
             accentColor: Colors.white),
         debugShowCheckedModeBanner: false,
         //home: Cover()
-        home: Test(),
-        );
+        //home: Test(),
+        home: ApiTest());
   }
 }
 

@@ -26,7 +26,6 @@ dependencies:
   http: ^0.13.3
   flutter_svg: 0.22.0
   page_transition: 2.0.2
-  shared_preferences: 2.0.7
   html: 0.15.0
   intl: ^0.17.0
   custom_check_box: 0.0.4
@@ -37,6 +36,19 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
+  kakao_flutter_sdk: ^0.7.0
+  dio: ^4.0.0
+  json_annotation: ^4.0.1
+  package_info_plus: ^1.0.4
+  platform: ^3.0.0
+  shared_preferences: ^2.0.5
+
+  # 자동 로그인 용도
+  flutter_secure_storage: ^4.2.1
+
+  # Firebase 사용자 정보 저장 용도
+  firebase_core: ^1.8.0
+  cloud_firestore: ^2.5.4
 
 dev_dependencies:
   flutter_test:
