@@ -36,17 +36,25 @@ class _MyClassState extends State<MyClass> with TickerProviderStateMixin {
   double ddnc = 0.0;
   Widget bar = new Text("");
   late Future<double> progressCnt;
+  late AnimationController animationController;
   _MyClassState(this.id, this.pw, this.classProps, this.userProps);
   @override
   void initState() {
     super.initState();
+    animationController =
+        AnimationController(duration: new Duration(milliseconds: 1000), vsync: this);
+    animationController.repeat();
     _getNames(classProps);
   }
-
+dispose() {
+  animationController.dispose();
+  super.dispose();
+}
   Widget build(BuildContext context) {
-    List dncList = List.generate(20, (i) => 0.0);
+    List dncList = List.generate(10, (i) => 0.0);
     var windowHeight = MediaQuery.of(context).size.height;
     var windowWidth = MediaQuery.of(context).size.width;
+
     return MaterialApp(
       theme: ThemeData(primaryColor: Colors.lightGreen),
       //debugShowCheckedModeBanner: false,
@@ -60,7 +68,7 @@ class _MyClassState extends State<MyClass> with TickerProviderStateMixin {
         },
         child: Container(
           child: Scaffold(
-              //appBar: myAppbar(context),
+              appBar: myAppbar(context),
               resizeToAvoidBottomInset: false,
               body: SafeArea(
                 child: Container(
@@ -70,13 +78,13 @@ class _MyClassState extends State<MyClass> with TickerProviderStateMixin {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                          height: 50,
-                          color: Colors.red,
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
+                        // Container(
+                        //   height: 50,
+                        //   color: Colors.red,
+                        // ),
+                        // SizedBox(
+                        //   height: 20,
+                        // ),
                         Container(
                           height: 30,
                           margin: const EdgeInsets.only(left: 10, bottom: 20),
@@ -141,11 +149,11 @@ class _MyClassState extends State<MyClass> with TickerProviderStateMixin {
                         ),
                         Center(
                           child: SizedBox(
-                            height: windowHeight - 220,
+                            height: windowHeight - 190,
+                            //height: windowHeight - 220,
                             child: RefreshIndicator(
                                 onRefresh: _refresh,
-                                child: SingleChildScrollView(
-                                    child: Column(
+                                child: ListView(
                                   children: filteredNames
                                       .asMap()
                                       .entries
@@ -159,13 +167,12 @@ class _MyClassState extends State<MyClass> with TickerProviderStateMixin {
                                             .crawlAssignments(e.classId);
                                         Navigator.push(
                                             context,
-                                            PageTransition(
-                                                type: PageTransitionType
-                                                    .bottomToTop,
-                                                duration:
-                                                    Duration(microseconds: 300),
-                                                child: MyAssignment(e ?? "",
-                                                    _adssi, dncList[index])));
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    MyAssignment(
+                                                        e ?? "",
+                                                        _adssi,
+                                                        dncList[index])));
                                       },
                                       child: Container(
                                         margin: const EdgeInsets.symmetric(
@@ -244,12 +251,23 @@ class _MyClassState extends State<MyClass> with TickerProviderStateMixin {
                                                                 vsync: this,
                                                                 upperBound:
                                                                     ddnc));
-                                                  } else {
+                                                  }else if(snap.hasError){
+                                                    return Container(
+                                                      alignment: Alignment.centerRight,
+                                                      child: Text("NaN"),
+                                                    );
+                                                  }else {
                                                     return Container(
                                                         alignment: Alignment
                                                             .centerRight,
-                                                        child:
-                                                            CircularProgressIndicator());
+                                                        child: SizedBox(
+                                                            width: 50,
+                                                            height: 50,
+                                                            child:
+                                                                CircularProgressIndicator(
+                                                               valueColor: animationController
+                  .drive(ColorTween(begin:Color(0xff8E53E9), end: Colors.red)),
+                                                            )));
                                                   }
                                                 },
                                               ),
@@ -259,7 +277,7 @@ class _MyClassState extends State<MyClass> with TickerProviderStateMixin {
                                       ),
                                     );
                                   }).toList(),
-                                ))),
+                                )),
                           ),
                         )
                       ],

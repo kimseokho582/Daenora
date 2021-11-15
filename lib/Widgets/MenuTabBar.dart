@@ -200,67 +200,74 @@ class _MenuTabBar extends State<MenuTabBar> with TickerProviderStateMixin {
                                 }));
                       });
             }),
-        new Align(
+        new Align(//아이콘 들어가는곳
           alignment: Alignment.bottomCenter,
-          child: new Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: _buildMenuIcons()),
-        ),
-        new Align(
-            alignment: Alignment.bottomCenter,
+          child: Container(
+            height: 60,
+            color:Colors.green,
             child: new Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  new Listener(
-                      onPointerDown: (c) {
-                        _isActivated.sink.add(0);
-                      },
-                      onPointerUp: (event) {
-                        _movementCancel(event.position.dy);
-                      },
-                      onPointerMove: (event) async {
-                        _updateButtonPosition(event.position.dy);
-                        _calculateOpacity(event.position.dy);
-                        _finishedMovement(event.position.dy);
-                      },
-                      child: new StreamBuilder(
-                          stream: _positionButton.stream,
-                          initialData: 10.0,
-                          builder: (context, AsyncSnapshot snapshot) {
-                            return new Padding(
-                                padding: EdgeInsets.only(bottom: snapshot.data),
-                                child: new StreamBuilder(
-                                    stream: _isActivated.stream,
-                                    builder: (context, AsyncSnapshot snapshot) {
-                                      return new FloatingActionButton(
-                                          elevation: 0,
-                                          onPressed: () {
-                                            _updateButtonPosition(0);
-                                            if (_isActivated.stream.value ==
-                                                1) {
-                                              _moveButtonDown();
-                                            } else {
-                                              _moveButtonUp();
-                                            }
-                                          },
-                                          child: new Transform.rotate(
-                                              angle: _animationRotate.value,
-                                              child: new Icon(Icons.add,
-                                                  color: snapshot.data == -1
-                                                      ? widget
-                                                          .colorMenuIconDefault
-                                                      //: widget.colorMenuIconActivated)),
-                                                      : Color(0xff6D6CEB))),
-                                          backgroundColor: snapshot.data == -1
-                                              // ? widget.backgroundMenuIconDefault
-                                              ? Color(0xff6D6CEB)
-                                              : widget
-                                                  .backgroundMenuIconActivated);
-                                    }));
-                          }))
-                ])),
+                children: _buildMenuIcons()),
+          ),
+        ),
+        Container(
+          margin: EdgeInsets.only(bottom: 20),
+          child: new Align(
+              alignment: Alignment.bottomCenter,
+              child: new Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    new Listener(
+                        onPointerDown: (c) {
+                          _isActivated.sink.add(0);
+                        },
+                        onPointerUp: (event) {
+                          _movementCancel(event.position.dy);
+                        },
+                        onPointerMove: (event) async {
+                          _updateButtonPosition(event.position.dy);
+                          _calculateOpacity(event.position.dy);
+                          _finishedMovement(event.position.dy);
+                        },
+                        child: new StreamBuilder(
+                            stream: _positionButton.stream,
+                            initialData: 10.0,
+                            builder: (context, AsyncSnapshot snapshot) {
+                              return new Padding(
+                                  padding: EdgeInsets.only(bottom: snapshot.data),
+                                  child: new StreamBuilder(
+                                      stream: _isActivated.stream,
+                                      builder: (context, AsyncSnapshot snapshot) {
+                                        return new FloatingActionButton(
+                                            elevation: 0,
+                                            onPressed: () {
+                                              _updateButtonPosition(0);
+                                              if (_isActivated.stream.value ==
+                                                  1) {
+                                                _moveButtonDown();
+                                              } else {
+                                                _moveButtonUp();
+                                              }
+                                            },
+                                            child: new Transform.rotate(
+                                                angle: _animationRotate.value,
+                                                child: new Icon(Icons.add,
+                                                    color: snapshot.data == -1
+                                                        ? widget
+                                                            .colorMenuIconDefault
+                                                        //: widget.colorMenuIconActivated)),
+                                                        : Color(0xff6D6CEB))),
+                                            backgroundColor: snapshot.data == -1
+                                                // ? widget.backgroundMenuIconDefault
+                                                ? Color(0xff6D6CEB)
+                                                : widget
+                                                    .backgroundMenuIconActivated);
+                                      }));
+                            }))
+                  ])),
+        ),
         new Align(
           alignment: Alignment.topCenter,
           child: new StreamBuilder(

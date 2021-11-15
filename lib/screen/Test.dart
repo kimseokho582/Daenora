@@ -27,14 +27,14 @@ class _Test extends State<Test> {
               color: Colors.blueGrey,
               icon: new Icon(Icons.search, size: 30),
               onPressed: () {}),
-          new IconButton(
-              color: Colors.blueGrey,
-              icon: new Icon(Icons.map, size: 30),
-              onPressed: () {}),
-          new IconButton(
-              color: Colors.blueGrey,
-              icon: new Icon(Icons.favorite, size: 30),
-              onPressed: () {}),
+          // new IconButton(
+          //     color: Colors.blueGrey,
+          //     icon: new Icon(Icons.map, size: 30),
+          //     onPressed: () {}),
+          // new IconButton(
+          //     color: Colors.blueGrey,
+          //     icon: new Icon(Icons.favorite, size: 30),
+          //     onPressed: () {}),
         ],
         child: new Column(
             mainAxisAlignment: MainAxisAlignment.center,

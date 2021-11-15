@@ -35,21 +35,21 @@ class CustomCircularBar extends StatefulWidget {
 }
 
 class _CustomCircularBar extends State<CustomCircularBar> {
-  late AnimationController _controller;
+  late AnimationController loadingCircleController;
   late ColorTween progressColor;
   final double fontSize;
   final double size;
 
   _CustomCircularBar(TickerProvider vsync, double upperBound, int duration,
       this.size, this.fontSize, Color startColor, Color endColor) {
-    _controller = AnimationController(
+    loadingCircleController = AnimationController(
         vsync: vsync,
         duration: Duration(milliseconds: duration),
         upperBound: upperBound)
       ..addListener(() {
         setState(() {});
       });
-    _controller.forward();
+    loadingCircleController.forward();
     this.progressColor = ColorTween(begin: startColor, end: endColor);
   }
 
@@ -61,8 +61,8 @@ class _CustomCircularBar extends State<CustomCircularBar> {
           width: this.size,
           height: this.size,
           child: CircularProgressIndicator(
-              value: _controller.value,
-              valueColor: _controller.drive(progressColor)),
+              value: loadingCircleController.value,
+              valueColor: loadingCircleController.drive(progressColor)),
         ),
         SizedBox(
           width: this.size,
@@ -70,7 +70,7 @@ class _CustomCircularBar extends State<CustomCircularBar> {
           child: Align(
               alignment: Alignment.center,
               child: Text(
-                '${(_controller.value * 100).floor()}%',
+                '${(loadingCircleController.value * 100).floor()}%',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: this.fontSize),
               )),
