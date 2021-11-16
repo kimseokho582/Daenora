@@ -17,7 +17,7 @@ class _Test extends State<Test> {
               style:
                   TextStyle(color: Colors.blue, fontWeight: FontWeight.bold))),
       new MenuTabBar(
-        background: Color(0xff8C65EC),
+        background: Colors.white,
         iconButtons: [
           new IconButton(
               color: Colors.blueGrey,
@@ -36,7 +36,7 @@ class _Test extends State<Test> {
           //     icon: new Icon(Icons.favorite, size: 30),
           //     onPressed: () {}),
         ],
-        child: new Column(
+        classChild : new Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               new Container(
@@ -45,6 +45,26 @@ class _Test extends State<Test> {
                   margin: EdgeInsets.all(10)),
               new Container(
                   child: new Text("Note",
+                      style: TextStyle(color: Colors.white, fontSize: 20)),
+                  margin: EdgeInsets.all(10)),
+              new Container(
+                  child: new Text("기타",
+                      style: TextStyle(color: Colors.white, fontSize: 20)),
+                  margin: EdgeInsets.all(10)),
+              new Container(
+                  child: new Text("등등...",
+                      style: TextStyle(color: Colors.white, fontSize: 20)),
+                  margin: EdgeInsets.all(10))
+            ]),
+            foodChild : new Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              new Container(
+                  child: new Text("음식",
+                      style: TextStyle(color: Colors.white, fontSize: 20)),
+                  margin: EdgeInsets.all(10)),
+              new Container(
+                  child: new Text("맛집",
                       style: TextStyle(color: Colors.white, fontSize: 20)),
                   margin: EdgeInsets.all(10)),
               new Container(

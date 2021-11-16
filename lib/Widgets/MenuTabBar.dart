@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
 class MenuTabBar extends StatefulWidget {
-  final Widget child;
+  final Widget classChild;
+  final Widget foodChild;
   final Color colorMenuIconDefault;
   final Color colorMenuIconActivated;
   final Color backgroundMenuIconDefault;
@@ -11,7 +12,8 @@ class MenuTabBar extends StatefulWidget {
   final List<IconButton> iconButtons;
 
   MenuTabBar(
-      {required this.child,
+      {required this.classChild,
+      required this.foodChild,
       this.background = Colors.blue,
       required this.iconButtons,
       this.colorMenuIconActivated = Colors.blue,
@@ -21,7 +23,8 @@ class MenuTabBar extends StatefulWidget {
       : assert(iconButtons != null &&
             iconButtons.length > 1 &&
             iconButtons.length % 2 == 0 &&
-            child != null);
+            classChild != null &&
+            foodChild != null);
 
   _MenuTabBar createState() => _MenuTabBar();
 }
@@ -41,11 +44,14 @@ class _MenuTabBar extends State<MenuTabBar> with TickerProviderStateMixin {
   late Animation<double> _animationRotate;
   late final void Function() _listenerDown;
   late final void Function() _listenerUp;
-
+  Contents _content = Contents.CLASS;
+  bool backbutton = false;
+  List<RadioCustom> radioModel = [];
   @override
   initState() {
     super.initState();
-
+    radioModel.add(new RadioCustom(true, "tabbarClass", "내 강의실", 0));
+    radioModel.add(new RadioCustom(false, "tabbarFood", "맛집 찾기", 1));
     _isActivated = new BehaviorSubject.seeded(-1);
     _opacity = new PublishSubject<double>();
     _positionButton = new BehaviorSubject.seeded(10);
@@ -153,6 +159,44 @@ class _MenuTabBar extends State<MenuTabBar> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return new Stack(children: <Widget>[
       new Stack(children: <Widget>[
+        new Align(
+          //아이콘 들어가는곳
+          alignment: Alignment.bottomCenter,
+          child: Container(
+            height: 80,
+            //color: Colors.green,
+            child: new Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                //children: _buildMenuIcons()
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width / 2,
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          radioModel[0].isSelected = true;
+                          radioModel[1].isSelected = false;
+                        });
+                      },
+                      child: RadioItem(radioModel[0]),
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width / 2,
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          radioModel[0].isSelected = false;
+                          radioModel[1].isSelected = true;
+                        });
+                      },
+                      child: RadioItem(radioModel[1]),
+                    ),
+                  ),
+                ]),
+          ),
+        ),
         new StreamBuilder(
             stream: _isActivated.stream,
             builder: (context, AsyncSnapshot<int> snapshot) {
@@ -200,19 +244,8 @@ class _MenuTabBar extends State<MenuTabBar> with TickerProviderStateMixin {
                                 }));
                       });
             }),
-        new Align(//아이콘 들어가는곳
-          alignment: Alignment.bottomCenter,
-          child: Container(
-            height: 60,
-            color:Colors.green,
-            child: new Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: _buildMenuIcons()),
-          ),
-        ),
         Container(
-          margin: EdgeInsets.only(bottom: 20),
+          margin: EdgeInsets.only(bottom: 40), // 플러스 버튼 위치
           child: new Align(
               alignment: Alignment.bottomCenter,
               child: new Row(
@@ -236,10 +269,13 @@ class _MenuTabBar extends State<MenuTabBar> with TickerProviderStateMixin {
                             initialData: 10.0,
                             builder: (context, AsyncSnapshot snapshot) {
                               return new Padding(
-                                  padding: EdgeInsets.only(bottom: snapshot.data),
+                                  padding:
+                                      EdgeInsets.only(bottom: snapshot.data),
                                   child: new StreamBuilder(
                                       stream: _isActivated.stream,
-                                      builder: (context, AsyncSnapshot snapshot) {
+                                      builder:
+                                          (context, AsyncSnapshot snapshot) {
+                                        print(_isActivated.stream.value);
                                         return new FloatingActionButton(
                                             elevation: 0,
                                             onPressed: () {
@@ -247,8 +283,14 @@ class _MenuTabBar extends State<MenuTabBar> with TickerProviderStateMixin {
                                               if (_isActivated.stream.value ==
                                                   1) {
                                                 _moveButtonDown();
+                                                setState(() {
+                                                  backbutton=false;
+                                                });
                                               } else {
                                                 _moveButtonUp();
+                                                 setState(() {
+                                                  backbutton=true;
+                                                });
                                               }
                                             },
                                             child: new Transform.rotate(
@@ -275,7 +317,10 @@ class _MenuTabBar extends State<MenuTabBar> with TickerProviderStateMixin {
               builder: (context, AsyncSnapshot<int> snapshot) {
                 return snapshot.data == 1
                     ? new Padding(
-                        padding: EdgeInsets.only(top: 0), child: widget.child)
+                        padding: EdgeInsets.only(top: 0),
+                        child: (radioModel[0].isSelected == true)
+                            ? widget.classChild
+                            : widget.foodChild)
                     : new Container(width: 0, height: 0);
               }),
         )
@@ -329,6 +374,81 @@ class ContainerClipper extends CustomClipper<Path> {
 
   @override
   bool shouldReclip(CustomClipper<Path> oldClipper) {
+    return true;
+  }
+}
+
+enum Contents { CLASS, FOOD }
+
+class RadioItem extends StatelessWidget {
+  final RadioCustom _item;
+  RadioItem(this._item);
+  @override
+  Widget build(BuildContext context) {
+    if (_item.isSelected == true) {
+      print(_item.title);
+    }
+    return Center(
+      child: ClipPath(
+        clipper: CustomPath(_item.idx),
+        child: Container(
+            width: MediaQuery.of(context).size.width / 2,
+            color: Color(0xfff4f4f4),
+            child: Opacity(
+                opacity: (_item.isSelected) ? 1 : 0.3,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      'assets/images/${_item.icon}.png',
+                      width: 20,
+                      height: 25,
+                    ),
+                    Text(_item.title),
+                  ],
+                ))),
+      ),
+    );
+  }
+}
+
+class RadioCustom {
+  bool isSelected;
+  final String icon;
+  final String title;
+  final int idx;
+
+  RadioCustom(this.isSelected, this.icon, this.title, this.idx);
+}
+
+// ignore: must_be_immutable
+class CustomPath extends CustomClipper<Path> {
+  final int index;
+  CustomPath(this.index);
+  var radius = 40.0;
+  @override
+  Path getClip(Size size) {
+    Path path = Path();
+    if (index == 0) {
+      path.lineTo(0.0, size.height);
+      path.lineTo(size.width - 5, size.height);
+      path.lineTo(size.width - 5, radius);
+      path.arcToPoint(Offset(size.width - radius, 0.0),
+          clockwise: true, radius: Radius.circular(radius));
+    } else if (index == 1) {
+      path.moveTo(radius, 0.0);
+      path.arcToPoint(Offset(5.0, radius),
+          clockwise: true, radius: Radius.circular(radius));
+      path.lineTo(5.0, size.height);
+      path.lineTo(size.width, size.height);
+      path.lineTo(size.width, 0.0);
+    }
+
+    return path;
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper) {
     return true;
   }
 }

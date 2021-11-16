@@ -24,6 +24,48 @@ class _MyMenuState extends State<MyMenu> {
     var windowHeight = MediaQuery.of(context).size.height;
     var windowWidth = MediaQuery.of(context).size.width;
 
+    Widget contentsMenu(_ontapcontroller, image, title, descrition) {
+      return InkWell(
+        onTap: () {
+          _ontapcontroller();
+        },
+        child: Container(
+          height: (windowHeight - 270) / 2,
+          child: Column(
+            children: [
+              Align(
+                  alignment: Alignment.topCenter,
+                  child: Container(
+                    child: Image.asset('assets/images/$image.png'),
+                  )),
+              Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(30),
+                            bottomRight: Radius.circular(30))),
+                    child: Container(
+                      padding: EdgeInsets.only(left: 20, top: 15, bottom: 15),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text(
+                              title,
+                              style: TextStyle(fontWeight: FontWeight.w800),
+                            ),
+                            Text(descrition, style: TextStyle(fontSize: 13))
+                          ]),
+                    ),
+                  ))
+            ],
+          ),
+        ),
+      );
+    }
 
     return MaterialApp(
       home: Scaffold(
@@ -43,85 +85,13 @@ class _MyMenuState extends State<MyMenu> {
                 SizedBox(
                   height: 18,
                 ),
-               InkWell(
-                  onTap: () {
-                   logintest();
-                  },
-                  child: Column(
-                    children: [
-                      Container(
-                        width: windowWidth - 60,
-                        //height: (windowWidth-60)*0.66,
-                        child: Image.asset('assets/images/nyanTitle.png'),
-                      ),
-                      Container(
-                        width: windowWidth - 60,
-                        height: 65,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(30),
-                                bottomRight: Radius.circular(30))),
-                        child: Container(
-                          padding:
-                              EdgeInsets.only(left: 20, top: 10, bottom: 10),
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Text(
-                                  "냥대 - 내 강의실",
-                                  style: TextStyle(fontWeight: FontWeight.w800),
-                                ),
-                                Text("각 과목의 과제 정보와 학사일정을 확인",
-                                    style: TextStyle(fontSize: 13))
-                              ]),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
+                contentsMenu(logintest, "nyanTitle", "냥대 - 내 강의실",
+                    "각 과목의 과제 정보와 학사일정을 확인"),
                 SizedBox(
                   height: 38,
                 ),
-                InkWell(
-                  onTap: () {
-                    print("냠");
-                  },
-                  child: Column(
-                    children: [
-                      Container(
-                        width: windowWidth - 60,
-                        //height: (windowWidth-60)*0.66,
-                        child: Image.asset('assets/images/yumTitle.png'),
-                      ),
-                      Container(
-                        width: windowWidth - 60,
-                        height: 65,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(30),
-                                bottomRight: Radius.circular(30))),
-                        child: Container(
-                          padding:
-                              EdgeInsets.only(left: 20, top: 10, bottom: 10),
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Text(
-                                  "냠대 - 맛집 정보",
-                                  style: TextStyle(fontWeight: FontWeight.w800),
-                                ),
-                                Text("안양대생만의 숨은 꿀 맛집 정보를 공유",
-                                    style: TextStyle(fontSize: 13))
-                              ]),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
+                contentsMenu(() => {print("냠")}, "yumTitle", "냠대 - 맛집 정보",
+                    "안양대생만의 숨은 꿀 맛집 정보를 공유"),
               ],
             ),
           ),
@@ -129,6 +99,8 @@ class _MyMenuState extends State<MyMenu> {
       ),
     );
   }
+
+  
 
   logintest() async {
     var ctrl = new LoginDataCtrl();
