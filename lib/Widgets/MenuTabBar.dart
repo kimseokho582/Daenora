@@ -284,12 +284,12 @@ class _MenuTabBar extends State<MenuTabBar> with TickerProviderStateMixin {
                                                   1) {
                                                 _moveButtonDown();
                                                 setState(() {
-                                                  backbutton=false;
+                                                  backbutton = false;
                                                 });
                                               } else {
                                                 _moveButtonUp();
-                                                 setState(() {
-                                                  backbutton=true;
+                                                setState(() {
+                                                  backbutton = true;
                                                 });
                                               }
                                             },
@@ -431,15 +431,15 @@ class CustomPath extends CustomClipper<Path> {
     Path path = Path();
     if (index == 0) {
       path.lineTo(0.0, size.height);
-      path.lineTo(size.width - 5, size.height);
-      path.lineTo(size.width - 5, radius);
+      path.lineTo(size.width, size.height);
+      path.lineTo(size.width, radius);
       path.arcToPoint(Offset(size.width - radius, 0.0),
           clockwise: true, radius: Radius.circular(radius));
     } else if (index == 1) {
       path.moveTo(radius, 0.0);
-      path.arcToPoint(Offset(5.0, radius),
+      path.arcToPoint(Offset(0.0, radius),
           clockwise: true, radius: Radius.circular(radius));
-      path.lineTo(5.0, size.height);
+      path.lineTo(0.0, size.height);
       path.lineTo(size.width, size.height);
       path.lineTo(size.width, 0.0);
     }

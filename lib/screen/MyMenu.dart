@@ -29,39 +29,42 @@ class _MyMenuState extends State<MyMenu> {
         onTap: () {
           _ontapcontroller();
         },
-        child: Container(
-          height: (windowHeight - 270) / 2,
-          child: Column(
-            children: [
-              Align(
-                  alignment: Alignment.topCenter,
-                  child: Container(
-                    child: Image.asset('assets/images/$image.png'),
-                  )),
-              Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(30),
-                            bottomRight: Radius.circular(30))),
+        child: Center(
+          child: Container(
+            //height: (windowHeight - 270) / 2,
+            width: 260,
+            child: Column(
+              children: [
+                Align(
+                    alignment: Alignment.topCenter,
                     child: Container(
-                      padding: EdgeInsets.only(left: 20, top: 15, bottom: 15),
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Text(
-                              title,
-                              style: TextStyle(fontWeight: FontWeight.w800),
-                            ),
-                            Text(descrition, style: TextStyle(fontSize: 13))
-                          ]),
-                    ),
-                  ))
-            ],
+                      child: Image.asset('assets/images/$image.png'),
+                    )),
+                Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(30),
+                              bottomRight: Radius.circular(30))),
+                      child: Container(
+                        padding: EdgeInsets.only(left: 20, top: 15, bottom: 15),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Text(
+                                title,
+                                style: TextStyle(fontWeight: FontWeight.w800),
+                              ),
+                              Text(descrition, style: TextStyle(fontSize: 13))
+                            ]),
+                      ),
+                    ))
+              ],
+            ),
           ),
         ),
       );
@@ -99,8 +102,6 @@ class _MyMenuState extends State<MyMenu> {
       ),
     );
   }
-
-  
 
   logintest() async {
     var ctrl = new LoginDataCtrl();
