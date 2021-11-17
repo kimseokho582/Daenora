@@ -1,35 +1,36 @@
+import 'package:deanora/screen/MyCalendar.dart';
+import 'package:deanora/screen/myClass.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
+bool checkbackbutton = false;
+Widget tt = new Container();
+
+
 class MenuTabBar extends StatefulWidget {
-  final Widget classChild;
-  final Widget foodChild;
+  BuildContext mycontext;
   final Color colorMenuIconDefault;
   final Color colorMenuIconActivated;
   final Color backgroundMenuIconDefault;
   final Color backgroundMenuIconActivated;
   final Color background;
-  final List<IconButton> iconButtons;
 
   MenuTabBar(
-      {required this.classChild,
-      required this.foodChild,
+      {required this.mycontext,
       this.background = Colors.blue,
-      required this.iconButtons,
       this.colorMenuIconActivated = Colors.blue,
       this.colorMenuIconDefault = Colors.white,
       this.backgroundMenuIconActivated = Colors.white,
-      this.backgroundMenuIconDefault = Colors.blue})
-      : assert(iconButtons != null &&
-            iconButtons.length > 1 &&
-            iconButtons.length % 2 == 0 &&
-            classChild != null &&
-            foodChild != null);
+      this.backgroundMenuIconDefault = Colors.blue});
+      
 
-  _MenuTabBar createState() => _MenuTabBar();
+  _MenuTabBar createState() => _MenuTabBar(this.mycontext);
 }
 
 class _MenuTabBar extends State<MenuTabBar> with TickerProviderStateMixin {
+BuildContext mycontext;
+
+_MenuTabBar(this.mycontext);
   //-1 button is quiet
   //0 button is moving
   //1 button is activated
@@ -44,9 +45,9 @@ class _MenuTabBar extends State<MenuTabBar> with TickerProviderStateMixin {
   late Animation<double> _animationRotate;
   late final void Function() _listenerDown;
   late final void Function() _listenerUp;
-  Contents _content = Contents.CLASS;
-  bool backbutton = false;
+
   List<RadioCustom> radioModel = [];
+
   @override
   initState() {
     super.initState();
@@ -77,25 +78,6 @@ class _MenuTabBar extends State<MenuTabBar> with TickerProviderStateMixin {
       _positionButton.sink.add(_animationDown.value);
     };
     _animationControllerDown.addListener(_listenerDown);
-  }
-
-  List<Widget> _buildMenuIcons() {
-    List<Widget> icons = [];
-
-    for (var i = 0; i < widget.iconButtons.length; i++) {
-      if (i == widget.iconButtons.length / 2) {
-        icons.add(new Container(
-            width: MediaQuery.of(context).size.width /
-                (widget.iconButtons.length + 1),
-            height: 0));
-      }
-      icons.add(new Container(
-          width: MediaQuery.of(context).size.width /
-              (widget.iconButtons.length + 1),
-          child: widget.iconButtons[i]));
-    }
-
-    return icons;
   }
 
   void _calculateOpacity(double dy) {
@@ -157,7 +139,55 @@ class _MenuTabBar extends State<MenuTabBar> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return new Stack(children: <Widget>[
+    List<Widget> classList = [
+      GestureDetector(
+        onTap: () {
+          Navigator.push(
+              mycontext, MaterialPageRoute(builder: (mycontext) => MyCalendar()));
+        },
+        child: new Container(
+            child: new Text("Calendar",
+                style: TextStyle(color: Colors.white, fontSize: 20)),
+            margin: EdgeInsets.all(10)),
+      ),
+      GestureDetector(
+        onTap: (){
+          _moveButtonDown();
+        },
+        child: new Container(
+            child: new Text("Note",
+                style: TextStyle(color: Colors.white, fontSize: 20)),
+            margin: EdgeInsets.all(10)),
+      ),
+      new Container(
+          child: new Text("기타",
+              style: TextStyle(color: Colors.white, fontSize: 20)),
+          margin: EdgeInsets.all(10)),
+      new Container(
+          child: new Text("등등...",
+              style: TextStyle(color: Colors.white, fontSize: 20)),
+          margin: EdgeInsets.all(10))
+    ];
+    List<Widget> foodList = [
+      new Container(
+          child: new Text("음식",
+              style: TextStyle(color: Colors.white, fontSize: 20)),
+          margin: EdgeInsets.all(10)),
+      new Container(
+          child: new Text("맛집",
+              style: TextStyle(color: Colors.white, fontSize: 20)),
+          margin: EdgeInsets.all(10)),
+      new Container(
+          child: new Text("기타",
+              style: TextStyle(color: Colors.white, fontSize: 20)),
+          margin: EdgeInsets.all(10)),
+      new Container(
+          child: new Text("등등...",
+              style: TextStyle(color: Colors.white, fontSize: 20)),
+          margin: EdgeInsets.all(10))
+    ];
+
+    return Stack(children: <Widget>[
       new Stack(children: <Widget>[
         new Align(
           //아이콘 들어가는곳
@@ -200,49 +230,55 @@ class _MenuTabBar extends State<MenuTabBar> with TickerProviderStateMixin {
         new StreamBuilder(
             stream: _isActivated.stream,
             builder: (context, AsyncSnapshot<int> snapshot) {
-              return snapshot.data == -1
-                  ? new Container(height: 0, width: 0)
-                  : new StreamBuilder(
-                      initialData: 0.0,
-                      stream: _opacity.stream,
-                      builder: (context, AsyncSnapshot<double> snapshot) {
-                        return new Opacity(
-                            opacity: snapshot.data ?? 0,
-                            child: new StreamBuilder(
-                                initialData: 0.0,
-                                stream: _positionButton.stream,
-                                builder:
-                                    (context, AsyncSnapshot<double> snapshot) {
-                                  var positon = snapshot.data! >=
-                                          MediaQuery.of(context).size.height *
-                                              0.3
-                                      ? (MediaQuery.of(context).size.height *
-                                              0.3) -
-                                          (snapshot.data! -
-                                              (MediaQuery.of(context)
-                                                      .size
-                                                      .height *
-                                                  0.3))
-                                      : snapshot.data;
-                                  return new ClipPath(
-                                      clipper: ContainerClipper(positon!),
-                                      child: new Container(
-                                        width: double.infinity,
-                                        height:
-                                            MediaQuery.of(context).size.height,
-                                        //color:background
-                                        decoration: BoxDecoration(
-                                          gradient: LinearGradient(
-                                              begin: Alignment.topRight,
-                                              end: Alignment.bottomLeft,
-                                              colors: <Color>[
-                                                Color(0xff6D6CEB),
-                                                Color(0xff7C4DF1)
-                                              ]),
-                                        ),
-                                      ));
-                                }));
-                      });
+              if (snapshot.data == -1) {
+                print("닫힘");
+                checkbackbutton = false;
+                tt = Container(height: 0, width: 0);
+              } else {
+                checkbackbutton = true;
+                print("보라돌이");
+                tt = StreamBuilder(
+                    initialData: 0.0,
+                    stream: _opacity.stream,
+                    builder: (context, AsyncSnapshot<double> snapshot) {
+                      return new Opacity(
+                          opacity: snapshot.data ?? 0,
+                          child: new StreamBuilder(
+                              initialData: 0.0,
+                              stream: _positionButton.stream,
+                              builder:
+                                  (context, AsyncSnapshot<double> snapshot) {
+                                var positon = snapshot.data! >=
+                                        MediaQuery.of(context).size.height * 0.3
+                                    ? (MediaQuery.of(context).size.height *
+                                            0.3) -
+                                        (snapshot.data! -
+                                            (MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.3))
+                                    : snapshot.data;
+                                return new ClipPath(
+                                    clipper: ContainerClipper(positon!),
+                                    child: new Container(
+                                      width: double.infinity,
+                                      height:
+                                          MediaQuery.of(context).size.height,
+                                      //color:background
+                                      decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                            begin: Alignment.topRight,
+                                            end: Alignment.bottomLeft,
+                                            colors: <Color>[
+                                              Color(0xff6D6CEB),
+                                              Color(0xff7C4DF1)
+                                            ]),
+                                      ),
+                                    ));
+                              }));
+                    });
+              }
+              return tt;
             }),
         Container(
           margin: EdgeInsets.only(bottom: 40), // 플러스 버튼 위치
@@ -283,14 +319,8 @@ class _MenuTabBar extends State<MenuTabBar> with TickerProviderStateMixin {
                                               if (_isActivated.stream.value ==
                                                   1) {
                                                 _moveButtonDown();
-                                                setState(() {
-                                                  backbutton = false;
-                                                });
                                               } else {
                                                 _moveButtonUp();
-                                                setState(() {
-                                                  backbutton = true;
-                                                });
                                               }
                                             },
                                             child: new Transform.rotate(
@@ -316,11 +346,14 @@ class _MenuTabBar extends State<MenuTabBar> with TickerProviderStateMixin {
               stream: _isActivated.stream,
               builder: (context, AsyncSnapshot<int> snapshot) {
                 return snapshot.data == 1
-                    ? new Padding(
-                        padding: EdgeInsets.only(top: 0),
-                        child: (radioModel[0].isSelected == true)
-                            ? widget.classChild
-                            : widget.foodChild)
+                    ? Column(
+                      children: [SizedBox(height:MediaQuery.of(context).size.height * 0.25),
+                        new Column(
+                            children: (radioModel[0].isSelected == true)
+                                ? classList
+                                : foodList),
+                      ],
+                    )
                     : new Container(width: 0, height: 0);
               }),
         )
@@ -385,9 +418,6 @@ class RadioItem extends StatelessWidget {
   RadioItem(this._item);
   @override
   Widget build(BuildContext context) {
-    if (_item.isSelected == true) {
-      print(_item.title);
-    }
     return Center(
       child: ClipPath(
         clipper: CustomPath(_item.idx),

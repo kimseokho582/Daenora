@@ -1,11 +1,14 @@
 import 'package:deanora/Widgets/LoginDataCtrl.dart';
+import 'package:deanora/Widgets/MakeCalendar.dart';
 import 'package:deanora/Widgets/MenuTabBar.dart';
 import 'package:deanora/Widgets/Widgets.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:deanora/Widgets/custom_circlular_bar.dart';
 import 'package:deanora/crawl/crawl.dart';
 import 'package:deanora/screen/MyCalendar.dart';
 import 'package:deanora/screen/MyLogin.dart';
 import 'package:deanora/screen/myAssignment.dart';
+import 'package:deanora/main.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
@@ -16,6 +19,7 @@ class CnDPair<T1, T2> {
   double val;
   CnDPair(this.index, this.val);
 }
+
 
 class MyClass extends StatefulWidget {
   var id, pw, classProps, userProps;
@@ -38,7 +42,9 @@ class _MyClassState extends State<MyClass> with TickerProviderStateMixin {
   Widget bar = new Text("");
   late Future<double> progressCnt;
   late AnimationController animationController;
+
   _MyClassState(this.id, this.pw, this.classProps, this.userProps);
+
   @override
   void initState() {
     super.initState();
@@ -53,320 +59,274 @@ class _MyClassState extends State<MyClass> with TickerProviderStateMixin {
     super.dispose();
   }
 
+Future<bool> _willPopCallback() async {
+    if (checkbackbutton == false) {
+      return Future.value(true);
+    } else {
+      tt = new Text("왜");
+    //  FlutterDialog();
+        Navigator.pushReplacement(context, PageTransition(child:MyClass(id, pw, classProps, userProps), type: PageTransitionType.fade));
+      return Future.value(false);
+    }
+    
+}
+
+
   Widget build(BuildContext context) {
     List dncList = List.generate(10, (i) => 0.0);
     var windowHeight = MediaQuery.of(context).size.height;
     var windowWidth = MediaQuery.of(context).size.width;
-    return MaterialApp(
-      theme: ThemeData(primaryColor: Colors.lightGreen),
-      //debugShowCheckedModeBanner: false,
-      home: GestureDetector(
-        onTap: () => {
-          FocusScope.of(context).unfocus(),
-          setState(() {
-            bar = new Text("");
-            searchIcon = new Icon(Icons.search);
-          })
-        },
-        child: Container(
-          child: Scaffold(
-              appBar: myAppbar(context),
-              resizeToAvoidBottomInset: false,
-              body: SafeArea(
-                child: Stack(children: [
-                  Container(
-                    color: Colors.white,
-                    child: Container(
-                      margin:
-                          const EdgeInsets.only(top: 3, left: 20, right: 20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Container(
-                          //   height: 50,
-                          //   color: Colors.red,
-                          // ),
-                          // SizedBox(
-                          //   height: 20,
-                          // ),
-                          Container(
-                            height: 30,
-                            margin: const EdgeInsets.only(left: 10, bottom: 20),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.account_circle,
-                                  color: Colors.blueGrey,
-                                  size: 35,
-                                ),
-                                Text.rich(TextSpan(children: <TextSpan>[
-                                  TextSpan(text: "  안녕하세요, "),
-                                  TextSpan(
-                                    text: "${user(userProps)[0].name}",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w900,
-                                        fontSize: 18),
-                                  ),
-                                  TextSpan(text: "님")
-                                ])),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Container(
+
+    return WillPopScope(
+      onWillPop: _willPopCallback,
+      child: MaterialApp(
+        theme: ThemeData(primaryColor: Colors.lightGreen),
+        //debugShowCheckedModeBanner: false,
+        home: GestureDetector(
+          onTap: () => {
+            FocusScope.of(context).unfocus(),
+            setState(() {
+              bar = new Text("");
+              searchIcon = new Icon(Icons.search);
+            })
+          },
+          child: Container(
+            child: Scaffold(
+                appBar: myAppbar(context),
+                resizeToAvoidBottomInset: false,
+                body: SafeArea(
+                  child: Stack(children: [
+                    Container(
+                      color: Colors.white,
+                      child: Container(
+                        margin:
+                            const EdgeInsets.only(top: 3, left: 20, right: 20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Container(
+                            //   height: 50,
+                            //   color: Colors.red,
+                            // ),
+                            // SizedBox(
+                            //   height: 20,
+                            // ),
+                            Container(
+                              height: 30,
                               margin:
-                                  const EdgeInsets.only(left: 10, right: 10),
+                                  const EdgeInsets.only(left: 10, bottom: 20),
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Text("내 강의실 List",
+                                  Icon(
+                                    Icons.account_circle,
+                                    color: Colors.blueGrey,
+                                    size: 35,
+                                  ),
+                                  Text.rich(TextSpan(children: <TextSpan>[
+                                    TextSpan(text: "  안녕하세요, "),
+                                    TextSpan(
+                                      text: "${user(userProps)[0].name}",
                                       style: TextStyle(
                                           fontWeight: FontWeight.w900,
-                                          fontSize: 18)),
-                                  InkWell(
-                                    onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  MyCalendar()));
-                                    },
-                                    child: Ink(
-                                      child: Row(
-                                        children: [
-                                          Icon(
-                                            Icons.event_available,
-                                            size: 20,
-                                          ),
-                                          Text("학사일정"),
-                                        ],
-                                      ),
+                                          fontSize: 18),
                                     ),
-                                  )
+                                    TextSpan(text: "님")
+                                  ])),
                                 ],
-                              )),
-                          SizedBox(
-                            height: 30,
-                          ),
-                          Center(
-                            child: SizedBox(
-                              height: windowHeight - 270,
-                              //height: windowHeight - 220,
-                              child: RefreshIndicator(
-                                  onRefresh: _refresh,
-                                  child: ListView(
-                                    children: filteredNames
-                                        .asMap()
-                                        .entries
-                                        .map((entry) {
-                                      var e = entry.value;
-                                      var index = entry.key;
-                                      return InkWell(
-                                        onTap: () async {
-                                          var crawl = new Crawl(id, pw);
-                                          var _adssi = await crawl
-                                              .crawlAssignments(e.classId);
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      MyAssignment(
-                                                          e ?? "",
-                                                          _adssi,
-                                                          dncList[index])));
-                                        },
-                                        child: Container(
-                                          margin: const EdgeInsets.symmetric(
-                                              vertical: 7, horizontal: 7),
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            border: Border.all(
-                                                width: 2,
-                                                color: Colors.grey
-                                                    .withOpacity(0.03)),
-                                            borderRadius:
-                                                BorderRadius.circular(15),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: Colors.grey
-                                                    .withOpacity(0.2),
-                                                spreadRadius: 1,
-                                                blurRadius: 4,
-                                                offset: Offset(3, 5),
-                                              )
-                                            ],
-                                          ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                                margin:
+                                    const EdgeInsets.only(left: 10, right: 10),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text("내 강의실 List",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w900,
+                                            fontSize: 18)),
+                                    InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    MyCalendar()));
+                                      },
+                                      child: Ink(
+                                        child: Row(
+                                          children: [
+                                            Icon(
+                                              Icons.event_available,
+                                              size: 20,
+                                            ),
+                                            Text("학사일정"),
+                                          ],
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                )),
+                            SizedBox(
+                              height: 30,
+                            ),
+                            Center(
+                              child: SizedBox(
+                                height: windowHeight - 270,
+                                //height: windowHeight - 220,
+                                child: RefreshIndicator(
+                                    onRefresh: _refresh,
+                                    child: ListView(
+                                      children: filteredNames
+                                          .asMap()
+                                          .entries
+                                          .map((entry) {
+                                        var e = entry.value;
+                                        var index = entry.key;
+                                        return InkWell(
+                                          onTap: () async {
+                                            var crawl = new Crawl(id, pw);
+                                            var _adssi = await crawl
+                                                .crawlAssignments(e.classId);
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        MyAssignment(
+                                                            e ?? "",
+                                                            _adssi,
+                                                            dncList[index])));
+                                          },
                                           child: Container(
-                                            margin: const EdgeInsets.only(
-                                                top: 20,
-                                                right: 30,
-                                                left: 25,
-                                                bottom: 18),
-                                            child: Stack(
-                                              children: [
-                                                Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceEvenly,
-                                                    children: [
-                                                      Container(
-                                                        width:
-                                                            windowWidth - 205,
-                                                        child: Text(
-                                                          e.className,
-                                                          maxLines: 1,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          softWrap: false,
-                                                          style: TextStyle(
-                                                              fontSize: 15,
-                                                              color: Color(
-                                                                  0xff707070),
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w800),
-                                                        ),
-                                                      ),
-                                                      SizedBox(
-                                                        height: 10,
-                                                      ),
-                                                      Text(' ${e.profName} 교수님',
-                                                          style: TextStyle(
-                                                              fontSize: 12,
-                                                              color: Color(
-                                                                  0xff707070)))
-                                                    ]),
-                                                FutureBuilder(
-                                                  future: requestDnc(id, pw, e),
-                                                  builder: (context,
-                                                      AsyncSnapshot snap) {
-                                                    if (snap.hasData) {
-                                                      ddnc = snap.data!;
-                                                      dncList[index] = ddnc;
-                                                      return Container(
-                                                          alignment: Alignment
-                                                              .centerRight,
-                                                          child:
-                                                              CustomCircularBar(
-                                                                  vsync: this,
-                                                                  upperBound:
-                                                                      ddnc));
-                                                    } else if (snap.hasError) {
-                                                      return Container(
-                                                        alignment: Alignment
-                                                            .centerRight,
-                                                        child: Text("NaN"),
-                                                      );
-                                                    } else {
-                                                      return Container(
-                                                          alignment: Alignment
-                                                              .centerRight,
-                                                          child: SizedBox(
-                                                              width: 50,
-                                                              height: 50,
-                                                              child:
-                                                                  CircularProgressIndicator(
-                                                                valueColor: animationController.drive(ColorTween(
-                                                                    begin: Color(
-                                                                        0xff8E53E9),
-                                                                    end: Colors
-                                                                        .red)),
-                                                              )));
-                                                    }
-                                                  },
-                                                ),
+                                            margin: const EdgeInsets.symmetric(
+                                                vertical: 7, horizontal: 7),
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              border: Border.all(
+                                                  width: 2,
+                                                  color: Colors.grey
+                                                      .withOpacity(0.03)),
+                                              borderRadius:
+                                                  BorderRadius.circular(15),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.grey
+                                                      .withOpacity(0.2),
+                                                  spreadRadius: 1,
+                                                  blurRadius: 4,
+                                                  offset: Offset(3, 5),
+                                                )
                                               ],
                                             ),
+                                            child: Container(
+                                              margin: const EdgeInsets.only(
+                                                  top: 20,
+                                                  right: 30,
+                                                  left: 25,
+                                                  bottom: 18),
+                                              child: Stack(
+                                                children: [
+                                                  Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceEvenly,
+                                                      children: [
+                                                        Container(
+                                                          width:
+                                                              windowWidth - 205,
+                                                          child: Text(
+                                                            e.className,
+                                                            maxLines: 1,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            softWrap: false,
+                                                            style: TextStyle(
+                                                                fontSize: 15,
+                                                                color: Color(
+                                                                    0xff707070),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w800),
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 10,
+                                                        ),
+                                                        Text(
+                                                            ' ${e.profName} 교수님',
+                                                            style: TextStyle(
+                                                                fontSize: 12,
+                                                                color: Color(
+                                                                    0xff707070)))
+                                                      ]),
+                                                  FutureBuilder(
+                                                    future:
+                                                        requestDnc(id, pw, e),
+                                                    builder: (context,
+                                                        AsyncSnapshot snap) {
+                                                      if (snap.hasData) {
+                                                        ddnc = snap.data!;
+                                                        dncList[index] = ddnc;
+                                                        return Container(
+                                                            alignment: Alignment
+                                                                .centerRight,
+                                                            child:
+                                                                CustomCircularBar(
+                                                                    vsync: this,
+                                                                    upperBound:
+                                                                        ddnc));
+                                                      } else if (snap
+                                                          .hasError) {
+                                                        return Container(
+                                                          alignment: Alignment
+                                                              .centerRight,
+                                                          child: Text("NaN"),
+                                                        );
+                                                      } else {
+                                                        return Container(
+                                                            alignment: Alignment
+                                                                .centerRight,
+                                                            child: SizedBox(
+                                                                width: 50,
+                                                                height: 50,
+                                                                child:
+                                                                    CircularProgressIndicator(
+                                                                  valueColor: animationController.drive(ColorTween(
+                                                                      begin: Color(
+                                                                          0xff8E53E9),
+                                                                      end: Colors
+                                                                          .red)),
+                                                                )));
+                                                      }
+                                                    },
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
                                           ),
-                                        ),
-                                      );
-                                    }).toList(),
-                                  )),
-                            ),
-                          )
-                        ],
+                                        );
+                                      }).toList(),
+                                    )),
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  MenuTabBar(
-                    background: Colors.white,
-                    iconButtons: [
-                      new IconButton(
-                          color: Colors.blueGrey,
-                          icon: new Icon(Icons.home, size: 30),
-                          onPressed: () {}),
-                      new IconButton(
-                          color: Colors.blueGrey,
-                          icon: new Icon(Icons.search, size: 30),
-                          onPressed: () {}),
-                      // new IconButton(
-                      //     color: Colors.blueGrey,
-                      //     icon: new Icon(Icons.map, size: 30),
-                      //     onPressed: () {}),
-                      // new IconButton(
-                      //     color: Colors.blueGrey,
-                      //     icon: new Icon(Icons.favorite, size: 30),
-                      //     onPressed: () {}),
-                    ],
-                    classChild: new Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          new Container(
-                              child: new Text("Calendar",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 20)),
-                              margin: EdgeInsets.all(10)),
-                          new Container(
-                              child: new Text("Note",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 20)),
-                              margin: EdgeInsets.all(10)),
-                          new Container(
-                              child: new Text("기타",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 20)),
-                              margin: EdgeInsets.all(10)),
-                          new Container(
-                              child: new Text("등등...",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 20)),
-                              margin: EdgeInsets.all(10))
-                        ]),
-                    foodChild: new Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          new Container(
-                              child: new Text("음식",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 20)),
-                              margin: EdgeInsets.all(10)),
-                          new Container(
-                              child: new Text("맛집",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 20)),
-                              margin: EdgeInsets.all(10)),
-                          new Container(
-                              child: new Text("기타",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 20)),
-                              margin: EdgeInsets.all(10)),
-                          new Container(
-                              child: new Text("등등...",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 20)),
-                              margin: EdgeInsets.all(10))
-                        ]),
-                  )
-                ]),
-              )),
+                    MenuTabBar(mycontext: context)
+                  ]),
+                )),
+          ),
         ),
       ),
     );
