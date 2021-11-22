@@ -33,8 +33,7 @@ dependencies:
   rxdart: 0.27.2
   syncfusion_flutter_datepicker: 19.2.62
   syncfusion_flutter_calendar: 19.2.62
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
+  carousel_slider: ^4.0.0
   cupertino_icons: ^1.0.2
   kakao_flutter_sdk: ^0.7.0
   dio: ^4.0.0
@@ -43,12 +42,7 @@ dependencies:
   platform: ^3.0.0
   shared_preferences: ^2.0.5
 
-  # 자동 로그인 용도
-  flutter_secure_storage: ^4.2.1
 
-  # Firebase 사용자 정보 저장 용도
-  firebase_core: ^1.8.0
-  cloud_firestore: ^2.5.4
 
 dev_dependencies:
   flutter_test:

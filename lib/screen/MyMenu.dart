@@ -5,6 +5,7 @@ import 'package:deanora/crawl/customException.dart';
 import 'package:deanora/main.dart';
 import 'package:deanora/screen/MyLogin.dart';
 import 'package:deanora/screen/MyClass.dart';
+import 'package:deanora/screen/MyYumMain.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'dart:async';
@@ -93,7 +94,7 @@ class _MyMenuState extends State<MyMenu> {
                 SizedBox(
                   height: 38,
                 ),
-                contentsMenu(() => {print("냠")}, "yumTitle", "냠대 - 맛집 정보",
+                contentsMenu(()=>{Navigator.push(context, MaterialPageRoute(builder: (context)=>MyYumMain()))}, "yumTitle", "냠대 - 맛집 정보",
                     "안양대생만의 숨은 꿀 맛집 정보를 공유"),
               ],
             ),
@@ -102,6 +103,8 @@ class _MyMenuState extends State<MyMenu> {
       ),
     );
   }
+
+
 
   logintest() async {
     var ctrl = new LoginDataCtrl();

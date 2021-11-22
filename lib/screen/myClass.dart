@@ -9,6 +9,7 @@ import 'package:deanora/screen/MyCalendar.dart';
 import 'package:deanora/screen/MyLogin.dart';
 import 'package:deanora/screen/myAssignment.dart';
 import 'package:deanora/main.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
@@ -19,7 +20,6 @@ class CnDPair<T1, T2> {
   double val;
   CnDPair(this.index, this.val);
 }
-
 
 class MyClass extends StatefulWidget {
   var id, pw, classProps, userProps;
@@ -59,23 +59,20 @@ class _MyClassState extends State<MyClass> with TickerProviderStateMixin {
     super.dispose();
   }
 
-Future<bool> _willPopCallback() async {
-    if (checkbackbutton == false) {
-      return Future.value(true);
-    } else {
-      tt = new Text("왜");
-    //  FlutterDialog();
-        Navigator.pushReplacement(context, PageTransition(child:MyClass(id, pw, classProps, userProps), type: PageTransitionType.fade));
-      return Future.value(false);
-    }
-    
-}
-
-
   Widget build(BuildContext context) {
     List dncList = List.generate(10, (i) => 0.0);
     var windowHeight = MediaQuery.of(context).size.height;
     var windowWidth = MediaQuery.of(context).size.width;
+
+    Future<bool> _willPopCallback() async {
+      if (checkbackbutton == false) {
+        return Future.value(true);
+      } else {
+        MenuTabBar(mycontext: context);
+         Navigator.pushReplacement(context, PageTransition(child:MyClass(id, pw, classProps, userProps), type: PageTransitionType.fade));
+        return Future.value(false);
+      }
+    }
 
     return WillPopScope(
       onWillPop: _willPopCallback,

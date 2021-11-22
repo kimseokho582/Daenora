@@ -4,11 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
 bool checkbackbutton = false;
-Widget tt = new Container();
+
 
 
 class MenuTabBar extends StatefulWidget {
   BuildContext mycontext;
+
   final Color colorMenuIconDefault;
   final Color colorMenuIconActivated;
   final Color backgroundMenuIconDefault;
@@ -29,6 +30,7 @@ class MenuTabBar extends StatefulWidget {
 
 class _MenuTabBar extends State<MenuTabBar> with TickerProviderStateMixin {
 BuildContext mycontext;
+
 
 _MenuTabBar(this.mycontext);
   //-1 button is quiet
@@ -233,11 +235,11 @@ _MenuTabBar(this.mycontext);
               if (snapshot.data == -1) {
                 print("닫힘");
                 checkbackbutton = false;
-                tt = Container(height: 0, width: 0);
+                return Container(height: 0, width: 0);
               } else {
                 checkbackbutton = true;
                 print("보라돌이");
-                tt = StreamBuilder(
+                return  StreamBuilder(
                     initialData: 0.0,
                     stream: _opacity.stream,
                     builder: (context, AsyncSnapshot<double> snapshot) {
@@ -278,7 +280,7 @@ _MenuTabBar(this.mycontext);
                               }));
                     });
               }
-              return tt;
+
             }),
         Container(
           margin: EdgeInsets.only(bottom: 40), // 플러스 버튼 위치
