@@ -34,7 +34,7 @@ class _MyLoginState extends State<MyLogin> {
                 Center(
                   child: Column(
                     children: [
-                      SizedBox(height: 140),
+                      SizedBox(height: 139),
                       putimg(105.0, 105.0, "loginLogo"),
                       SizedBox(height: 60),
                       loginTextF(id, "학번", "loginIdIcon", false),

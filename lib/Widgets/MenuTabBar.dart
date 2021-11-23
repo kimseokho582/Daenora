@@ -6,7 +6,6 @@ import 'package:rxdart/rxdart.dart';
 bool checkbackbutton = false;
 
 
-
 class MenuTabBar extends StatefulWidget {
   BuildContext mycontext;
 
@@ -23,16 +22,14 @@ class MenuTabBar extends StatefulWidget {
       this.colorMenuIconDefault = Colors.white,
       this.backgroundMenuIconActivated = Colors.white,
       this.backgroundMenuIconDefault = Colors.blue});
-      
 
   _MenuTabBar createState() => _MenuTabBar(this.mycontext);
 }
 
 class _MenuTabBar extends State<MenuTabBar> with TickerProviderStateMixin {
-BuildContext mycontext;
+  BuildContext mycontext;
 
-
-_MenuTabBar(this.mycontext);
+  _MenuTabBar(this.mycontext);
   //-1 button is quiet
   //0 button is moving
   //1 button is activated
@@ -144,8 +141,8 @@ _MenuTabBar(this.mycontext);
     List<Widget> classList = [
       GestureDetector(
         onTap: () {
-          Navigator.push(
-              mycontext, MaterialPageRoute(builder: (mycontext) => MyCalendar()));
+          Navigator.push(mycontext,
+              MaterialPageRoute(builder: (mycontext) => MyCalendar()));
         },
         child: new Container(
             child: new Text("Calendar",
@@ -153,8 +150,9 @@ _MenuTabBar(this.mycontext);
             margin: EdgeInsets.all(10)),
       ),
       GestureDetector(
-        onTap: (){
-          _moveButtonDown();
+        onTap: () {
+          // _moveButtonDown();
+          print("??");
         },
         child: new Container(
             child: new Text("Note",
@@ -190,176 +188,176 @@ _MenuTabBar(this.mycontext);
     ];
 
     return Stack(children: <Widget>[
-      new Stack(children: <Widget>[
-        new Align(
-          //아이콘 들어가는곳
-          alignment: Alignment.bottomCenter,
-          child: Container(
-            height: 80,
-            //color: Colors.green,
-            child: new Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                //children: _buildMenuIcons()
-                children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width / 2,
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          radioModel[0].isSelected = true;
-                          radioModel[1].isSelected = false;
-                        });
-                      },
-                      child: RadioItem(radioModel[0]),
-                    ),
+      new Align(
+        //아이콘 들어가는곳
+        alignment: Alignment.bottomCenter,
+        child: Container(
+          height: 80,
+          //color: Colors.green,
+          child: new Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              //children: _buildMenuIcons()
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width / 2,
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        radioModel[0].isSelected = true;
+                        radioModel[1].isSelected = false;
+                      });
+                    },
+                    child: RadioItem(radioModel[0]),
                   ),
-                  Container(
-                    width: MediaQuery.of(context).size.width / 2,
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          radioModel[0].isSelected = false;
-                          radioModel[1].isSelected = true;
-                        });
-                      },
-                      child: RadioItem(radioModel[1]),
-                    ),
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width / 2,
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        radioModel[0].isSelected = false;
+                        radioModel[1].isSelected = true;
+                      });
+                    },
+                    child: RadioItem(radioModel[1]),
                   ),
-                ]),
-          ),
+                ),
+              ]),
         ),
-        new StreamBuilder(
+      ),
+      new StreamBuilder(
+          stream: _isActivated.stream,
+          builder: (context, AsyncSnapshot<int> snapshot) {
+            if (snapshot.data == -1) {
+              print("닫힘");
+              checkbackbutton = false;
+              return Container(height: 0, width: 0);
+            } else {
+              checkbackbutton = true;
+              print("보라돌이");
+              return StreamBuilder(
+                  initialData: 0.0,
+                  stream: _opacity.stream,
+                  builder: (context, AsyncSnapshot<double> snapshot) {
+                    return new Opacity(
+                        opacity: snapshot.data ?? 0,
+                        child: new StreamBuilder(
+                            initialData: 0.0,
+                            stream: _positionButton.stream,
+                            builder:
+                                (context, AsyncSnapshot<double> snapshot) {
+                              var positon = snapshot.data! >=
+                                      MediaQuery.of(context).size.height * 0.3
+                                  ? (MediaQuery.of(context).size.height *
+                                          0.3) -
+                                      (snapshot.data! -
+                                          (MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.3))
+                                  : snapshot.data;
+                              return new ClipPath(
+                                  clipper: ContainerClipper(positon!),
+                                  child: new Container(
+                                    width: double.infinity,
+                                    height:
+                                        MediaQuery.of(context).size.height,
+                                    //color:background
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                          begin: Alignment.topRight,
+                                          end: Alignment.bottomLeft,
+                                          colors: <Color>[
+                                            Color(0xff6D6CEB),
+                                            Color(0xff7C4DF1)
+                                          ]),
+                                    ),
+                                  ));
+                            }));
+                  });
+            }
+          }),
+      Container(
+        margin: EdgeInsets.only(bottom: 40), // 플러스 버튼 위치
+        child: new Align(
+            alignment: Alignment.bottomCenter,
+            child: new Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  new Listener(
+                      onPointerDown: (c) {
+                        _isActivated.sink.add(0);
+                      },
+                      onPointerUp: (event) {
+                        _movementCancel(event.position.dy);
+                      },
+                      onPointerMove: (event) async {
+                        _updateButtonPosition(event.position.dy);
+                        _calculateOpacity(event.position.dy);
+                        _finishedMovement(event.position.dy);
+                      },
+                      child: new StreamBuilder(
+                          stream: _positionButton.stream,
+                          initialData: 10.0,
+                          builder: (context, AsyncSnapshot snapshot) {
+                            return new Padding(
+                                padding: EdgeInsets.only(bottom: snapshot.data),
+                                child: new StreamBuilder(
+                                    stream: _isActivated.stream,
+                                    builder: (context, AsyncSnapshot snapshot) {
+                                      print(_isActivated.stream.value);
+                                      return new FloatingActionButton(
+                                          elevation: 0,
+                                          onPressed: () {
+                                            _updateButtonPosition(0);
+                                            if (_isActivated.stream.value ==
+                                                1) {
+                                              _moveButtonDown();
+                                              setState(() {
+                                             
+                                              });
+                                            } else {
+                                              _moveButtonUp();
+                                            }
+                                          },
+                                          child: new Transform.rotate(
+                                              angle: _animationRotate.value,
+                                              child: new Icon(Icons.add,
+                                                  color: snapshot.data == -1
+                                                      ? widget
+                                                          .colorMenuIconDefault
+                                                      //: widget.colorMenuIconActivated)),
+                                                      : Color(0xff6D6CEB))),
+                                          backgroundColor: snapshot.data == -1
+                                              // ? widget.backgroundMenuIconDefault
+                                              ? Color(0xff6D6CEB)
+                                              : widget
+                                                  .backgroundMenuIconActivated);
+                                    }));
+                          }))
+                ])),
+      ),
+      new Align(
+        alignment: Alignment.topCenter,
+        child: new StreamBuilder(
             stream: _isActivated.stream,
             builder: (context, AsyncSnapshot<int> snapshot) {
-              if (snapshot.data == -1) {
-                print("닫힘");
-                checkbackbutton = false;
-                return Container(height: 0, width: 0);
-              } else {
-                checkbackbutton = true;
-                print("보라돌이");
-                return  StreamBuilder(
-                    initialData: 0.0,
-                    stream: _opacity.stream,
-                    builder: (context, AsyncSnapshot<double> snapshot) {
-                      return new Opacity(
-                          opacity: snapshot.data ?? 0,
-                          child: new StreamBuilder(
-                              initialData: 0.0,
-                              stream: _positionButton.stream,
-                              builder:
-                                  (context, AsyncSnapshot<double> snapshot) {
-                                var positon = snapshot.data! >=
-                                        MediaQuery.of(context).size.height * 0.3
-                                    ? (MediaQuery.of(context).size.height *
-                                            0.3) -
-                                        (snapshot.data! -
-                                            (MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.3))
-                                    : snapshot.data;
-                                return new ClipPath(
-                                    clipper: ContainerClipper(positon!),
-                                    child: new Container(
-                                      width: double.infinity,
-                                      height:
-                                          MediaQuery.of(context).size.height,
-                                      //color:background
-                                      decoration: BoxDecoration(
-                                        gradient: LinearGradient(
-                                            begin: Alignment.topRight,
-                                            end: Alignment.bottomLeft,
-                                            colors: <Color>[
-                                              Color(0xff6D6CEB),
-                                              Color(0xff7C4DF1)
-                                            ]),
-                                      ),
-                                    ));
-                              }));
-                    });
-              }
-
-            }),
-        Container(
-          margin: EdgeInsets.only(bottom: 40), // 플러스 버튼 위치
-          child: new Align(
-              alignment: Alignment.bottomCenter,
-              child: new Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    new Listener(
-                        onPointerDown: (c) {
-                          _isActivated.sink.add(0);
-                        },
-                        onPointerUp: (event) {
-                          _movementCancel(event.position.dy);
-                        },
-                        onPointerMove: (event) async {
-                          _updateButtonPosition(event.position.dy);
-                          _calculateOpacity(event.position.dy);
-                          _finishedMovement(event.position.dy);
-                        },
-                        child: new StreamBuilder(
-                            stream: _positionButton.stream,
-                            initialData: 10.0,
-                            builder: (context, AsyncSnapshot snapshot) {
-                              return new Padding(
-                                  padding:
-                                      EdgeInsets.only(bottom: snapshot.data),
-                                  child: new StreamBuilder(
-                                      stream: _isActivated.stream,
-                                      builder:
-                                          (context, AsyncSnapshot snapshot) {
-                                        print(_isActivated.stream.value);
-                                        return new FloatingActionButton(
-                                            elevation: 0,
-                                            onPressed: () {
-                                              _updateButtonPosition(0);
-                                              if (_isActivated.stream.value ==
-                                                  1) {
-                                                _moveButtonDown();
-                                              } else {
-                                                _moveButtonUp();
-                                              }
-                                            },
-                                            child: new Transform.rotate(
-                                                angle: _animationRotate.value,
-                                                child: new Icon(Icons.add,
-                                                    color: snapshot.data == -1
-                                                        ? widget
-                                                            .colorMenuIconDefault
-                                                        //: widget.colorMenuIconActivated)),
-                                                        : Color(0xff6D6CEB))),
-                                            backgroundColor: snapshot.data == -1
-                                                // ? widget.backgroundMenuIconDefault
-                                                ? Color(0xff6D6CEB)
-                                                : widget
-                                                    .backgroundMenuIconActivated);
-                                      }));
-                            }))
-                  ])),
-        ),
-        new Align(
-          alignment: Alignment.topCenter,
-          child: new StreamBuilder(
-              stream: _isActivated.stream,
-              builder: (context, AsyncSnapshot<int> snapshot) {
-                return snapshot.data == 1
-                    ? Column(
-                      children: [SizedBox(height:MediaQuery.of(context).size.height * 0.25),
+              return snapshot.data == 1
+                  ? Column(
+                      children: [
+                        SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.25),
                         new Column(
                             children: (radioModel[0].isSelected == true)
                                 ? classList
                                 : foodList),
                       ],
                     )
-                    : new Container(width: 0, height: 0);
-              }),
-        )
-      ])
+                  : new Container(width: 0, height: 0);
+            }),
+      )
     ]);
   }
 

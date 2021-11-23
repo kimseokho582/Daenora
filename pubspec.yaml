@@ -24,7 +24,6 @@ dependencies:
   flutter:
     sdk: flutter
   http: ^0.13.3
-  flutter_svg: 0.22.0
   page_transition: 2.0.2
   html: 0.15.0
   intl: ^0.17.0

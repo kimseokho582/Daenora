@@ -23,18 +23,55 @@ class _MyAssignmentState extends State<MyAssignment>
   void initState() {
     super.initState();
   }
-
-
-    Future<bool> _willPopCallback() async {
-      if (checkbackbutton == false) {
-        return Future.value(true);
-      } else {
-        MenuTabBar(mycontext: context);
-         Navigator.pushReplacement(context, PageTransition(child:MyAssignment(classProps, assignmentProps, progress), type: PageTransitionType.fade));
-        return Future.value(false);
-      }
+  final _memoController = TextEditingController();
+  Future<bool> _willPopCallback() async {
+    if (checkbackbutton == false) {
+      return Future.value(true);
+    } else {
+      MenuTabBar(mycontext: context);
+      Navigator.pushReplacement(
+          context,
+          PageTransition(
+              child: MyAssignment(classProps, assignmentProps, progress),
+              type: PageTransitionType.fade));
+      return Future.value(false);
     }
+  }
 
+  Widget buildBottomSheet(BuildContext context) {
+    return SingleChildScrollView(
+      child: Padding(
+         padding:
+        EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          //height: MediaQuery.of(context).size.height * 0.7,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+            Text("과목 메모"),
+            Container(
+              margin: EdgeInsets.all(30),
+              height: 280,
+              child: TextFormField(
+                controller:_memoController,
+                onChanged: (text){
+                  //print(text);
+                  print(_memoController.text);
+                },
+              //  initialValue: (_memoController.text!="")?" " :" ",
+                maxLines: 20,
+                decoration: InputDecoration(
+                  hintText: "과목에대한 메모를 자유롭게 남겨보세요!",
+                  fillColor: Color(0xfff3f3f3),
+                  filled: true,
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 100,
+            )
+          ])),
+    );
+  }
 
   Widget build(BuildContext context) {
     List<dynamic> myAssignment = assignments(assignmentProps);
@@ -48,7 +85,7 @@ class _MyAssignmentState extends State<MyAssignment>
       }
     });
     return WillPopScope(
-      onWillPop:_willPopCallback ,
+      onWillPop: _willPopCallback,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         home: Scaffold(
@@ -80,25 +117,56 @@ class _MyAssignmentState extends State<MyAssignment>
                               height: 225,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  Container(
-                                    height: 30,
-                                    margin: const EdgeInsets.only(left: 20, top: 3),
-                                    child: GestureDetector(
-                                        onTap: () => {
-                                              Navigator.pop(context),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
+                                        height: 30,
+                                        margin: const EdgeInsets.only(left: 20),
+                                        child: GestureDetector(
+                                            onTap: () => {
+                                                  Navigator.pop(context),
+                                                },
+                                            child: Icon(
+                                              Icons.arrow_back,
+                                              color: Colors.white,
+                                              size: 25,
+                                            )),
+                                      ),
+                                      Container(
+                                          height: 20,
+                                          margin: EdgeInsets.only(right: 20),
+                                          child: GestureDetector(
+                                            onTap: () => {
+                                              showModalBottomSheet(
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius
+                                                        .only(
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    30.0),
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    30.0)),
+                                                  ),
+                                                  context: context,
+                                                  builder: buildBottomSheet,
+                                                  isScrollControlled: true
+                                                  ),
                                             },
-                                        child: Icon(
-                                          Icons.arrow_back,
-                                          color: Colors.white,
-                                          size: 25,
-                                        )),
+                                            child: Image.asset(
+                                                'assets/images/memoIcon.png'),
+                                          ))
+                                    ],
                                   ),
                                   Center(
                                       child: Container(
-                                    margin:
-                                        const EdgeInsets.symmetric(horizontal: 100),
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 100),
                                     child: Text("${classProps.className}",
                                         style: TextStyle(
                                             color: Colors.white,
@@ -109,12 +177,15 @@ class _MyAssignmentState extends State<MyAssignment>
                                   Center(
                                       child: Text("${classProps.profName} 교수님",
                                           style: TextStyle(
-                                              color: Colors.white, fontSize: 18))),
+                                              color: Colors.white,
+                                              fontSize: 18))),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: [
-                                      doneNmiss(Color(0xffB2C3FF), "done  ", doneCnt),
+                                      doneNmiss(
+                                          Color(0xffB2C3FF), "done  ", doneCnt),
                                       SizedBox(
                                         width: 23,
                                       ),
@@ -135,7 +206,8 @@ class _MyAssignmentState extends State<MyAssignment>
                         margin: const EdgeInsets.only(left: 24),
                         child: Text(
                           "과제 목록",
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.w800),
                         ),
                       ),
                       SizedBox(
@@ -149,7 +221,7 @@ class _MyAssignmentState extends State<MyAssignment>
                     ],
                   ),
                 ),
-                 MenuTabBar(mycontext: context),
+                MenuTabBar(mycontext: context),
               ],
             ),
           ),

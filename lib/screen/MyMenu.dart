@@ -32,8 +32,8 @@ class _MyMenuState extends State<MyMenu> {
         },
         child: Center(
           child: Container(
-            //height: (windowHeight - 270) / 2,
-            width: 260,
+            width: windowWidth - 60,
+
             child: Column(
               children: [
                 Align(
@@ -79,23 +79,38 @@ class _MyMenuState extends State<MyMenu> {
           width: windowWidth,
           height: windowHeight,
           child: Container(
-            margin: EdgeInsets.all(30),
+            margin: EdgeInsets.only(top:30,left: 30,right: 30),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 30),
                 Text("냥냠대 컨탠츠",
                     style: TextStyle(color: Colors.white, fontSize: 25)),
-                SizedBox(
-                  height: 18,
+                SizedBox(height: 10,),
+                Container(
+                  height: windowHeight - 100,
+                  child: ListView(
+                    children: [
+                      SizedBox(
+                        height: 18,
+                      ),
+                      contentsMenu(logintest, "nyanTitle", "냥대 - 내 강의실",
+                          "각 과목의 과제 정보와 학사일정을 확인"),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      contentsMenu(
+                          () => {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => MyYumMain()))
+                              },
+                          "yumTitle",
+                          "냠대 - 맛집 정보",
+                          "안양대생만의 숨은 꿀 맛집 정보를 공유"),
+                    ],
+                  ),
                 ),
-                contentsMenu(logintest, "nyanTitle", "냥대 - 내 강의실",
-                    "각 과목의 과제 정보와 학사일정을 확인"),
-                SizedBox(
-                  height: 38,
-                ),
-                contentsMenu(()=>{Navigator.push(context, MaterialPageRoute(builder: (context)=>MyYumMain()))}, "yumTitle", "냠대 - 맛집 정보",
-                    "안양대생만의 숨은 꿀 맛집 정보를 공유"),
               ],
             ),
           ),
@@ -103,8 +118,6 @@ class _MyMenuState extends State<MyMenu> {
       ),
     );
   }
-
-
 
   logintest() async {
     var ctrl = new LoginDataCtrl();
@@ -125,7 +138,7 @@ class _MyMenuState extends State<MyMenu> {
             child: MyClass(saved_id, saved_pw, classes, user),
           ));
     } on CustomException catch (e) {
-      Navigator.pushReplacement(
+      Navigator.push(
         context,
         PageTransition(
           duration: Duration(milliseconds: 800),
