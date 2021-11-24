@@ -1,8 +1,9 @@
+import 'package:deanora/Widgets/MemoData.dart';
 import 'package:deanora/Widgets/MenuTabBar.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:deanora/screen/myAssignment.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:deanora/Widgets/Widgets.dart';
 
 class MyAssignment extends StatefulWidget {
@@ -17,14 +18,25 @@ class MyAssignment extends StatefulWidget {
 class _MyAssignmentState extends State<MyAssignment>
     with TickerProviderStateMixin {
   var classProps, userProps, assignmentProps, progress;
+  final _focusNode = FocusNode();
   _MyAssignmentState(this.classProps, this.assignmentProps, this.progress);
 
   @override
   void initState() {
     super.initState();
+
+   
   }
+
+  // @override
+  // void dispose() {
+  //   _focusNode.dispose();
+  //   super.dispose();
+  // }
   final _memoController = TextEditingController();
-  Future<bool> _willPopCallback() async {
+  String mymemo = "";
+  String tmpmemo="";
+    Future<bool> _willPopCallback() async {
     if (checkbackbutton == false) {
       return Future.value(true);
     } else {
@@ -38,27 +50,25 @@ class _MyAssignmentState extends State<MyAssignment>
     }
   }
 
+  var saveloadMemo = new MemoData();
   Widget buildBottomSheet(BuildContext context) {
+    //return Container();
     return SingleChildScrollView(
       child: Padding(
-         padding:
-        EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          //height: MediaQuery.of(context).size.height * 0.7,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-            Text("과목 메모"),
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: Column(mainAxisSize: MainAxisSize.min, children: [
+            SizedBox(height: 15,),
+            Text("과목 메모",style: TextStyle(fontSize: 30),),
             Container(
               margin: EdgeInsets.all(30),
               height: 280,
               child: TextFormField(
-                controller:_memoController,
-                onChanged: (text){
-                  //print(text);
-                  print(_memoController.text);
+                onChanged: (text) async {
+                  await saveloadMemo.saveMemo(text,classProps.classId );
                 },
-              //  initialValue: (_memoController.text!="")?" " :" ",
-                maxLines: 20,
+                initialValue: mymemo,
+                maxLines: 10,
                 decoration: InputDecoration(
                   hintText: "과목에대한 메모를 자유롭게 남겨보세요!",
                   fillColor: Color(0xfff3f3f3),
@@ -66,11 +76,13 @@ class _MyAssignmentState extends State<MyAssignment>
                 ),
               ),
             ),
-            SizedBox(
-              height: 100,
-            )
           ])),
     );
+  }
+
+  loadmemo() async {
+    var getmemo = await saveloadMemo.loadMemo(classProps.classId);
+    mymemo = getmemo['memoText'] ?? "";
   }
 
   Widget build(BuildContext context) {
@@ -141,7 +153,8 @@ class _MyAssignmentState extends State<MyAssignment>
                                           height: 20,
                                           margin: EdgeInsets.only(right: 20),
                                           child: GestureDetector(
-                                            onTap: () => {
+                                            onTap:  () async {
+                                              await loadmemo();
                                               showModalBottomSheet(
                                                   shape: RoundedRectangleBorder(
                                                     borderRadius: BorderRadius
@@ -155,8 +168,7 @@ class _MyAssignmentState extends State<MyAssignment>
                                                   ),
                                                   context: context,
                                                   builder: buildBottomSheet,
-                                                  isScrollControlled: true
-                                                  ),
+                                                  isScrollControlled: true);
                                             },
                                             child: Image.asset(
                                                 'assets/images/memoIcon.png'),

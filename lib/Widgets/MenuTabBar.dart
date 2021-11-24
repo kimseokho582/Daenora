@@ -230,12 +230,12 @@ class _MenuTabBar extends State<MenuTabBar> with TickerProviderStateMixin {
           stream: _isActivated.stream,
           builder: (context, AsyncSnapshot<int> snapshot) {
             if (snapshot.data == -1) {
-              print("닫힘");
+              //print("닫힘");
               checkbackbutton = false;
               return Container(height: 0, width: 0);
             } else {
               checkbackbutton = true;
-              print("보라돌이");
+             // print("보라돌이");
               return StreamBuilder(
                   initialData: 0.0,
                   stream: _opacity.stream,
@@ -307,7 +307,7 @@ class _MenuTabBar extends State<MenuTabBar> with TickerProviderStateMixin {
                                 child: new StreamBuilder(
                                     stream: _isActivated.stream,
                                     builder: (context, AsyncSnapshot snapshot) {
-                                      print(_isActivated.stream.value);
+                                    
                                       return new FloatingActionButton(
                                           elevation: 0,
                                           onPressed: () {
