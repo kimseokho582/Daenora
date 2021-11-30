@@ -4,6 +4,7 @@ import 'package:deanora/Widgets/Widgets.dart';
 import 'package:deanora/crawl/crawl.dart';
 import 'package:deanora/crawl/customException.dart';
 import 'package:deanora/screen/MyClass.dart';
+import 'package:deanora/screen/MyMenu.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 
@@ -115,7 +116,8 @@ class _MyLoginState extends State<MyLogin> {
                               PageTransition(
                                 duration: Duration(milliseconds: 250),
                                 type: PageTransitionType.fade,
-                                child: MyClass(id.text, pw.text, classes, user),
+                                child: MyClass(id.text, pw.text, classes, user,
+                                    weatherData),
                               ));
                           setState(() {
                             logindefault = new Text("");
