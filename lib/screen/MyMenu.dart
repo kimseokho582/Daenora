@@ -210,7 +210,8 @@ class _MyMenuState extends State<MyMenu> {
     required String lon,
   }) async {
     var str =
-        'http://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$lon&appid=$_openweatherkey&units=metric';
+        // 'http://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$lon&appid=$_openweatherkey&units=metric';
+        'http://api.openweathermap.org/data/2.5/weather?lat=37.5&lon=127.5&appid=$_openweatherkey&units=metric';
     //print(str);
     var response = await http.get(Uri.parse(str));
 
@@ -231,12 +232,12 @@ class _MyMenuState extends State<MyMenu> {
     required String lon,
   }) async {
     var url =
-        'https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=$lat&longitude=$lon&localityLanguage=ko';
+        'https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=37.5&longitude=127.5&localityLanguage=ko';
+    //'https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=$lat&longitude=$lon&localityLanguage=ko';
     var cityresponse = await http.get(Uri.parse(url));
     var data = cityresponse.body;
 
     var dataJson = jsonDecode(data);
     cityNameData = dataJson;
-    print(cityNameData);
   }
 }

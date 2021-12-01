@@ -10,7 +10,30 @@ class Test extends StatefulWidget {
 
 class _TestState extends State<Test> {
   @override
+  IconData weatherIcon = Icons.light_mode_outlined;
   Widget build(BuildContext context) {
+    switch ("${weatherData['weather'][0]['main']}") {
+      case 'Clear':
+        weatherIcon = Icons.light_mode_outlined;
+        break;
+      case 'Clouds':
+        weatherIcon = Icons.cloud_outlined;
+        break;
+      case 'Snow':
+        weatherIcon = Icons.ac_unit;
+        break;
+      case 'Rain':
+        weatherIcon = Icons.umbrella_outlined;
+        break;
+      case 'Drizzle':
+        weatherIcon = Icons.umbrella_outlined;
+        break;
+      case 'Thunderstorm':
+        weatherIcon = Icons.bolt_outlined;
+        break;
+      default:
+        weatherIcon = Icons.waves;
+    }
     print(weatherData);
     //print(cityNameData);
     return MaterialApp(
@@ -34,10 +57,12 @@ class _TestState extends State<Test> {
               Divider(color: Colors.black, thickness: 2.0),
               Flexible(
                 flex: 3,
-                child: Image.network(
-                  'http://openweathermap.org/img/w/02d.png',
-                ),
-              )
+                child: Text("${weatherData['main']['temp']}"),
+                // child: Icon(
+                //   weatherIcon,
+                //   size: 100,
+                // )
+              ),
             ]),
           ),
         ),
