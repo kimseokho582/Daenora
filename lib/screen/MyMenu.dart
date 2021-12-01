@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:deanora/screen/Test.dart';
 import 'package:http/http.dart' as http;
 import 'package:deanora/Widgets/Tutorial.dart';
 import 'package:deanora/Widgets/Widgets.dart';
@@ -21,6 +22,7 @@ class MyMenu extends StatefulWidget {
 }
 
 var weatherData;
+var cityNameData;
 
 class _MyMenuState extends State<MyMenu> {
   final _openweatherkey = 'e474b467f27b8f03abdeb64c8a8e027a';
@@ -109,7 +111,16 @@ class _MyMenuState extends State<MyMenu> {
                       SizedBox(
                         height: 18,
                       ),
-                      contentsMenu(logintest, "nyanTitle", "냥대 - 내 강의실",
+                      //contentsMenu(logintest, "nyanTitle", "냥대 - 내 강의실", "각 과목의 과제 정보와 학사일정을 확인"),
+                      contentsMenu(
+                          () => {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Test()))
+                              },
+                          "nyanTitle",
+                          "냥대 - 내 강의실",
                           "각 과목의 과제 정보와 학사일정을 확인"),
                       SizedBox(
                         height: 30,
@@ -184,9 +195,12 @@ class _MyMenuState extends State<MyMenu> {
     }
 
     _locationData = await location.getLocation();
-    print(_locationData);
 
     getWeatherData(
+        lat: _locationData.latitude.toString(),
+        lon: _locationData.longitude.toString());
+
+    getCityNameDate(
         lat: _locationData.latitude.toString(),
         lon: _locationData.longitude.toString());
   }
@@ -197,17 +211,32 @@ class _MyMenuState extends State<MyMenu> {
   }) async {
     var str =
         'http://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$lon&appid=$_openweatherkey&units=metric';
-    print(str);
+    //print(str);
     var response = await http.get(Uri.parse(str));
 
     if (response.statusCode == 200) {
       var data = response.body;
       var dataJson = jsonDecode(data);
       weatherData = dataJson; // string to json
-      print('data = $data');
-      // print('${dataJson['main']['temp']}');
+
+      //  print('data = $data');
+      print('${dataJson['name']}');
     } else {
       print('response status code = ${response.statusCode}');
     }
+  }
+
+  Future<void> getCityNameDate({
+    required String lat,
+    required String lon,
+  }) async {
+    var url =
+        'https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=$lat&longitude=$lon&localityLanguage=ko';
+    var cityresponse = await http.get(Uri.parse(url));
+    var data = cityresponse.body;
+
+    var dataJson = jsonDecode(data);
+    cityNameData = dataJson;
+    print(cityNameData);
   }
 }
