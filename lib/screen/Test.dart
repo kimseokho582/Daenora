@@ -43,9 +43,10 @@ class _TestState extends State<Test> {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Column(children: [
-              Flexible(
-                  flex: 1,
+              Expanded(
+                  flex: 2,
                   child: Container(
+                    margin: EdgeInsets.only(top: 15),
                     child: Center(
                       child: Text(
                         cityNameData['locality'],
@@ -55,14 +56,25 @@ class _TestState extends State<Test> {
                     ),
                   )),
               Divider(color: Colors.black, thickness: 2.0),
-              Flexible(
-                flex: 3,
-                child: Text("${weatherData['main']['temp']}"),
-                // child: Icon(
-                //   weatherIcon,
-                //   size: 100,
-                // )
-              ),
+              Expanded(
+                  flex: 1,
+                  child: Container(
+                    margin: EdgeInsets.only(right: 20),
+                    alignment: Alignment.topRight,
+                    child: Icon(
+                      weatherIcon,
+                      size: 100,
+                    ),
+                  )),
+              Expanded(
+                  flex: 5,
+                  child: Container(
+                      child: Text('${weatherData['main']['temp']}°'))),
+              Divider(color: Colors.black, thickness: 2.0),
+              Expanded(
+                flex: 2,
+                child: Container(),
+              )
             ]),
           ),
         ),
