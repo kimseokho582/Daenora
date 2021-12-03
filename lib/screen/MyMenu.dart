@@ -22,7 +22,10 @@ class MyMenu extends StatefulWidget {
 }
 
 var weatherData;
+var anYangWeatherData;
 var cityNameData;
+var precipitationPercentDate;
+var anYangPrecipitationPercentDate;
 
 class _MyMenuState extends State<MyMenu> {
   final _openweatherkey = 'e474b467f27b8f03abdeb64c8a8e027a';
@@ -199,6 +202,7 @@ class _MyMenuState extends State<MyMenu> {
     getWeatherData(
         lat: _locationData.latitude.toString(),
         lon: _locationData.longitude.toString());
+    getAnyangWeatherData();
 
     getCityNameDate(
         lat: _locationData.latitude.toString(),
@@ -211,9 +215,10 @@ class _MyMenuState extends State<MyMenu> {
   }) async {
     var str =
         'http://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$lon&appid=$_openweatherkey&units=metric';
-
-    //print(str);
+    var precipitation =
+        'https://api.openweathermap.org/data/2.5/onecall?lat=$lat&lon=$lon&exclude=current,alerts,daily,hourly&appid=$_openweatherkey';
     var response = await http.get(Uri.parse(str));
+    var precipitationResponse = await http.get(Uri.parse(precipitation));
 
     if (response.statusCode == 200) {
       var data = response.body;
@@ -221,9 +226,45 @@ class _MyMenuState extends State<MyMenu> {
       weatherData = dataJson; // string to json
 
       //  print('data = $data');
-      print('${dataJson['name']}');
+      //print('${dataJson['name']}');
     } else {
       print('response status code = ${response.statusCode}');
+    }
+
+    if (precipitationResponse.statusCode == 200) {
+      var data = precipitationResponse.body;
+      var dataJson = jsonDecode(data);
+      precipitationPercentDate = dataJson;
+    } else {
+      print('response status code = ${precipitationResponse.statusCode}');
+    }
+  }
+
+  Future<void> getAnyangWeatherData() async {
+    var str =
+        'http://api.openweathermap.org/data/2.5/weather?lat=37.39169375011486&lon=126.91964184065135&appid=$_openweatherkey&units=metric';
+    var precipitation =
+        'https://api.openweathermap.org/data/2.5/onecall?lat=37.39169375011486&lon=126.91964184065135&exclude=current,alerts,daily,hourly&appid=$_openweatherkey';
+    var response = await http.get(Uri.parse(str));
+    var precipitationResponse = await http.get(Uri.parse(precipitation));
+
+    if (response.statusCode == 200) {
+      var data = response.body;
+      var dataJson = jsonDecode(data);
+      anYangWeatherData = dataJson; // string to json
+
+      //  print('data = $data');
+      //print('${dataJson['name']}');
+    } else {
+      print('response status code = ${response.statusCode}');
+    }
+
+    if (precipitationResponse.statusCode == 200) {
+      var data = precipitationResponse.body;
+      var dataJson = jsonDecode(data);
+      anYangPrecipitationPercentDate = dataJson;
+    } else {
+      print('response status code = ${precipitationResponse.statusCode}');
     }
   }
 
