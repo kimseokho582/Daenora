@@ -44,7 +44,7 @@ class _MyMenuState extends State<MyMenu> {
   Widget build(BuildContext context) {
     var windowHeight = MediaQuery.of(context).size.height;
     var windowWidth = MediaQuery.of(context).size.width;
-
+    print(weatherData);
     Widget contentsMenu(_ontapcontroller, image, title, descrition) {
       return InkWell(
         onTap: () {
@@ -114,17 +114,18 @@ class _MyMenuState extends State<MyMenu> {
                       SizedBox(
                         height: 18,
                       ),
-                      //contentsMenu(logintest, "nyanTitle", "냥대 - 내 강의실", "각 과목의 과제 정보와 학사일정을 확인"),
-                      contentsMenu(
-                          () => {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => Test()))
-                              },
-                          "nyanTitle",
-                          "냥대 - 내 강의실",
+                      contentsMenu(logintest, "nyanTitle", "냥대 - 내 강의실",
                           "각 과목의 과제 정보와 학사일정을 확인"),
+                      // contentsMenu(
+                      //     () => {
+                      //           Navigator.push(
+                      //               context,
+                      //               MaterialPageRoute(
+                      //                   builder: (context) => Test()))
+                      //         },
+                      //     "nyanTitle",
+                      //     "냥대 - 내 강의실",
+                      //     "각 과목의 과제 정보와 학사일정을 확인"),
                       SizedBox(
                         height: 30,
                       ),
@@ -199,12 +200,13 @@ class _MyMenuState extends State<MyMenu> {
 
     _locationData = await location.getLocation();
 
-    getWeatherData(
+    await getWeatherData(
         lat: _locationData.latitude.toString(),
         lon: _locationData.longitude.toString());
-    getAnyangWeatherData();
 
-    getCityNameDate(
+    await getAnyangWeatherData();
+
+    await getCityNameDate(
         lat: _locationData.latitude.toString(),
         lon: _locationData.longitude.toString());
   }

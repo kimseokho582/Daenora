@@ -75,20 +75,44 @@ class _TestState extends State<Test> {
               )),
           Expanded(
               flex: 2,
-              child: Align(
-                alignment: Alignment(-0.9, 0.9),
-                child: Text.rich(TextSpan(
-                    text: '${DateFormat('EEEE').format(DateTime.now())}\n',
-                    style: TextStyle(fontWeight: FontWeight.w900, fontSize: 21),
-                    children: [
-                      TextSpan(
-                        text:
-                            '${DateFormat('dd').format(DateTime.now())} ${_monthNames[int.parse(DateFormat('MM').format(DateTime.now())) - 1]}',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w500, fontSize: 18),
-                      )
-                    ])),
-              )),
+              child: Stack(children: [
+                Align(
+                  alignment: Alignment(-0.9, 0.9),
+                  child: Text.rich(TextSpan(
+                      text: '${DateFormat('EEEE').format(DateTime.now())}\n',
+                      style:
+                          TextStyle(fontWeight: FontWeight.w900, fontSize: 21),
+                      children: [
+                        TextSpan(
+                          text:
+                              '${DateFormat('dd').format(DateTime.now())} ${_monthNames[int.parse(DateFormat('MM').format(DateTime.now())) - 1]}',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500, fontSize: 18),
+                        )
+                      ])),
+                ),
+                Align(
+                  alignment: Alignment(0.9, 0.9),
+                  child: (cityName != "우리 학교")
+                      ? RichText(
+                          text: TextSpan(children: [
+                            WidgetSpan(
+                              child: Icon(
+                                Icons.place,
+                                size: 20,
+                              ),
+                            ),
+                            TextSpan(
+                                text: "현재 위치",
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black))
+                          ]),
+                        )
+                      : Container(),
+                )
+              ])),
           Divider(color: Colors.black, thickness: 2.0),
           Expanded(
               flex: 2,
@@ -197,10 +221,26 @@ class _TestState extends State<Test> {
       );
     }
 
+    print(DateFormat('H').format(DateTime.now()));
     return MaterialApp(
       home: Scaffold(
         body: Container(
-          color: Color(0xfff1c40f),
+          decoration: BoxDecoration(
+            gradient: (6 <= int.parse(DateFormat('H').format(DateTime.now())) &&
+                    int.parse(DateFormat('H').format(DateTime.now())) < 18)
+                ? LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: <Color>[Color(0xfffedcae), Color(0xffff5d8c)])
+                : LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: <Color>[Color(0xff524b74), Color(0xffff7a40)]),
+            // gradient: LinearGradient(
+            //     begin: Alignment.topCenter,
+            //     end: Alignment.bottomCenter,
+            //     colors: <Color>[Color(0xff524b74), Color(0xffff7a40)]),
+          ),
           child: PageView(controller: pageController, children: [
             weatherCard(weatherData, cityNameData, precipitationPercentDate),
             weatherCard(

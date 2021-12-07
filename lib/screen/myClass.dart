@@ -3,11 +3,13 @@ import 'package:deanora/Widgets/MakeCalendar.dart';
 import 'package:deanora/Widgets/MenuTabBar.dart';
 import 'package:deanora/Widgets/Widgets.dart';
 import 'package:deanora/screen/MyMenu.dart';
+import 'package:deanora/screen/Test.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:deanora/Widgets/custom_circlular_bar.dart';
 import 'package:deanora/crawl/crawl.dart';
 import 'package:deanora/screen/MyCalendar.dart';
 import 'package:deanora/screen/MyLogin.dart';
+import 'package:deanora/screen/MyMenu.dart';
 import 'package:deanora/screen/myAssignment.dart';
 import 'package:deanora/main.dart';
 import 'package:rxdart/rxdart.dart';
@@ -139,6 +141,19 @@ class _MyClassState extends State<MyClass> with TickerProviderStateMixin {
                                 ],
                               ),
                             ),
+                            InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Test()));
+                              },
+                              child: Container(
+                                height: 30,
+                                child: Text(
+                                    "${weatherData['weather'][0]['main']} // 전래동화...???"),
+                              ),
+                            ),
                             SizedBox(
                               height: 10,
                             ),
@@ -182,18 +197,6 @@ class _MyClassState extends State<MyClass> with TickerProviderStateMixin {
                             Center(
                               child: SizedBox(
                                 height: windowHeight - 270,
-                                // child: Column(children: [
-                                //   Text('${weatherData['name']}',
-                                //       style: TextStyle(fontSize: 30)),
-                                //   Text('${weatherData['main']['temp']}°',
-                                //       style: TextStyle(fontSize: 55)),
-                                //   Text(
-                                //       '  (feels : ${weatherData['main']['feels_like']}°)',
-                                //       style: TextStyle(fontSize: 15)),
-                                //   Text(
-                                //       '습도 : ${weatherData['main']['humidity']}%',
-                                //       style: TextStyle(fontSize: 55))
-                                // ]),
                                 child: RefreshIndicator(
                                     onRefresh: _refresh,
                                     child: ListView(
