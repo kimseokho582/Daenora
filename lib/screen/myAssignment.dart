@@ -1,5 +1,6 @@
 import 'package:deanora/Widgets/MemoData.dart';
 import 'package:deanora/Widgets/MenuTabBar.dart';
+import 'package:deanora/screen/Test.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
@@ -48,7 +49,6 @@ class _MyAssignmentState extends State<MyAssignment>
 
   var saveloadMemo = new MemoData();
   Widget buildBottomSheet(BuildContext context) {
-    //return Container();
     return FutureBuilder(
       future: loadmemo(),
       builder: (context, snap) {
@@ -73,7 +73,7 @@ class _MyAssignmentState extends State<MyAssignment>
                         onChanged: (text) async {
                           await saveloadMemo.saveMemo(text, classProps.classId);
                         },
-                        //initialValue: tmpstring,
+                        initialValue: tmpstring,
                         maxLines: 10,
                         decoration: InputDecoration(
                           hintText: "과목에대한 메모를 자유롭게 남겨보세요!",
@@ -281,54 +281,62 @@ Widget assignmentDivided(BuildContext context, myAssignment) {
     //안지남
   }
 
-  return Container(
-    margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-    child: Stack(
-      children: [
-        Container(
-          height: 90,
-          width: MediaQuery.of(context).size.width - 20,
-          padding: const EdgeInsets.only(left: 30),
-          decoration: BoxDecoration(
-              border:
-                  Border.all(width: 2, color: Colors.grey.withOpacity(0.02)),
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.2),
-                  spreadRadius: 1,
-                  blurRadius: 1,
-                  offset: Offset(1, 3),
-                )
-              ],
-              borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(20),
-                  bottomRight: Radius.circular(20))),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(myAssignment.title,
-                  style: TextStyle(
-                      fontSize: 16,
-                      color: textColor,
-                      fontWeight: FontWeight.w700)),
-              SizedBox(
-                height: 15,
+  return Builder(
+    builder: (newcontext) => GestureDetector(
+      onTap: () {
+        Navigator.push(newcontext,
+            MaterialPageRoute(builder: (context) => Test(myAssignment.text)));
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        child: Stack(
+          children: [
+            Container(
+              height: 90,
+              width: MediaQuery.of(context).size.width - 20,
+              padding: const EdgeInsets.only(left: 30),
+              decoration: BoxDecoration(
+                  border: Border.all(
+                      width: 2, color: Colors.grey.withOpacity(0.02)),
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.2),
+                      spreadRadius: 1,
+                      blurRadius: 1,
+                      offset: Offset(1, 3),
+                    )
+                  ],
+                  borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(20),
+                      bottomRight: Radius.circular(20))),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(myAssignment.title,
+                      style: TextStyle(
+                          fontSize: 16,
+                          color: textColor,
+                          fontWeight: FontWeight.w700)),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Text(
+                      "${myAssignment.startDate.replaceAll("-", ". ")} ~ ${myAssignment.endDate.replaceAll("-", ". ")}",
+                      style: TextStyle(fontSize: 14, color: textColor)),
+                ],
               ),
-              Text(
-                  "${myAssignment.startDate.replaceAll("-", ". ")} ~ ${myAssignment.endDate.replaceAll("-", ". ")}",
-                  style: TextStyle(fontSize: 14, color: textColor)),
-            ],
-          ),
+            ),
+            Positioned(
+                child: Container(
+              width: 15,
+              height: 90,
+              color: boxColor,
+            ))
+          ],
         ),
-        Positioned(
-            child: Container(
-          width: 15,
-          height: 90,
-          color: boxColor,
-        ))
-      ],
+      ),
     ),
   );
 }

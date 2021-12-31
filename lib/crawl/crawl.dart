@@ -104,6 +104,7 @@ class Crawl {
 
     final elements = document.querySelectorAll('.board_list > ul > li');
     for (var i = 0; i < elements.length; i += 2) {
+      var str = elements[i].querySelector('ul')?.text;
       List<String> date =
           (elements[i].querySelector('ul:nth-child(5) > li')?.text ?? '~')
               .split('~');
@@ -126,7 +127,8 @@ class Crawl {
             .text
             .trim(),
         'startDate': date[0].trim(),
-        'endDate': date[1].trim()
+        'endDate': date[1].trim(),
+        'text': str.toString()
       });
     }
 

@@ -3,7 +3,7 @@ import 'package:deanora/Widgets/MakeCalendar.dart';
 import 'package:deanora/Widgets/MenuTabBar.dart';
 import 'package:deanora/Widgets/Widgets.dart';
 import 'package:deanora/screen/MyMenu.dart';
-import 'package:deanora/screen/Test.dart';
+import 'package:deanora/screen/MyWeather.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:deanora/Widgets/custom_circlular_bar.dart';
 import 'package:deanora/crawl/crawl.dart';
@@ -146,7 +146,7 @@ class _MyClassState extends State<MyClass> with TickerProviderStateMixin {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => Test()));
+                                        builder: (context) => MyWeather()));
                               },
                               child: Container(
                                 height: 30,

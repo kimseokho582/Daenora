@@ -2,9 +2,9 @@ import 'package:deanora/screen/MyCalendar.dart';
 import 'package:deanora/screen/myClass.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:flutter/material.dart';
 
 bool checkbackbutton = false;
-
 
 class MenuTabBar extends StatefulWidget {
   BuildContext mycontext;
@@ -235,7 +235,7 @@ class _MenuTabBar extends State<MenuTabBar> with TickerProviderStateMixin {
               return Container(height: 0, width: 0);
             } else {
               checkbackbutton = true;
-             // print("보라돌이");
+              // print("보라돌이");
               return StreamBuilder(
                   initialData: 0.0,
                   stream: _opacity.stream,
@@ -245,24 +245,19 @@ class _MenuTabBar extends State<MenuTabBar> with TickerProviderStateMixin {
                         child: new StreamBuilder(
                             initialData: 0.0,
                             stream: _positionButton.stream,
-                            builder:
-                                (context, AsyncSnapshot<double> snapshot) {
+                            builder: (context, AsyncSnapshot<double> snapshot) {
                               var positon = snapshot.data! >=
                                       MediaQuery.of(context).size.height * 0.3
-                                  ? (MediaQuery.of(context).size.height *
-                                          0.3) -
+                                  ? (MediaQuery.of(context).size.height * 0.3) -
                                       (snapshot.data! -
-                                          (MediaQuery.of(context)
-                                                  .size
-                                                  .height *
+                                          (MediaQuery.of(context).size.height *
                                               0.3))
                                   : snapshot.data;
                               return new ClipPath(
                                   clipper: ContainerClipper(positon!),
                                   child: new Container(
                                     width: double.infinity,
-                                    height:
-                                        MediaQuery.of(context).size.height,
+                                    height: MediaQuery.of(context).size.height,
                                     //color:background
                                     decoration: BoxDecoration(
                                       gradient: LinearGradient(
@@ -307,7 +302,6 @@ class _MenuTabBar extends State<MenuTabBar> with TickerProviderStateMixin {
                                 child: new StreamBuilder(
                                     stream: _isActivated.stream,
                                     builder: (context, AsyncSnapshot snapshot) {
-                                    
                                       return new FloatingActionButton(
                                           elevation: 0,
                                           onPressed: () {
@@ -315,9 +309,6 @@ class _MenuTabBar extends State<MenuTabBar> with TickerProviderStateMixin {
                                             if (_isActivated.stream.value ==
                                                 1) {
                                               _moveButtonDown();
-                                              setState(() {
-                                             
-                                              });
                                             } else {
                                               _moveButtonUp();
                                             }

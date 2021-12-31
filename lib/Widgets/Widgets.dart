@@ -106,8 +106,8 @@ List assignments(props) {
   List assignment = [];
   props
       .map((x) => {
-            assignment.add(Assignment(
-                x["title"], x["state"], x["startDate"], x["endDate"]))
+            assignment.add(Assignment(x["title"], x["state"], x["startDate"],
+                x["endDate"], x["text"]))
           })
       .toList();
   return assignment;
@@ -194,4 +194,3 @@ requestDnc(id, pw, props) async {
     return Future.error(e);
   }
 }
-
