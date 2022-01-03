@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class Test extends StatefulWidget {
   var text;
@@ -14,12 +15,11 @@ class _TestState extends State<Test> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        body: Container(
-          child: SingleChildScrollView(child: Center(child: Text(text))),
-        ),
-      ),
-    );
+        home: Scaffold(
+            body: SingleChildScrollView(
+                child: WebView(
+      initialUrl: 'https://www.google.com/',
+      javascriptMode: JavascriptMode.unrestricted,
+    ))));
   }
 }
- 

@@ -102,7 +102,7 @@ class _MyAssignmentState extends State<MyAssignment>
     Widget _child = new Text("");
     setState(() {
       if (assignmentProps.length > 0) {
-        _child = haveassignment(myAssignment);
+        _child = haveassignment(context, myAssignment);
       } else {
         _child = notassignment;
       }
@@ -256,16 +256,25 @@ class _MyAssignmentState extends State<MyAssignment>
 Widget notassignment = new Center(
   child: Text("아직 과제가 없습니다"),
 );
-Widget haveassignment(myAssignment) {
-  return ListView.builder(
-    itemCount: myAssignment.length,
-    itemBuilder: (BuildContext context, int index) {
-      return assignmentDivided(context, myAssignment[index]);
-    },
-  );
+
+// Widget haveassignment(myAssignment) {
+//   return ListView.builder(
+//       itemCount: myAssignment.length,
+//       itemBuilder: (BuildContext context, int index) {
+//         return Builder(builder: (context) {
+//           return assignmentDivided(context, myAssignment[index]);
+//         });
+//       });
+// }
+
+Widget haveassignment(context, List<dynamic> myAssignment) {
+  return ListView(
+      children: myAssignment.map((e) {
+    return assignmentDivided(context, e);
+  }).toList());
 }
 
-Widget assignmentDivided(BuildContext context, myAssignment) {
+Widget assignmentDivided(context, myAssignment) {
   var dateformatter = new DateFormat('yyyy-MM-dd');
   Color boxColor = Color(0xffF2A7C5);
   Color textColor;
@@ -281,61 +290,59 @@ Widget assignmentDivided(BuildContext context, myAssignment) {
     //안지남
   }
 
-  return Builder(
-    builder: (newcontext) => GestureDetector(
-      onTap: () {
-        Navigator.push(newcontext,
-            MaterialPageRoute(builder: (context) => Test(myAssignment.text)));
-      },
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        child: Stack(
-          children: [
-            Container(
-              height: 90,
-              width: MediaQuery.of(context).size.width - 20,
-              padding: const EdgeInsets.only(left: 30),
-              decoration: BoxDecoration(
-                  border: Border.all(
-                      width: 2, color: Colors.grey.withOpacity(0.02)),
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.2),
-                      spreadRadius: 1,
-                      blurRadius: 1,
-                      offset: Offset(1, 3),
-                    )
-                  ],
-                  borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(20),
-                      bottomRight: Radius.circular(20))),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(myAssignment.title,
-                      style: TextStyle(
-                          fontSize: 16,
-                          color: textColor,
-                          fontWeight: FontWeight.w700)),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  Text(
-                      "${myAssignment.startDate.replaceAll("-", ". ")} ~ ${myAssignment.endDate.replaceAll("-", ". ")}",
-                      style: TextStyle(fontSize: 14, color: textColor)),
+  return GestureDetector(
+    onTap: () {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => Test(myAssignment.text)));
+    },
+    child: Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      child: Stack(
+        children: [
+          Container(
+            height: 90,
+            width: MediaQuery.of(context).size.width - 20,
+            padding: const EdgeInsets.only(left: 30),
+            decoration: BoxDecoration(
+                border:
+                    Border.all(width: 2, color: Colors.grey.withOpacity(0.02)),
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.2),
+                    spreadRadius: 1,
+                    blurRadius: 1,
+                    offset: Offset(1, 3),
+                  )
                 ],
-              ),
+                borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(20),
+                    bottomRight: Radius.circular(20))),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(myAssignment.title,
+                    style: TextStyle(
+                        fontSize: 16,
+                        color: textColor,
+                        fontWeight: FontWeight.w700)),
+                SizedBox(
+                  height: 15,
+                ),
+                Text(
+                    "${myAssignment.startDate.replaceAll("-", ". ")} ~ ${myAssignment.endDate.replaceAll("-", ". ")}",
+                    style: TextStyle(fontSize: 14, color: textColor)),
+              ],
             ),
-            Positioned(
-                child: Container(
-              width: 15,
-              height: 90,
-              color: boxColor,
-            ))
-          ],
-        ),
+          ),
+          Positioned(
+              child: Container(
+            width: 15,
+            height: 90,
+            color: boxColor,
+          ))
+        ],
       ),
     ),
   );
