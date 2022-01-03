@@ -14,12 +14,14 @@ class _TestState extends State<Test> {
   _TestState(this.text);
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        home: Scaffold(
-            body: SingleChildScrollView(
-                child: WebView(
-      initialUrl: 'https://www.google.com/',
-      javascriptMode: JavascriptMode.unrestricted,
-    ))));
+    return Scaffold(
+      body: SafeArea(
+        child: WebView(
+          initialUrl:
+              'https://cyber.anyang.ac.kr/MReport.do?cmd=viewReportInfoPageList&boardInfoDTO.boardInfoGubun=report&courseDTO.courseId=$text',
+          javascriptMode: JavascriptMode.unrestricted,
+        ),
+      ),
+    );
   }
 }

@@ -102,7 +102,7 @@ class _MyAssignmentState extends State<MyAssignment>
     Widget _child = new Text("");
     setState(() {
       if (assignmentProps.length > 0) {
-        _child = haveassignment(context, myAssignment);
+        _child = haveassignment(context, myAssignment, classProps);
       } else {
         _child = notassignment;
       }
@@ -267,14 +267,14 @@ Widget notassignment = new Center(
 //       });
 // }
 
-Widget haveassignment(context, List<dynamic> myAssignment) {
+Widget haveassignment(context, List<dynamic> myAssignment, classProps) {
   return ListView(
       children: myAssignment.map((e) {
-    return assignmentDivided(context, e);
+    return assignmentDivided(context, e, classProps);
   }).toList());
 }
 
-Widget assignmentDivided(context, myAssignment) {
+Widget assignmentDivided(context, myAssignment, classProps) {
   var dateformatter = new DateFormat('yyyy-MM-dd');
   Color boxColor = Color(0xffF2A7C5);
   Color textColor;
@@ -293,7 +293,7 @@ Widget assignmentDivided(context, myAssignment) {
   return GestureDetector(
     onTap: () {
       Navigator.push(context,
-          MaterialPageRoute(builder: (context) => Test(myAssignment.text)));
+          MaterialPageRoute(builder: (context) => Test(classProps.classId)));
     },
     child: Container(
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),

@@ -1,15 +1,17 @@
 import 'package:deanora/Widgets/MenuTabBar.dart';
 import 'package:deanora/Widgets/Widgets.dart';
 import 'package:deanora/screen/MyMenu.dart';
-import 'package:deanora/screen/myClass.dart';
+import 'package:deanora/screen/MyKakaoLogin.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'dart:async';
-import 'dart:ui';
+
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:kakao_flutter_sdk/all.dart';
 
 int? isviewed;
 void main() async {
+  KakaoContext.clientId = '0ee1a69b5061efe60731a280662c04d7';
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   isviewed = prefs.getInt('Tutorial');
@@ -31,6 +33,7 @@ class _MyAppState extends State<MyApp> {
             accentColor: Colors.white),
         debugShowCheckedModeBanner: false,
         home: Cover()
+        //home: MyKakaoLogin()
         //home: Test()
         );
   }
@@ -68,7 +71,8 @@ class _CoverState extends State<Cover> {
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 1), () {
+
+    Timer(Duration(milliseconds: 50), () {
       Navigator.pushReplacement(
         context,
         PageTransition(
