@@ -1,27 +1,52 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class Test extends StatefulWidget {
-  var text;
-  Test(this.text);
+  Test();
 
   @override
-  _TestState createState() => _TestState(this.text);
+  _TestState createState() => _TestState();
 }
 
 class _TestState extends State<Test> {
-  var text;
-  _TestState(this.text);
+  late FirebaseMessaging messaging;
   @override
+  void initState() {
+    super.initState();
+
+    messaging = FirebaseMessaging.instance;
+    messaging.getToken().then((value) {
+      print(value);
+    });
+    FirebaseMessaging.onMessage.listen((RemoteMessage event) {
+      print("message recieved");
+      print(event.notification!.body);
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text("FCM-test"),
+              content: Text(event.notification!.body!),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text("확인"))
+              ],
+            );
+          });
+    });
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      print('Message clicked!');
+    });
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: WebView(
-          initialUrl:
-              'https://cyber.anyang.ac.kr/MReport.do?cmd=viewReportInfoPageList&boardInfoDTO.boardInfoGubun=report&courseDTO.courseId=$text',
-          javascriptMode: JavascriptMode.unrestricted,
-        ),
-      ),
+      body: SafeArea(child: Text("FCM TEST")),
     );
   }
 }

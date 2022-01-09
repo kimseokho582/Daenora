@@ -4,6 +4,7 @@ import 'package:deanora/Widgets/MenuTabBar.dart';
 import 'package:deanora/Widgets/Widgets.dart';
 import 'package:deanora/screen/MyMenu.dart';
 import 'package:deanora/screen/MyWeather.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:deanora/Widgets/custom_circlular_bar.dart';
 import 'package:deanora/crawl/crawl.dart';
@@ -48,7 +49,7 @@ class _MyClassState extends State<MyClass> with TickerProviderStateMixin {
   late AnimationController animationController;
 
   _MyClassState(this.id, this.pw, this.classProps, this.userProps, weatherData);
-
+  late FirebaseMessaging messaging;
   @override
   void initState() {
     super.initState();
@@ -56,6 +57,33 @@ class _MyClassState extends State<MyClass> with TickerProviderStateMixin {
         duration: new Duration(milliseconds: 1000), vsync: this);
     animationController.repeat();
     _getNames(classProps);
+
+    messaging = FirebaseMessaging.instance;
+    messaging.getToken().then((value) {
+      print(value);
+    });
+    FirebaseMessaging.onMessage.listen((RemoteMessage event) {
+      print("message recieved");
+      print(event.notification!.body);
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text("FCM-test"),
+              content: Text(event.notification!.body!),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text("확인"))
+              ],
+            );
+          });
+    });
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      print('Message clicked!');
+    });
   }
 
   dispose() {

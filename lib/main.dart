@@ -2,7 +2,10 @@ import 'package:deanora/Widgets/MenuTabBar.dart';
 import 'package:deanora/Widgets/Widgets.dart';
 import 'package:deanora/screen/MyMenu.dart';
 import 'package:deanora/screen/MyKakaoLogin.dart';
+import 'package:deanora/screen/Test.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:page_transition/page_transition.dart';
 import 'dart:async';
 
@@ -10,10 +13,17 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:kakao_flutter_sdk/all.dart';
 
 int? isviewed;
+
+Future<void> _messageHandler(RemoteMessage message) async {
+  print('background message ${message.notification!.body}');
+}
+
 void main() async {
-  KakaoContext.clientId = '0ee1a69b5061efe60731a280662c04d7';
   WidgetsFlutterBinding.ensureInitialized();
+  KakaoContext.clientId = '0ee1a69b5061efe60731a280662c04d7';
+  await Firebase.initializeApp();
   SharedPreferences prefs = await SharedPreferences.getInstance();
+  FirebaseMessaging.onBackgroundMessage(_messageHandler);
   isviewed = prefs.getInt('Tutorial');
   runApp(MyApp());
 }
@@ -34,7 +44,7 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         home: Cover()
         //home: MyKakaoLogin()
-        //home: Test()
+        // home: Test()
         );
   }
 }

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "695403993889",
+    "project_id": "fcmtest2-e3a16",
+    "storage_bucket": "fcmtest2-e3a16.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:695403993889:android:b7c4cef51491af47c2fc60",
+        "android_client_info": {
+          "package_name": "goorm.It"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "695403993889-a48fs8vpfac4pcsc0sfki2ur04mb0s7e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDoNJ5w3vhL2QtU9cFaGRvAMRSOKawJ-8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "695403993889-a48fs8vpfac4pcsc0sfki2ur04mb0s7e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

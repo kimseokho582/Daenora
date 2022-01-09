@@ -290,60 +290,54 @@ Widget assignmentDivided(context, myAssignment, classProps) {
     //안지남
   }
 
-  return GestureDetector(
-    onTap: () {
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => Test(classProps.classId)));
-    },
-    child: Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      child: Stack(
-        children: [
-          Container(
-            height: 90,
-            width: MediaQuery.of(context).size.width - 20,
-            padding: const EdgeInsets.only(left: 30),
-            decoration: BoxDecoration(
-                border:
-                    Border.all(width: 2, color: Colors.grey.withOpacity(0.02)),
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.2),
-                    spreadRadius: 1,
-                    blurRadius: 1,
-                    offset: Offset(1, 3),
-                  )
-                ],
-                borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(20),
-                    bottomRight: Radius.circular(20))),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(myAssignment.title,
-                    style: TextStyle(
-                        fontSize: 16,
-                        color: textColor,
-                        fontWeight: FontWeight.w700)),
-                SizedBox(
-                  height: 15,
-                ),
-                Text(
-                    "${myAssignment.startDate.replaceAll("-", ". ")} ~ ${myAssignment.endDate.replaceAll("-", ". ")}",
-                    style: TextStyle(fontSize: 14, color: textColor)),
+  return Container(
+    margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+    child: Stack(
+      children: [
+        Container(
+          height: 90,
+          width: MediaQuery.of(context).size.width - 20,
+          padding: const EdgeInsets.only(left: 30),
+          decoration: BoxDecoration(
+              border:
+                  Border.all(width: 2, color: Colors.grey.withOpacity(0.02)),
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.2),
+                  spreadRadius: 1,
+                  blurRadius: 1,
+                  offset: Offset(1, 3),
+                )
               ],
-            ),
+              borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(20),
+                  bottomRight: Radius.circular(20))),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(myAssignment.title,
+                  style: TextStyle(
+                      fontSize: 16,
+                      color: textColor,
+                      fontWeight: FontWeight.w700)),
+              SizedBox(
+                height: 15,
+              ),
+              Text(
+                  "${myAssignment.startDate.replaceAll("-", ". ")} ~ ${myAssignment.endDate.replaceAll("-", ". ")}",
+                  style: TextStyle(fontSize: 14, color: textColor)),
+            ],
           ),
-          Positioned(
-              child: Container(
-            width: 15,
-            height: 90,
-            color: boxColor,
-          ))
-        ],
-      ),
+        ),
+        Positioned(
+            child: Container(
+          width: 15,
+          height: 90,
+          color: boxColor,
+        ))
+      ],
     ),
   );
 }
