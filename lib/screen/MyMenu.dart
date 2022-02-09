@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:deanora/screen/MyWeather.dart';
 import 'package:http/http.dart' as http;
 import 'package:deanora/Widgets/Tutorial.dart';
 import 'package:deanora/Widgets/Widgets.dart';
@@ -13,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:deanora/Widgets/LoginDataCtrl.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class MyMenu extends StatefulWidget {
   const MyMenu({Key? key}) : super(key: key);
@@ -34,10 +34,37 @@ class _MyMenuState extends State<MyMenu> {
   late bool _serviceEnabled;
   late PermissionStatus _permissionGranted;
   late LocationData _locationData;
-
+  late FirebaseMessaging messaging;
   @override
   void initState() {
     super.initState();
+
+    messaging = FirebaseMessaging.instance;
+    messaging.getToken().then((value) {
+      print(value);
+    });
+    FirebaseMessaging.onMessage.listen((RemoteMessage event) {
+      print("message recieved");
+      print(event.notification!.body);
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text("FCM-test"),
+              content: Text(event.notification!.body!),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text("확인"))
+              ],
+            );
+          });
+    });
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      print('Message clicked!');
+    });
   }
 
   Widget build(BuildContext context) {

@@ -1,8 +1,5 @@
-import 'package:deanora/Widgets/MenuTabBar.dart';
 import 'package:deanora/Widgets/Widgets.dart';
 import 'package:deanora/screen/MyMenu.dart';
-import 'package:deanora/screen/MyKakaoLogin.dart';
-import 'package:deanora/screen/Test.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -56,6 +53,23 @@ class Cover extends StatefulWidget {
 }
 
 class _CoverState extends State<Cover> {
+  @override
+  void initState() {
+    super.initState();
+
+    Timer(Duration(milliseconds: 50), () {
+      Navigator.pushReplacement(
+        context,
+        PageTransition(
+          duration: Duration(milliseconds: 800),
+          type: PageTransitionType.fade,
+          alignment: Alignment.topCenter,
+          child: MyMenu(),
+        ),
+      );
+    });
+  }
+
   Widget build(BuildContext context) {
     var windowWidth = MediaQuery.of(context).size.width;
     var windowHeight = MediaQuery.of(context).size.height;
@@ -76,22 +90,5 @@ class _CoverState extends State<Cover> {
         )
       ],
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    Timer(Duration(milliseconds: 50), () {
-      Navigator.pushReplacement(
-        context,
-        PageTransition(
-          duration: Duration(milliseconds: 800),
-          type: PageTransitionType.fade,
-          alignment: Alignment.topCenter,
-          child: MyMenu(),
-        ),
-      );
-    });
   }
 }

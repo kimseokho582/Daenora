@@ -1,5 +1,4 @@
 import 'package:deanora/Widgets/LoginDataCtrl.dart';
-import 'package:deanora/Widgets/MakeCalendar.dart';
 import 'package:deanora/Widgets/MenuTabBar.dart';
 import 'package:deanora/Widgets/Widgets.dart';
 import 'package:deanora/screen/MyMenu.dart';
@@ -10,14 +9,9 @@ import 'package:deanora/Widgets/custom_circlular_bar.dart';
 import 'package:deanora/crawl/crawl.dart';
 import 'package:deanora/screen/MyCalendar.dart';
 import 'package:deanora/screen/MyLogin.dart';
-import 'package:deanora/screen/MyMenu.dart';
 import 'package:deanora/screen/myAssignment.dart';
-import 'package:deanora/main.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
-
-import 'package:page_transition/page_transition.dart';
 
 class CnDPair<T1, T2> {
   int index;
@@ -57,33 +51,6 @@ class _MyClassState extends State<MyClass> with TickerProviderStateMixin {
         duration: new Duration(milliseconds: 1000), vsync: this);
     animationController.repeat();
     _getNames(classProps);
-
-    messaging = FirebaseMessaging.instance;
-    messaging.getToken().then((value) {
-      print(value);
-    });
-    FirebaseMessaging.onMessage.listen((RemoteMessage event) {
-      print("message recieved");
-      print(event.notification!.body);
-      showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: Text("FCM-test"),
-              content: Text(event.notification!.body!),
-              actions: [
-                TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Text("확인"))
-              ],
-            );
-          });
-    });
-    FirebaseMessaging.onMessageOpenedApp.listen((message) {
-      print('Message clicked!');
-    });
   }
 
   dispose() {
