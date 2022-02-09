@@ -104,13 +104,6 @@ class _MyClassState extends State<MyClass> with TickerProviderStateMixin {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Container(
-                            //   height: 50,
-                            //   color: Colors.red,
-                            // ),
-                            // SizedBox(
-                            //   height: 20,
-                            // ),
                             Container(
                               height: 30,
                               margin:
