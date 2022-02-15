@@ -76,7 +76,7 @@ class _MyAssignmentState extends State<MyAssignment>
                         initialValue: tmpstring,
                         maxLines: 10,
                         decoration: InputDecoration(
-                          hintText: "과목에대한 메모를 자유롭게 남겨보세요!",
+                          hintText: "과목에 대한 메모를 자유롭게 남겨보세요!",
                           fillColor: Color(0xfff3f3f3),
                           filled: true,
                         ),
@@ -84,7 +84,7 @@ class _MyAssignmentState extends State<MyAssignment>
                     ),
                   ])));
         } else {
-          return Text("now loading...");
+          return Text("now loading....");
         }
       },
     );

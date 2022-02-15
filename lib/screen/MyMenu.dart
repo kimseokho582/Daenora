@@ -147,7 +147,7 @@ class _MyMenuState extends State<MyMenu> {
                                   height: 18,
                                 ),
                                 contentsMenu(logintest, "nyanTitle",
-                                    "냥대 - 내 강의실", "각 과목의 과제 정보와 학사일정을 확인"),
+                                    "냥대 - 내 강의실", "각 과목의 과제 정보와 학사 일정을 확인"),
                                 // contentsMenu(
                                 //     () => {
                                 //           Navigator.push(
