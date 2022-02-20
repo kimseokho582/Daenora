@@ -50,14 +50,39 @@ class _MyMenuState extends State<MyMenu> {
           context: context,
           builder: (context) {
             return AlertDialog(
-              title: Text("FCM-test"),
-              content: Text(event.notification!.body!),
+              contentPadding:
+                  const EdgeInsets.symmetric(vertical: 24, horizontal: 40),
+              buttonPadding: const EdgeInsetsDirectional.fromSTEB(0, 8, 0, 8),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(18))),
+              title: Center(
+                  child: Text(
+                event.notification!.title!,
+                style: TextStyle(fontWeight: FontWeight.w900),
+              )),
+              content: Container(
+                  child: Text(
+                event.notification!.body!,
+                textAlign: TextAlign.center,
+              )),
               actions: [
-                TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Text("확인"))
+                Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                      border: Border(
+                          top: BorderSide(
+                              color: Color(0xffd2d2d5), width: 1.0))),
+                  child: TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Container(
+                        child: Text(
+                          "확인",
+                          style: TextStyle(color: Color(0xff755FE7)),
+                        ),
+                      )),
+                )
               ],
             );
           });
