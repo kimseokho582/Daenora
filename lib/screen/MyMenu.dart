@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:deanora/object/AmdinLogin.dart';
 import 'package:http/http.dart' as http;
 import 'package:deanora/Widgets/Tutorial.dart';
 import 'package:deanora/Widgets/Widgets.dart';
@@ -237,7 +238,6 @@ class _MyMenuState extends State<MyMenu> {
     saved_id = assurance["user_id"] ?? "";
     saved_pw = assurance["user_pw"] ?? "";
     var crawl = new Crawl(saved_id, saved_pw);
-
     try {
       var classes = await crawl.crawlClasses();
       var user = await crawl.crawlUser();

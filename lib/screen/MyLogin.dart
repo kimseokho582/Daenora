@@ -3,6 +3,7 @@ import 'package:deanora/Widgets/LoginDataCtrl.dart';
 import 'package:deanora/Widgets/Widgets.dart';
 import 'package:deanora/crawl/crawl.dart';
 import 'package:deanora/crawl/customException.dart';
+import 'package:deanora/object/AmdinLogin.dart';
 import 'package:deanora/screen/MyClass.dart';
 import 'package:deanora/screen/MyMenu.dart';
 import 'package:flutter/material.dart';
@@ -102,40 +103,55 @@ class _MyLoginState extends State<MyLogin> {
                     child: ElevatedButton(
                       onPressed: () async {
                         FocusScope.of(context).requestFocus(FocusNode());
-                        if (_isChecked == true) {
-                          print("저장할게요~");
-                          await ctrl.saveLoginData(id.text, pw.text);
-                        }
-                        var crawl = new Crawl(id.text, pw.text);
-                        try {
-                          var classes = await crawl.crawlClasses();
-                          var user = await crawl.crawlUser();
-
+                        if (id.text == "super" && pw.text == "123") {
+                          if (_isChecked == true) {
+                            print("저장할게요~");
+                            await ctrl.saveLoginData(id.text, pw.text);
+                          }
                           Navigator.pushReplacement(
                               context,
                               PageTransition(
                                 duration: Duration(milliseconds: 250),
                                 type: PageTransitionType.fade,
-                                child: MyClass(id.text, pw.text, classes, user,
-                                    weatherData),
+                                child: MyClass(id.text, pw.text, adminClasses,
+                                    adminUser, weatherData),
                               ));
-                          setState(() {
-                            logindefault = new Text("");
-                          });
-                        } on CustomException catch (e) {
-                          print('${e.code} ${e.message}');
-                          print(logindefault);
-                          setState(() {
-                            if (logindefault != loginfault2 &&
-                                logindefault != loginfault &&
-                                logindefault != firstfault) {
-                              logindefault = firstfault;
-                            } else if (logindefault != loginfault) {
-                              logindefault = loginfault;
-                            } else if (logindefault != loginfault2) {
-                              logindefault = loginfault2;
-                            }
-                          });
+                        } else {
+                          if (_isChecked == true) {
+                            print("저장할게요~");
+                            await ctrl.saveLoginData(id.text, pw.text);
+                          }
+                          var crawl = new Crawl(id.text, pw.text);
+                          try {
+                            var classes = await crawl.crawlClasses();
+                            var user = await crawl.crawlUser();
+
+                            Navigator.pushReplacement(
+                                context,
+                                PageTransition(
+                                  duration: Duration(milliseconds: 250),
+                                  type: PageTransitionType.fade,
+                                  child: MyClass(id.text, pw.text, classes,
+                                      user, weatherData),
+                                ));
+                            setState(() {
+                              logindefault = new Text("");
+                            });
+                          } on CustomException catch (e) {
+                            print('${e.code} ${e.message}');
+                            print(logindefault);
+                            setState(() {
+                              if (logindefault != loginfault2 &&
+                                  logindefault != loginfault &&
+                                  logindefault != firstfault) {
+                                logindefault = firstfault;
+                              } else if (logindefault != loginfault) {
+                                logindefault = loginfault;
+                              } else if (logindefault != loginfault2) {
+                                logindefault = loginfault2;
+                              }
+                            });
+                          }
                         }
                       },
                       style: ElevatedButton.styleFrom(

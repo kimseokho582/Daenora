@@ -1,6 +1,7 @@
 import 'package:deanora/Widgets/LoginDataCtrl.dart';
 import 'package:deanora/Widgets/MenuTabBar.dart';
 import 'package:deanora/Widgets/Widgets.dart';
+import 'package:deanora/object/AmdinLogin.dart';
 import 'package:deanora/screen/MyMenu.dart';
 import 'package:deanora/screen/MyWeather.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -197,19 +198,37 @@ class _MyClassState extends State<MyClass> with TickerProviderStateMixin {
                                             var index = entry.key;
                                             return InkWell(
                                               onTap: () async {
-                                                var crawl = new Crawl(id, pw);
-                                                var _adssi = await crawl
-                                                    .crawlAssignments(
-                                                        e.classId);
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            MyAssignment(
-                                                                e ?? "",
-                                                                _adssi,
-                                                                dncList[
-                                                                    index])));
+                                                if (e.classId == "1" ||
+                                                    e.classId == "2" ||
+                                                    e.classId == "3" ||
+                                                    e.classId == "4" ||
+                                                    e.classId == "5" ||
+                                                    e.classId == "6") {
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              MyAssignment(
+                                                                  e ?? "",
+                                                                  AdminAssignments(
+                                                                          e.classId)
+                                                                      .postAdminAssiment(),
+                                                                  4 / 5)));
+                                                } else {
+                                                  var crawl = new Crawl(id, pw);
+                                                  var _adssi = await crawl
+                                                      .crawlAssignments(
+                                                          e.classId);
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              MyAssignment(
+                                                                  e ?? "",
+                                                                  _adssi,
+                                                                  dncList[
+                                                                      index])));
+                                                }
                                               },
                                               child: Container(
                                                 margin:
@@ -292,6 +311,7 @@ class _MyClassState extends State<MyClass> with TickerProviderStateMixin {
                                                             ddnc = snap.data!;
                                                             dncList[index] =
                                                                 ddnc;
+
                                                             return Container(
                                                                 alignment: Alignment
                                                                     .centerRight,

@@ -1,5 +1,6 @@
 import 'package:deanora/Widgets/Widgets.dart';
 import 'package:deanora/screen/MyMenu.dart';
+import 'package:deanora/screen/Test.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -39,10 +40,8 @@ class _MyAppState extends State<MyApp> {
             primaryColor: Colors.black,
             accentColor: Colors.white),
         debugShowCheckedModeBanner: false,
-        home: Cover()
-        //home: MyKakaoLogin()
-        // home: Test()
-        );
+        // home: Cover()
+        home: Test());
   }
 }
 
