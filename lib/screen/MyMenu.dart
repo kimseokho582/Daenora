@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:deanora/screen/MyWeather.dart';
 import 'package:http/http.dart' as http;
 import 'package:deanora/Widgets/Tutorial.dart';
 import 'package:deanora/Widgets/Widgets.dart';
@@ -13,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:deanora/Widgets/LoginDataCtrl.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class MyMenu extends StatefulWidget {
   const MyMenu({Key? key}) : super(key: key);
@@ -34,10 +34,62 @@ class _MyMenuState extends State<MyMenu> {
   late bool _serviceEnabled;
   late PermissionStatus _permissionGranted;
   late LocationData _locationData;
-
+  late FirebaseMessaging messaging;
   @override
   void initState() {
     super.initState();
+
+    messaging = FirebaseMessaging.instance;
+    messaging.getToken().then((value) {
+      print(value);
+    });
+    FirebaseMessaging.onMessage.listen((RemoteMessage event) {
+      print("message recieved");
+      print(event.notification!.body);
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              contentPadding:
+                  const EdgeInsets.symmetric(vertical: 24, horizontal: 40),
+              buttonPadding: const EdgeInsetsDirectional.fromSTEB(0, 8, 0, 8),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(18))),
+              title: Center(
+                  child: Text(
+                event.notification!.title!,
+                style: TextStyle(fontWeight: FontWeight.w900),
+              )),
+              content: Container(
+                  child: Text(
+                event.notification!.body!,
+                textAlign: TextAlign.center,
+              )),
+              actions: [
+                Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                      border: Border(
+                          top: BorderSide(
+                              color: Color(0xffd2d2d5), width: 1.0))),
+                  child: TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Container(
+                        child: Text(
+                          "확인",
+                          style: TextStyle(color: Color(0xff755FE7)),
+                        ),
+                      )),
+                )
+              ],
+            );
+          });
+    });
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      print('Message clicked!');
+    });
   }
 
   Widget build(BuildContext context) {
@@ -120,7 +172,7 @@ class _MyMenuState extends State<MyMenu> {
                                   height: 18,
                                 ),
                                 contentsMenu(logintest, "nyanTitle",
-                                    "냥대 - 내 강의실", "각 과목의 과제 정보와 학사일정을 확인"),
+                                    "냥대 - 내 강의실", "각 과목의 과제 정보와 학사 일정을 확인"),
                                 // contentsMenu(
                                 //     () => {
                                 //           Navigator.push(

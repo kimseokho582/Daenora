@@ -1,5 +1,4 @@
 import 'package:deanora/Widgets/LoginDataCtrl.dart';
-import 'package:deanora/Widgets/MakeCalendar.dart';
 import 'package:deanora/Widgets/MenuTabBar.dart';
 import 'package:deanora/Widgets/Widgets.dart';
 import 'package:deanora/screen/MyMenu.dart';
@@ -10,14 +9,9 @@ import 'package:deanora/Widgets/custom_circlular_bar.dart';
 import 'package:deanora/crawl/crawl.dart';
 import 'package:deanora/screen/MyCalendar.dart';
 import 'package:deanora/screen/MyLogin.dart';
-import 'package:deanora/screen/MyMenu.dart';
 import 'package:deanora/screen/myAssignment.dart';
-import 'package:deanora/main.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
-
-import 'package:page_transition/page_transition.dart';
 
 class CnDPair<T1, T2> {
   int index;
@@ -57,33 +51,6 @@ class _MyClassState extends State<MyClass> with TickerProviderStateMixin {
         duration: new Duration(milliseconds: 1000), vsync: this);
     animationController.repeat();
     _getNames(classProps);
-
-    messaging = FirebaseMessaging.instance;
-    messaging.getToken().then((value) {
-      print(value);
-    });
-    FirebaseMessaging.onMessage.listen((RemoteMessage event) {
-      print("message recieved");
-      print(event.notification!.body);
-      showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: Text("FCM-test"),
-              content: Text(event.notification!.body!),
-              actions: [
-                TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Text("확인"))
-              ],
-            );
-          });
-    });
-    FirebaseMessaging.onMessageOpenedApp.listen((message) {
-      print('Message clicked!');
-    });
   }
 
   dispose() {
@@ -219,142 +186,157 @@ class _MyClassState extends State<MyClass> with TickerProviderStateMixin {
                               child: SizedBox(
                                 height: windowHeight - 270,
                                 child: RefreshIndicator(
-                                    onRefresh: _refresh,
-                                    child: ListView(
-                                      children: filteredNames
-                                          .asMap()
-                                          .entries
-                                          .map((entry) {
-                                        var e = entry.value;
-                                        var index = entry.key;
-                                        return InkWell(
-                                          onTap: () async {
-                                            var crawl = new Crawl(id, pw);
-                                            var _adssi = await crawl
-                                                .crawlAssignments(e.classId);
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        MyAssignment(
-                                                            e ?? "",
-                                                            _adssi,
-                                                            dncList[index])));
-                                          },
-                                          child: Container(
-                                            margin: const EdgeInsets.symmetric(
-                                                vertical: 7, horizontal: 7),
-                                            decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              border: Border.all(
-                                                  width: 2,
-                                                  color: Colors.grey
-                                                      .withOpacity(0.03)),
-                                              borderRadius:
-                                                  BorderRadius.circular(15),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors.grey
-                                                      .withOpacity(0.2),
-                                                  spreadRadius: 1,
-                                                  blurRadius: 4,
-                                                  offset: Offset(3, 5),
-                                                )
-                                              ],
-                                            ),
-                                            child: Container(
-                                              margin: const EdgeInsets.only(
-                                                  top: 20,
-                                                  right: 30,
-                                                  left: 25,
-                                                  bottom: 18),
-                                              child: Stack(
-                                                children: [
-                                                  Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceEvenly,
-                                                      children: [
-                                                        Container(
-                                                          width:
-                                                              windowWidth - 205,
-                                                          child: Text(
-                                                            e.className,
-                                                            maxLines: 1,
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                            softWrap: false,
-                                                            style: TextStyle(
-                                                                fontSize: 15,
-                                                                color: Color(
-                                                                    0xff707070),
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w800),
-                                                          ),
-                                                        ),
-                                                        SizedBox(
-                                                          height: 10,
-                                                        ),
-                                                        Text(
-                                                            ' ${e.profName} 교수님',
-                                                            style: TextStyle(
-                                                                fontSize: 12,
-                                                                color: Color(
-                                                                    0xff707070)))
-                                                      ]),
-                                                  FutureBuilder(
-                                                    future:
-                                                        requestDnc(id, pw, e),
-                                                    builder: (context,
-                                                        AsyncSnapshot snap) {
-                                                      if (snap.hasData) {
-                                                        ddnc = snap.data!;
-                                                        dncList[index] = ddnc;
-                                                        return Container(
-                                                            alignment: Alignment
-                                                                .centerRight,
-                                                            child: CustomCircularBar(
-                                                                vsync: this,
-                                                                upperBound:
-                                                                    dncList[
-                                                                        index]));
-                                                      } else if (snap
-                                                          .hasError) {
-                                                        return Container(
-                                                          alignment: Alignment
-                                                              .centerRight,
-                                                          child: Text("NaN"),
-                                                        );
-                                                      } else {
-                                                        return Container(
-                                                            alignment: Alignment
-                                                                .centerRight,
-                                                            child: SizedBox(
-                                                                width: 50,
-                                                                height: 50,
-                                                                child:
-                                                                    CircularProgressIndicator(
-                                                                  valueColor: animationController.drive(ColorTween(
-                                                                      begin: Color(
-                                                                          0xff8E53E9),
-                                                                      end: Colors
-                                                                          .red)),
-                                                                )));
-                                                      }
-                                                    },
+                                  onRefresh: _refresh,
+                                  child: filteredNames.length != 0
+                                      ? ListView(
+                                          children: filteredNames
+                                              .asMap()
+                                              .entries
+                                              .map((entry) {
+                                            var e = entry.value;
+                                            var index = entry.key;
+                                            return InkWell(
+                                              onTap: () async {
+                                                var crawl = new Crawl(id, pw);
+                                                var _adssi = await crawl
+                                                    .crawlAssignments(
+                                                        e.classId);
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            MyAssignment(
+                                                                e ?? "",
+                                                                _adssi,
+                                                                dncList[
+                                                                    index])));
+                                              },
+                                              child: Container(
+                                                margin:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 7,
+                                                        horizontal: 7),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  border: Border.all(
+                                                      width: 2,
+                                                      color: Colors.grey
+                                                          .withOpacity(0.03)),
+                                                  borderRadius:
+                                                      BorderRadius.circular(15),
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: Colors.grey
+                                                          .withOpacity(0.2),
+                                                      spreadRadius: 1,
+                                                      blurRadius: 4,
+                                                      offset: Offset(3, 5),
+                                                    )
+                                                  ],
+                                                ),
+                                                child: Container(
+                                                  margin: const EdgeInsets.only(
+                                                      top: 20,
+                                                      right: 30,
+                                                      left: 25,
+                                                      bottom: 18),
+                                                  child: Stack(
+                                                    children: [
+                                                      Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceEvenly,
+                                                          children: [
+                                                            Container(
+                                                              width:
+                                                                  windowWidth -
+                                                                      205,
+                                                              child: Text(
+                                                                e.className,
+                                                                maxLines: 1,
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                                softWrap: false,
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        15,
+                                                                    color: Color(
+                                                                        0xff707070),
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w800),
+                                                              ),
+                                                            ),
+                                                            SizedBox(
+                                                              height: 10,
+                                                            ),
+                                                            Text(
+                                                                ' ${e.profName} 교수님',
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        12,
+                                                                    color: Color(
+                                                                        0xff707070)))
+                                                          ]),
+                                                      FutureBuilder(
+                                                        future: requestDnc(
+                                                            id, pw, e),
+                                                        builder: (context,
+                                                            AsyncSnapshot
+                                                                snap) {
+                                                          if (snap.hasData) {
+                                                            ddnc = snap.data!;
+                                                            dncList[index] =
+                                                                ddnc;
+                                                            return Container(
+                                                                alignment: Alignment
+                                                                    .centerRight,
+                                                                child: CustomCircularBar(
+                                                                    vsync: this,
+                                                                    upperBound:
+                                                                        dncList[
+                                                                            index]));
+                                                          } else if (snap
+                                                              .hasError) {
+                                                            return Container(
+                                                              alignment: Alignment
+                                                                  .centerRight,
+                                                              child:
+                                                                  Text("NaN"),
+                                                            );
+                                                          } else {
+                                                            return Container(
+                                                                alignment: Alignment
+                                                                    .centerRight,
+                                                                child: SizedBox(
+                                                                    width: 50,
+                                                                    height: 50,
+                                                                    child:
+                                                                        CircularProgressIndicator(
+                                                                      valueColor: animationController.drive(ColorTween(
+                                                                          begin: Color(
+                                                                              0xff8E53E9),
+                                                                          end: Colors
+                                                                              .red)),
+                                                                    )));
+                                                          }
+                                                        },
+                                                      ),
+                                                    ],
                                                   ),
-                                                ],
+                                                ),
                                               ),
-                                            ),
-                                          ),
-                                        );
-                                      }).toList(),
-                                    )),
+                                            );
+                                          }).toList(),
+                                        )
+                                      : ListView(children: [
+                                          Center(child: Text("강의가 없습니다"))
+                                        ]),
+                                ),
                               ),
                             )
                           ],
@@ -480,8 +462,8 @@ class _MyClassState extends State<MyClass> with TickerProviderStateMixin {
     }
     setState(() {
       filteredNames = names;
-
       fname = names;
     });
+    print("${filteredNames.length}");
   }
 }

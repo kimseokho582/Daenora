@@ -29,13 +29,13 @@ class _MyWertherState extends State<MyWeather> {
   Widget build(BuildContext context) {
     //print(weatherData);
     //print(cityNameData);
-    print(precipitationPercentDate['minutely'][60]['precipitation']);
+    //print(precipitationPercentDate['minutely'][60]['precipitation']);
     final PageController pageController = PageController(
       initialPage: 0,
     );
 
     Widget weatherCard(weather, cityName, precipitationPercent) {
-      switch ("${weather['weather'][0]['main']}") {
+      switch ("${weather['weather']?[0]['main']}") {
         case 'Clear':
           weatherIcon = Icons.light_mode_outlined;
           break;
@@ -128,7 +128,7 @@ class _MyWertherState extends State<MyWeather> {
             child: Align(
               alignment: Alignment(-0.8, -0.7),
               child: Text.rich(TextSpan(
-                  text: '${weather['main']['temp'].toStringAsFixed(0)}°\n',
+                  text: '${weather['main']?['temp'].toStringAsFixed(0)}°\n',
                   style: TextStyle(fontSize: 180),
                   children: [
                     TextSpan(
@@ -146,7 +146,7 @@ class _MyWertherState extends State<MyWeather> {
                     alignment: Alignment(-0.9, -0.2),
                     child: Text.rich(TextSpan(
                         text:
-                            "${weather['main']['feels_like'].toStringAsFixed(1)}°",
+                            "${weather['main']?['feels_like'].toStringAsFixed(1)}°",
                         style: TextStyle(
                             fontSize: 24, fontWeight: FontWeight.w400),
                         children: [
@@ -157,7 +157,7 @@ class _MyWertherState extends State<MyWeather> {
                           ),
                           TextSpan(
                             text:
-                                "${weather['main']['temp_max'].toStringAsFixed(1)}°",
+                                "${weather['main']?['temp_max'].toStringAsFixed(1)}°",
                             style: TextStyle(
                                 fontSize: 24, fontWeight: FontWeight.w300),
                           ),
@@ -168,7 +168,7 @@ class _MyWertherState extends State<MyWeather> {
                           ),
                           TextSpan(
                             text:
-                                "${weather['main']['temp_min'].toStringAsFixed(1)}°",
+                                "${weather['main']?['temp_min'].toStringAsFixed(1)}°",
                             style: TextStyle(
                                 fontSize: 24, fontWeight: FontWeight.w300),
                           ),
@@ -183,7 +183,7 @@ class _MyWertherState extends State<MyWeather> {
                     alignment: Alignment(0.9, -0.2),
                     child: Text.rich(TextSpan(
                         text:
-                            "${precipitationPercent['minutely'][60]['precipitation'].toStringAsFixed(0)}%",
+                            "${precipitationPercent['minutely']?[60]['precipitation'].toStringAsFixed(0)}%",
                         style: TextStyle(
                             fontSize: 24, fontWeight: FontWeight.w400),
                         children: [
@@ -193,7 +193,7 @@ class _MyWertherState extends State<MyWeather> {
                                 fontSize: 9, fontWeight: FontWeight.w300),
                           ),
                           TextSpan(
-                            text: "${weather['main']['humidity']}%",
+                            text: "${weather['main']?['humidity']}%",
                             style: TextStyle(
                                 fontSize: 24, fontWeight: FontWeight.w300),
                           ),
@@ -204,7 +204,7 @@ class _MyWertherState extends State<MyWeather> {
                           ),
                           TextSpan(
                             text:
-                                "${weather['wind']['speed'].toStringAsFixed(0)}m/s",
+                                "${weather['wind']?['speed'].toStringAsFixed(0)}m/s",
                             style: TextStyle(
                                 fontSize: 24, fontWeight: FontWeight.w300),
                           ),
