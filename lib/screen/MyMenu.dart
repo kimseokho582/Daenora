@@ -96,7 +96,6 @@ class _MyMenuState extends State<MyMenu> {
   Widget build(BuildContext context) {
     var windowHeight = MediaQuery.of(context).size.height;
     var windowWidth = MediaQuery.of(context).size.width;
-    print(weatherData);
 
     Widget contentsMenu(_ontapcontroller, image, title, descrition) {
       return InkWell(

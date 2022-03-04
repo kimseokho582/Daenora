@@ -320,14 +320,14 @@ class _MyClassState extends State<MyClass> with TickerProviderStateMixin {
                                                                     upperBound:
                                                                         dncList[
                                                                             index]));
-                                                          } else if (snap
-                                                              .hasError) {
-                                                            return Container(
-                                                              alignment: Alignment
-                                                                  .centerRight,
-                                                              child:
-                                                                  Text("NaN"),
-                                                            );
+                                                            // } else if (snap
+                                                            //     .hasError) {
+                                                            //   return Container(
+                                                            //     alignment: Alignment
+                                                            //         .centerRight,
+                                                            //     child:
+                                                            //         Text("NaN"),
+                                                            //   );
                                                           } else {
                                                             return Container(
                                                                 alignment: Alignment
@@ -422,7 +422,6 @@ class _MyClassState extends State<MyClass> with TickerProviderStateMixin {
                             autofocus: true,
                             onChanged: (text) {
                               _searchText = text;
-                              print(_searchText);
                               if (!(_searchText == "")) {
                                 List tmp = [];
 
@@ -484,6 +483,5 @@ class _MyClassState extends State<MyClass> with TickerProviderStateMixin {
       filteredNames = names;
       fname = names;
     });
-    print("${filteredNames.length}");
   }
 }
