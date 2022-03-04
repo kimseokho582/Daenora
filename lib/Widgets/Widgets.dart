@@ -164,6 +164,7 @@ Future<List> requestAssignment(id, pw, props) async {
           doneCnt.add(0.0);
         }
       }
+      print(doneCnt);
       return doneCnt;
     }
     return [];
@@ -174,10 +175,15 @@ Future<List> requestAssignment(id, pw, props) async {
 
 requestDnc(id, pw, props) async {
   var crawl = new Crawl(id, pw);
-  print("ㄴㅁㅇㅁ  ${props.classId}");
   List<dynamic> _assignment = [];
+
   try {
-    var _asp = await crawl.crawlAssignments(props.classId);
+    var _asp;
+    try {
+      _asp = await crawl.crawlAssignments(props.classId);
+    } catch (e) {
+      _asp = await crawl.crawlAssignments(props.classId);
+    }
     if (_asp.length > 0) {
       _assignment = assignments(_asp);
       double tmp = 0.0;
