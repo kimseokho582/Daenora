@@ -221,7 +221,7 @@ class _MyWertherState extends State<MyWeather> {
       );
     }
 
-    print(DateFormat('H').format(DateTime.now()));
+    // print(DateFormat('H').format(DateTime.now()));
     return MaterialApp(
       home: Scaffold(
         body: Container(

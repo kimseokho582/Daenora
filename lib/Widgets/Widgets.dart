@@ -106,8 +106,8 @@ List assignments(props) {
   List assignment = [];
   props
       .map((x) => {
-            assignment.add(Assignment(x["title"], x["state"], x["startDate"],
-                x["endDate"], x["text"]))
+            assignment.add(Assignment(
+                x["title"], x["state"], x["startDate"], x["endDate"]))
           })
       .toList();
   return assignment;
@@ -174,11 +174,12 @@ Future<List> requestAssignment(id, pw, props) async {
 
 requestDnc(id, pw, props) async {
   var crawl = new Crawl(id, pw);
+  print("ㄴㅁㅇㅁ  ${props.classId}");
   List<dynamic> _assignment = [];
   try {
-    var _assp = await crawl.crawlAssignments(props.classId);
-    if (_assp.length > 0) {
-      _assignment = assignments(_assp);
+    var _asp = await crawl.crawlAssignments(props.classId);
+    if (_asp.length > 0) {
+      _assignment = assignments(_asp);
       double tmp = 0.0;
       for (int i = 0; i < _assignment.length; i++) {
         if (_assignment[i].state == "제출완료") {
