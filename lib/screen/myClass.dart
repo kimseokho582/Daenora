@@ -158,9 +158,10 @@ class _MyClassState extends State<MyClass> {
                               );
                             } else {
                               return SizedBox(
-                                  width: 50,
-                                  height: 50,
-                                  child: CircularProgressIndicator());
+                                width: 50,
+                                height: 50,
+                                // child: CircularProgressIndicator()
+                              );
                             }
                           },
                         ),
