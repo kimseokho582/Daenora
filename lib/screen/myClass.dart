@@ -204,38 +204,20 @@ class _MyClassState extends State<MyClass> with TickerProviderStateMixin {
                                                     var index = entry.key;
                                                     return InkWell(
                                                       onTap: () async {
-                                                        if (e.classId == "1" ||
-                                                            e.classId == "2" ||
-                                                            e.classId == "3" ||
-                                                            e.classId == "4" ||
-                                                            e.classId == "5" ||
-                                                            e.classId == "6") {
-                                                          Navigator.push(
-                                                              context,
-                                                              MaterialPageRoute(
-                                                                  builder: (context) => MyAssignment(
-                                                                      e ?? "",
-                                                                      AdminAssignments(
-                                                                              e.classId)
-                                                                          .postAdminAssiment(),
-                                                                      4 / 5)));
-                                                        } else {
-                                                          var crawl =
-                                                              new Crawl(id, pw);
-                                                          var _adssi = await crawl
-                                                              .crawlAssignments(
-                                                                  e.classId);
-                                                          Navigator.push(
-                                                              context,
-                                                              MaterialPageRoute(
-                                                                  builder: (context) =>
-                                                                      MyAssignment(
-                                                                          e ??
-                                                                              "",
-                                                                          _adssi,
-                                                                          dncList[
-                                                                              index])));
-                                                        }
+                                                        var crawl =
+                                                            new Crawl(id, pw);
+                                                        var _adssi = await crawl
+                                                            .crawlAssignments(
+                                                                e.classId);
+                                                        Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder: (context) =>
+                                                                    MyAssignment(
+                                                                        e ?? "",
+                                                                        _adssi,
+                                                                        dncList[
+                                                                            index])));
                                                       },
                                                       child: Container(
                                                         margin: const EdgeInsets
