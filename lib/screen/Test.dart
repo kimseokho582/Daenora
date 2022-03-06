@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'dart:convert' as convert;
@@ -16,12 +17,12 @@ String _loginCookie = "";
 _registerTest() async {
   final url = Uri.parse("http://52.79.251.162:80/auth/Register");
   var response = await http
-      .put(url, body: <String, String>{"uid": "test1", "nickName": "1"});
+      .put(url, body: <String, String>{"uid": "jinsung", "nickName": "js"});
   print(response.body);
 }
 
 _loginTest() async {
-  var url = Uri.http('52.79.251.162:80', '/auth/login', {"uid": "test1"});
+  var url = Uri.http('52.79.251.162:80', '/auth/login', {"uid": "jinsung"});
   var response = await http.get(url);
   String _tmpCookie = response.headers['set-cookie'] ?? '';
   var idx = _tmpCookie.indexOf(';');
@@ -36,10 +37,9 @@ _loginTest() async {
 
 _infoTest() async {
   print(_loginCookie);
-  final url =
-      Uri.http('52.79.251.162:80', '/auth/info', {'cookie': _loginCookie});
+  final url = Uri.http('52.79.251.162:80', '/auth/info');
 
-  var response = await http.get(url);
+  var response = await http.get(url, headers: {'Cookie': _loginCookie});
   if (response.statusCode == 200) {
     print(utf8.decode(response.bodyBytes));
   } else {

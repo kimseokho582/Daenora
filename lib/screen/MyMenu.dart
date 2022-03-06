@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:deanora/object/AmdinLogin.dart';
+import 'package:deanora/screen/MyNyamNickname.dart';
 import 'package:http/http.dart' as http;
 import 'package:deanora/Widgets/Tutorial.dart';
 import 'package:deanora/Widgets/Widgets.dart';
@@ -192,7 +193,7 @@ class _MyMenuState extends State<MyMenu> {
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      MyYumMain()))
+                                                      MyNyamNickName()))
                                         },
                                     "yumTitle",
                                     "냠대 - 맛집 정보",
