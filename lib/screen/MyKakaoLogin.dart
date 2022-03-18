@@ -11,21 +11,28 @@ class MyKakaoLogin extends StatefulWidget {
 
 class _MyKakaoLoginState extends State<MyKakaoLogin> {
   String kakaotoken = "";
+  var id ;
   Future<void> _loginButtonPressed() async {
     kakaotoken = await AuthCodeClient.instance.request();
     print(kakaotoken + "토큰 왔다!!");
-    _postRequest();
+
+    _getUserId();
+    // _registerTest();
   }
 
-  _postRequest() async {
-    final url = Uri.parse("http://121.162.15.236:80/register");
-    await http
-        .post(
-          url,
-          body: <String, String>{'uid': kakaotoken},
-        )
-        .then((value) => print(value.body + "여기가 통신"))
-        .catchError((e) => print(e.toString() + "오류입니다"));
+  _getUserId() async {
+    User user = await UserApi.instance.me();
+    setState(() {
+      id = user.kakaoAccount!.profile?.toJson()['nickname'].toString();
+    });
+  }
+
+  _registerTest() async {
+    final url = Uri.parse("http://52.79.251.162:80/auth/Register");
+
+    var response = await http.put(url,
+        body: <String, String>{"uid": kakaotoken, "nickName": "ksh123123"});
+    print(response.body);
   }
 
   @override
@@ -49,6 +56,7 @@ class _MyKakaoLoginState extends State<MyKakaoLogin> {
                 ),
               ),
             ),
+            Text(id.toString()),
           ],
         ),
       ),
