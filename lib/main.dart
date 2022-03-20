@@ -8,7 +8,7 @@ import 'package:page_transition/page_transition.dart';
 import 'dart:async';
 
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:kakao_flutter_sdk/all.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 
 int? isviewed;
 
@@ -18,7 +18,7 @@ Future<void> _messageHandler(RemoteMessage message) async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  KakaoContext.clientId = '0ee1a69b5061efe60731a280662c04d7';
+  KakaoSdk.init(nativeAppKey: 'dd673bf6fd4e61a745ecae2bd14a2671');
   await Firebase.initializeApp();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   FirebaseMessaging.onBackgroundMessage(_messageHandler);
@@ -57,7 +57,7 @@ class _CoverState extends State<Cover> {
   void initState() {
     super.initState();
 
-    Timer(Duration(milliseconds: 50), () {
+    Timer(Duration(milliseconds: 500), () {
       Navigator.pushReplacement(
         context,
         PageTransition(

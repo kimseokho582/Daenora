@@ -1,6 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:deanora/screen/MyMenu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 
 class MyYumMain extends StatefulWidget {
   var _nickName;
@@ -32,9 +34,9 @@ class _MyYumMainState extends State<MyYumMain> {
 
   Widget build(BuildContext context) {
     // print(_nickName);
-    String _name =
-        _nickName.substring(9, 9 + _nickName.substring(9).indexOf('"'));
-    // print(_nickName.substring(9, 9 + _nickName.substring(9).indexOf('"')));
+    String _name = _nickName;
+    // _nickName.substring(9, 9 + _nickName.substring(9).indexOf('"'));
+
     return MaterialApp(
       home: Scaffold(
         body: SafeArea(
@@ -45,7 +47,25 @@ class _MyYumMainState extends State<MyYumMain> {
               SizedBox(
                 height: 31,
               ),
-              Text("안녕하세요 $_name님"),
+              Row(
+                children: [
+                  Text("안녕하세요 $_name님"),
+                  ElevatedButton(
+                    child: Text("로그아웃"),
+                    onPressed: () async {
+                      try {
+                        await UserApi.instance.logout();
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: ((context) => MyMenu())));
+                      } catch (e) {
+                        print('로그아웃 실패 $e');
+                      }
+                    },
+                  )
+                ],
+              ),
               SizedBox(
                 height: 31,
               ),

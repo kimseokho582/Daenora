@@ -130,19 +130,20 @@ class _MyClassState extends State<MyClass> with TickerProviderStateMixin {
                                 ],
                               ),
                             ),
-                            InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => MyWeather()));
-                              },
-                              child: Container(
-                                height: 30,
-                                child: Text(
-                                    "${weatherData['weather'][0]['main']} // 전래동화...???"),
-                              ),
-                            ),
+                            //날씨
+                            // InkWell(
+                            //   onTap: () {
+                            //     Navigator.push(
+                            //         context,
+                            //         MaterialPageRoute(
+                            //             builder: (context) => MyWeather()));
+                            //   },
+                            //   child: Container(
+                            //     height: 30,
+                            //     child: Text(
+                            //         "${weatherData['weather'][0]['main']} // 전래동화...???"),
+                            //   ),
+                            // ),
                             SizedBox(
                               height: 10,
                             ),

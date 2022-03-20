@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:deanora/object/AmdinLogin.dart';
 import 'package:deanora/screen/MyKakaoLogin.dart';
 import 'package:deanora/screen/MyNyamNickname.dart';
+import 'package:deanora/screen/Test2.dart';
 import 'package:http/http.dart' as http;
 import 'package:deanora/Widgets/Tutorial.dart';
 import 'package:deanora/Widgets/Widgets.dart';
@@ -12,7 +13,8 @@ import 'package:deanora/screen/MyLogin.dart';
 import 'package:deanora/screen/MyClass.dart';
 import 'package:deanora/screen/MyYumMain.dart';
 import 'package:flutter/material.dart';
-import 'package:location/location.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
+// import 'package:location/location.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:deanora/Widgets/LoginDataCtrl.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -33,10 +35,10 @@ var anYangPrecipitationPercentDate;
 class _MyMenuState extends State<MyMenu> {
   final _openweatherkey = 'e474b467f27b8f03abdeb64c8a8e027a';
   String saved_id = "", saved_pw = "";
-  Location location = new Location();
+  // Location location = new Location();
+  // late PermissionStatus _permissionGranted;
+  // late LocationData _locationData;
   late bool _serviceEnabled;
-  late PermissionStatus _permissionGranted;
-  late LocationData _locationData;
   late FirebaseMessaging messaging;
   @override
   void initState() {
@@ -147,93 +149,46 @@ class _MyMenuState extends State<MyMenu> {
     return MaterialApp(
       home: Scaffold(
         body: SafeArea(
-          child: FutureBuilder(
-              future: mygetlocation(),
-              builder: (context, snap) {
-                if (snap.hasData) {
-                  return Container(
-                    color: Colors.black,
-                    width: windowWidth,
-                    height: windowHeight,
-                    child: Container(
-                      margin: EdgeInsets.only(top: 30, left: 30, right: 30),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("냥냠대 컨탠츠",
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 25)),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            height: windowHeight - 100,
-                            child: ListView(
-                              children: [
-                                SizedBox(
-                                  height: 18,
-                                ),
-                                contentsMenu(logintest, "nyanTitle",
-                                    "냥대 - 내 강의실", "각 과목의 과제 정보와 학사 일정을 확인"),
-                                // contentsMenu(
-                                //     () => {
-                                //           Navigator.push(
-                                //               context,
-                                //               MaterialPageRoute(
-                                //                   builder: (context) => Test()))
-                                //         },
-                                //     "nyanTitle",
-                                //     "냥대 - 내 강의실",
-                                //     "각 과목의 과제 정보와 학사일정을 확인"),
-                                SizedBox(
-                                  height: 30,
-                                ),
-                                contentsMenu(
-                                    () => {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      MyKakaoLogin()))
-                                        },
-                                    "yumTitle",
-                                    "냠대 - 맛집 정보",
-                                    "안양대생만의 숨은 꿀 맛집 정보를 공유"),
-                              ],
-                            ),
-                          ),
-                        ],
+            child: Container(
+          color: Colors.black,
+          width: windowWidth,
+          height: windowHeight,
+          child: Container(
+            margin: EdgeInsets.only(top: 30, left: 30, right: 30),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("냥냠대 컨탠츠",
+                    style: TextStyle(color: Colors.white, fontSize: 25)),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  height: windowHeight - 100,
+                  child: ListView(
+                    children: [
+                      SizedBox(
+                        height: 18,
                       ),
-                    ),
-                  );
-                } else {
-                  return Stack(
-                    children: <Widget>[
-                      Positioned(child: cover_Background()),
-                      Positioned(
-                        bottom: windowHeight / 2,
-                        left: windowWidth / 2 - windowWidth * 0.3 / 2,
-                        child: putimg(
-                            windowWidth * 0.3, windowWidth * 0.3, "coverLogo"),
+                      contentsMenu(nyanLogintest, "nyanTitle", "냥대 - 내 강의실",
+                          "각 과목의 과제 정보와 학사 일정을 확인"),
+                      SizedBox(
+                        height: 30,
                       ),
-                      Positioned(
-                        bottom:
-                            windowHeight / 2 - windowWidth * 0.3 * 0.416 - 50,
-                        left: windowWidth / 2 - windowWidth * 0.3 / 2,
-                        child: putimg(windowWidth * 0.3,
-                            windowWidth * 0.3 * 0.416, "coverTitle"),
-                      )
+                      contentsMenu(yumLogintest, "yumTitle", "냠대 - 맛집 정보",
+                          "안양대생만의 숨은 꿀 맛집 정보를 공유"),
                     ],
-                  );
-                  ;
-                }
-              }),
-        ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        )),
       ),
     );
   }
 
-  logintest() async {
+  nyanLogintest() async {
     var ctrl = new LoginDataCtrl();
     var assurance = await ctrl.loadLoginData();
     saved_id = assurance["user_id"] ?? "";
@@ -263,106 +218,131 @@ class _MyMenuState extends State<MyMenu> {
     }
   }
 
-  mygetlocation() async {
-    _serviceEnabled = await location.serviceEnabled();
-    if (!_serviceEnabled) {
-      _serviceEnabled = await location.requestService();
-      if (!_serviceEnabled) {
-        return;
+  yumLogintest() async {
+    if (await AuthApi.instance.hasToken()) {
+      User _user = await UserApi.instance.me();
+      String? _kakaoNick =
+          _user.kakaoAccount!.profile?.toJson()['nickname'].toString();
+      try {
+        print("토근 유효");
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => MyYumMain(_kakaoNick)));
+      } catch (e) {
+        if (e is KakaoException && e.isInvalidTokenError()) {
+          print('토큰 만료 $e');
+        } else {
+          print('토큰 정보 조회 실패 $e');
+        }
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => Test2()));
       }
-    }
-
-    _permissionGranted = await location.hasPermission();
-    if (_permissionGranted == PermissionStatus.denied) {
-      _permissionGranted = await location.requestPermission();
-      if (_permissionGranted != PermissionStatus.granted) {
-        return;
-      }
-    }
-
-    _locationData = await location.getLocation();
-
-    await getWeatherData(
-        lat: _locationData.latitude.toString(),
-        lon: _locationData.longitude.toString());
-
-    await getAnyangWeatherData();
-
-    await getCityNameDate(
-        lat: _locationData.latitude.toString(),
-        lon: _locationData.longitude.toString());
-    return 0;
-  }
-
-  Future<void> getWeatherData({
-    required String lat,
-    required String lon,
-  }) async {
-    var str =
-        'http://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$lon&appid=$_openweatherkey&units=metric';
-    var precipitation =
-        'https://api.openweathermap.org/data/2.5/onecall?lat=$lat&lon=$lon&exclude=current,alerts,daily,hourly&appid=$_openweatherkey';
-    var response = await http.get(Uri.parse(str));
-    var precipitationResponse = await http.get(Uri.parse(precipitation));
-
-    if (response.statusCode == 200) {
-      var data = response.body;
-      var dataJson = jsonDecode(data);
-      weatherData = dataJson; // string to json
-
-      //  print('data = $data');
-      //print('${dataJson['name']}');
     } else {
-      print('response status code = ${response.statusCode}');
-    }
-
-    if (precipitationResponse.statusCode == 200) {
-      var data = precipitationResponse.body;
-      var dataJson = jsonDecode(data);
-      precipitationPercentDate = dataJson;
-    } else {
-      print('response status code = ${precipitationResponse.statusCode}');
+      print("토큰 없음");
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => Test2()));
     }
   }
 
-  Future<void> getAnyangWeatherData() async {
-    var str =
-        'http://api.openweathermap.org/data/2.5/weather?lat=37.39169375011486&lon=126.91964184065135&appid=$_openweatherkey&units=metric';
-    var precipitation =
-        'https://api.openweathermap.org/data/2.5/onecall?lat=37.39169375011486&lon=126.91964184065135&exclude=current,alerts,daily,hourly&appid=$_openweatherkey';
-    var response = await http.get(Uri.parse(str));
-    var precipitationResponse = await http.get(Uri.parse(precipitation));
+  // mygetlocation() async {
+  // _serviceEnabled = await location.serviceEnabled();
+  // if (!_serviceEnabled) {
+  //   _serviceEnabled = await location.requestService();
+  //   if (!_serviceEnabled) {
+  //     return;
+  //   }
+  // }
 
-    if (response.statusCode == 200) {
-      var data = response.body;
-      var dataJson = jsonDecode(data);
-      anYangWeatherData = dataJson; // string to json
+  // _permissionGranted = await location.hasPermission();
+  // if (_permissionGranted == PermissionStatus.denied) {
+  //   _permissionGranted = await location.requestPermission();
+  //   if (_permissionGranted != PermissionStatus.granted) {
+  //     return;
+  //   }
+  // }
 
-      //  print('data = $data');
-      //print('${dataJson['name']}');
-    } else {
-      print('response status code = ${response.statusCode}');
-    }
+  // _locationData = await location.getLocation();
 
-    if (precipitationResponse.statusCode == 200) {
-      var data = precipitationResponse.body;
-      var dataJson = jsonDecode(data);
-      anYangPrecipitationPercentDate = dataJson;
-    } else {
-      print('response status code = ${precipitationResponse.statusCode}');
-    }
-  }
+  // await getWeatherData(
+  //     lat: _locationData.latitude.toString(),
+  //     lon: _locationData.longitude.toString());
 
-  Future<void> getCityNameDate({
-    required String lat,
-    required String lon,
-  }) async {
-    var url =
-        'https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=$lat&longitude=$lon&localityLanguage=ko';
-    var cityresponse = await http.get(Uri.parse(url));
-    var data = cityresponse.body;
+  // await getAnyangWeatherData();
 
-    var dataJson = jsonDecode(data);
-    cityNameData = dataJson;
-  }
+  // await getCityNameDate(
+  //     lat: _locationData.latitude.toString(),
+  //     lon: _locationData.longitude.toString());
+  // return 0;
+//   }
+
+//   Future<void> getWeatherData({
+//     required String lat,
+//     required String lon,
+//   }) async {
+//     var str =
+//         'http://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$lon&appid=$_openweatherkey&units=metric';
+//     var precipitation =
+//         'https://api.openweathermap.org/data/2.5/onecall?lat=$lat&lon=$lon&exclude=current,alerts,daily,hourly&appid=$_openweatherkey';
+//     var response = await http.get(Uri.parse(str));
+//     var precipitationResponse = await http.get(Uri.parse(precipitation));
+
+//     if (response.statusCode == 200) {
+//       var data = response.body;
+//       var dataJson = jsonDecode(data);
+//       weatherData = dataJson; // string to json
+
+//       //  print('data = $data');
+//       //print('${dataJson['name']}');
+//     } else {
+//       print('response status code = ${response.statusCode}');
+//     }
+
+//     if (precipitationResponse.statusCode == 200) {
+//       var data = precipitationResponse.body;
+//       var dataJson = jsonDecode(data);
+//       precipitationPercentDate = dataJson;
+//     } else {
+//       print('response status code = ${precipitationResponse.statusCode}');
+//     }
+//   }
+
+//   Future<void> getAnyangWeatherData() async {
+//     var str =
+//         'http://api.openweathermap.org/data/2.5/weather?lat=37.39169375011486&lon=126.91964184065135&appid=$_openweatherkey&units=metric';
+//     var precipitation =
+//         'https://api.openweathermap.org/data/2.5/onecall?lat=37.39169375011486&lon=126.91964184065135&exclude=current,alerts,daily,hourly&appid=$_openweatherkey';
+//     var response = await http.get(Uri.parse(str));
+//     var precipitationResponse = await http.get(Uri.parse(precipitation));
+
+//     if (response.statusCode == 200) {
+//       var data = response.body;
+//       var dataJson = jsonDecode(data);
+//       anYangWeatherData = dataJson; // string to json
+
+//       //  print('data = $data');
+//       //print('${dataJson['name']}');
+//     } else {
+//       print('response status code = ${response.statusCode}');
+//     }
+
+//     if (precipitationResponse.statusCode == 200) {
+//       var data = precipitationResponse.body;
+//       var dataJson = jsonDecode(data);
+//       anYangPrecipitationPercentDate = dataJson;
+//     } else {
+//       print('response status code = ${precipitationResponse.statusCode}');
+//     }
+//   }
+
+//   Future<void> getCityNameDate({
+//     required String lat,
+//     required String lon,
+//   }) async {
+//     var url =
+//         'https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=$lat&longitude=$lon&localityLanguage=ko';
+//     var cityresponse = await http.get(Uri.parse(url));
+//     var data = cityresponse.body;
+
+//     var dataJson = jsonDecode(data);
+//     cityNameData = dataJson;
+//   }
 }
