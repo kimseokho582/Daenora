@@ -1,7 +1,9 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:deanora/Widgets/Yumhttp.dart';
 import 'package:deanora/screen/MyMenu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:http/http.dart' as http;
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 
 class MyYumMain extends StatefulWidget {
@@ -55,12 +57,23 @@ class _MyYumMainState extends State<MyYumMain> {
                     onPressed: () async {
                       try {
                         await UserApi.instance.logout();
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: ((context) => MyMenu())));
+                        Navigator.pop(context);
                       } catch (e) {
                         print('로그아웃 실패 $e');
+                      }
+                    },
+                  ),
+                  ElevatedButton(
+                    child: Text("얌 회탈"),
+                    onPressed: () async {
+                      try {
+                        final url =
+                            Uri.parse("http://52.79.251.162/auth/secession");
+                        var response = await http.delete(url);
+                        print(response.body);
+                        Navigator.pop(context);
+                      } catch (e) {
+                        print('회탈 실패 $e');
                       }
                     },
                   )

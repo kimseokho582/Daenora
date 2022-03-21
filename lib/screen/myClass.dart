@@ -122,7 +122,7 @@ class _MyClassState extends State<MyClass> with TickerProviderStateMixin {
                                     TextSpan(
                                       text: "${user(userProps)[0].name}",
                                       style: TextStyle(
-                                          fontWeight: FontWeight.w900,
+                                          fontWeight: FontWeight.w700,
                                           fontSize: 18),
                                     ),
                                     TextSpan(text: "님")
@@ -157,7 +157,7 @@ class _MyClassState extends State<MyClass> with TickerProviderStateMixin {
                                   children: [
                                     Text("내 강의실 List",
                                         style: TextStyle(
-                                            fontWeight: FontWeight.w900,
+                                            fontWeight: FontWeight.w700,
                                             fontSize: 18)),
                                     InkWell(
                                       onTap: () {

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:deanora/Widgets/Yumhttp.dart';
 import 'package:deanora/object/AmdinLogin.dart';
 import 'package:deanora/screen/MyKakaoLogin.dart';
 import 'package:deanora/screen/MyNyamNickname.dart';
@@ -218,28 +219,51 @@ class _MyMenuState extends State<MyMenu> {
     }
   }
 
+  _login2() async {
+    await UserApi.instance.loginWithKakaoAccount();
+    // print('카카오계정으로 로그인 성공');
+    User _user = await UserApi.instance.me();
+    String _kakaoNick =
+        _user.kakaoAccount!.profile?.toJson()['nickname'].toString() ?? "";
+    var yumHttp = new Yumhttp(_kakaoNick);
+    var yumLogin = await yumHttp.yumLogin();
+    print("메인에서 토큰 있을때");
+    if (yumLogin == 200) {
+      //로그인 성공
+      var yumInfo = await yumHttp.yumInfo();
+      print(yumInfo);
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) => MyYumMain(yumInfo[0]['nickName'])),
+      );
+    } else if (yumLogin == 400) {
+      // 로그인 실패, 회원가입 으로
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => MyNyamNickName(_kakaoNick)));
+    } else {
+      // 기타 에러
+      print(yumLogin);
+    }
+  }
+
   yumLogintest() async {
     if (await AuthApi.instance.hasToken()) {
-      User _user = await UserApi.instance.me();
-      String? _kakaoNick =
-          _user.kakaoAccount!.profile?.toJson()['nickname'].toString();
       try {
-        print("토근 유효");
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => MyYumMain(_kakaoNick)));
+        _login2();
       } catch (e) {
         if (e is KakaoException && e.isInvalidTokenError()) {
           print('토큰 만료 $e');
         } else {
           print('토큰 정보 조회 실패 $e');
         }
-        Navigator.pushReplacement(
+        Navigator.push(
             context, MaterialPageRoute(builder: (context) => Test2()));
       }
     } else {
       print("토큰 없음");
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => Test2()));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => Test2()));
     }
   }
 

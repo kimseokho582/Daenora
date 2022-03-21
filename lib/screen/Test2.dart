@@ -1,5 +1,7 @@
 import 'package:deanora/Widgets/Widgets.dart';
+import 'package:deanora/Widgets/Yumhttp.dart';
 import 'package:deanora/screen/LoginTest.dart';
+import 'package:deanora/screen/MyNyamNickName.dart';
 import 'package:deanora/screen/MyYumMain.dart';
 import 'package:flutter/material.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
@@ -50,18 +52,40 @@ class _Test2State extends State<Test2> {
   //   }
   // }
 
+  _login2() async {
+    await UserApi.instance.loginWithKakaoAccount();
+    // print('카카오계정으로 로그인 성공');
+    User _user = await UserApi.instance.me();
+    String _kakaoNick =
+        _user.kakaoAccount!.profile?.toJson()['nickname'].toString() ?? "";
+    var yumHttp = new Yumhttp(_kakaoNick);
+    var yumLogin = await yumHttp.yumLogin();
+    print(yumLogin);
+    if (yumLogin == 200) {
+      //로그인 성공
+      var yumInfo = await yumHttp.yumInfo();
+      print(yumInfo);
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) => MyYumMain(yumInfo[0]['nickName'])),
+      );
+    } else if (yumLogin == 400) {
+      // 로그인 실패, 회원가입 으로
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => MyNyamNickName(_kakaoNick)));
+    } else {
+      // 기타 에러
+      print(yumLogin);
+    }
+  }
+
+  //nickname에서 email로 바꿔야함!
   _login() async {
     if (await isKakaoTalkInstalled()) {
       try {
-        await UserApi.instance.loginWithKakaoTalk();
-        // print('카카오톡으로 로그인 성공');
-        User _user = await UserApi.instance.me();
-        String? _kakaoNick =
-            _user.kakaoAccount!.profile?.toJson()['nickname'].toString();
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => MyYumMain(_kakaoNick)),
-        );
+        _login2();
       } catch (error) {
         // print('카카오톡으로 로그인 실패 $error');
 
@@ -73,30 +97,14 @@ class _Test2State extends State<Test2> {
 
         // 카카오톡에 연결된 카카오계정이 없는 경우, 카카오계정으로 로그인
         try {
-          await UserApi.instance.loginWithKakaoAccount();
-          // print('카카오계정으로 로그인 성공');
-          User _user = await UserApi.instance.me();
-          String? _kakaoNick =
-              _user.kakaoAccount!.profile?.toJson()['nickname'].toString();
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => MyYumMain(_kakaoNick)),
-          );
+          _login2();
         } catch (error) {
           // print('카카오계정으로 로그인 실패 $error');
         }
       }
     } else {
       try {
-        await UserApi.instance.loginWithKakaoAccount();
-        // print('카카오계정으로 로그인 성공');
-        User _user = await UserApi.instance.me();
-        String? _kakaoNick =
-            _user.kakaoAccount!.profile?.toJson()['nickname'].toString();
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => MyYumMain(_kakaoNick)),
-        );
+        _login2();
       } catch (error) {
         // print('카카오계정으로 로그인 실패 $error');
       }
@@ -126,12 +134,37 @@ class _Test2State extends State<Test2> {
               height: 90,
             ),
             Center(
-              child: Container(
-                child: InkWell(
-                  onTap: _login,
-                  child: Image.asset(
-                    'assets/images/kakaologinbutton.png',
-                    height: 100.0,
+              child: ElevatedButton(
+                onPressed: _login,
+                style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50))),
+                child: Ink(
+                  decoration: BoxDecoration(
+                      color: Color(0xff794cdd),
+                      borderRadius: BorderRadius.circular(50)),
+                  child: Container(
+                    width: 270,
+                    height: 60,
+                    alignment: Alignment.center,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          '카카오 로그인하기  ',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w800,
+                            fontFamily: 'NanumSquare_acB',
+                          ),
+                        ),
+                        Image.asset(
+                          'assets/images/kakaoLogo.png',
+                          width: 16,
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),

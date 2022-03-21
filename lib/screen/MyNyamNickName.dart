@@ -1,17 +1,13 @@
-import 'dart:convert';
-
-import 'package:blinking_text/blinking_text.dart';
+import 'package:deanora/Widgets/Yumhttp.dart';
 import 'package:deanora/screen/MyYumMain.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:http/http.dart' as http;
-import 'package:page_transition/page_transition.dart';
 
 class MyNyamNickName extends StatefulWidget {
-  const MyNyamNickName({Key? key}) : super(key: key);
+  var nickName;
+  MyNyamNickName(this.nickName);
 
   @override
-  _MyNyamNickNameState createState() => _MyNyamNickNameState();
+  _MyNyamNickNameState createState() => _MyNyamNickNameState(this.nickName);
 }
 
 class _MyNyamNickNameState extends State<MyNyamNickName>
@@ -21,6 +17,9 @@ class _MyNyamNickNameState extends State<MyNyamNickName>
   String _loginCookie = "";
   bool _visible = false;
   late AnimationController _animationController;
+  var nickName;
+  _MyNyamNickNameState(this.nickName);
+  @override
   void initState() {
     super.initState();
     _animationController = new AnimationController(
@@ -88,79 +87,17 @@ class _MyNyamNickNameState extends State<MyNyamNickName>
                 Center(
                   child: ElevatedButton(
                     onPressed: () async {
-                      FocusScope.of(context).requestFocus(FocusNode());
-
-                      var url = Uri.http('52.79.251.162:80', '/auth/login',
-                          {"uid": _nickNameController.text});
-                      var response = await http.get(url);
-                      String _tmpCookie = response.headers['set-cookie'] ?? '';
-                      var idx = _tmpCookie.indexOf(';');
-                      _loginCookie = (idx == -1)
-                          ? _tmpCookie
-                          : _tmpCookie.substring(0, idx);
-                      if (response.body == "login") {
-                        print("위");
-                        final url = Uri.http('52.79.251.162:80', '/auth/info');
-                        var responsse = await http
-                            .get(url, headers: {'Cookie': _loginCookie});
-                        print(utf8.decode(responsse.bodyBytes));
-
-                        Navigator.push(
+                      var yumHttp = new Yumhttp(nickName);
+                      try {
+                        var yumRegister =
+                            await yumHttp.yumRegister(_nickNameController.text);
+                        Navigator.pushReplacement(
                           context,
-                          PageTransition(
-                              child:
-                                  MyYumMain(utf8.decode(responsse.bodyBytes)),
-                              type: PageTransitionType.fade),
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  MyYumMain(_nickNameController.text)),
                         );
-                      } else {
-                        final url =
-                            Uri.parse("http://52.79.251.162:80/auth/Register");
-                        var response =
-                            await http.put(url, body: <String, String>{
-                          "uid": _nickNameController.text,
-                          "nickName": _nickNameController.text,
-                        });
-                        print(response.statusCode);
-                        if (response.statusCode != 200) {
-                          if (!_visible) {
-                            _animationController.forward();
-                            _visible = !_visible;
-                          } else {
-                            _animationController.reverse();
-                            Future.delayed(const Duration(milliseconds: 500),
-                                () {
-                              _animationController.forward();
-                            });
-                          }
-                        } else {
-                          var url = Uri.http('52.79.251.162:80', '/auth/login',
-                              {"uid": _nickNameController.text});
-                          var response = await http.get(url);
-                          String _tmpCookie =
-                              response.headers['set-cookie'] ?? '';
-                          var idx = _tmpCookie.indexOf(';');
-                          _loginCookie = (idx == -1)
-                              ? _tmpCookie
-                              : _tmpCookie.substring(0, idx);
-                          if (response.statusCode == 200) {
-                            print("아래");
-                            final url =
-                                Uri.http('52.79.251.162:80', '/auth/info');
-                            var response = await http
-                                .get(url, headers: {'Cookie': _loginCookie});
-                            Navigator.push(
-                              context,
-                              PageTransition(
-                                  child: MyYumMain(
-                                      utf8.decode(response.bodyBytes)),
-                                  type: PageTransitionType.fade),
-                            );
-                          } else {
-                            print(
-                                'Request failed with status: ${response.statusCode}.');
-                          }
-                        }
-                      }
+                      } catch (e) {}
                     },
                     style: ElevatedButton.styleFrom(
                         padding: EdgeInsets.zero,
