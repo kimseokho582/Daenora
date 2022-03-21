@@ -233,13 +233,12 @@ class _MyMenuState extends State<MyMenu> {
         } else {
           print('토큰 정보 조회 실패 $e');
         }
-        Navigator.pushReplacement(
+        Navigator.push(
             context, MaterialPageRoute(builder: (context) => Test2()));
       }
     } else {
       print("토큰 없음");
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => Test2()));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => Test2()));
     }
   }
 
