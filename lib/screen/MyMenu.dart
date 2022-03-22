@@ -219,51 +219,77 @@ class _MyMenuState extends State<MyMenu> {
     }
   }
 
-  _login2() async {
-    await UserApi.instance.loginWithKakaoAccount();
-    // print('카카오계정으로 로그인 성공');
-    User _user = await UserApi.instance.me();
-    String _kakaoNick =
-        _user.kakaoAccount!.profile?.toJson()['nickname'].toString() ?? "";
-    var yumHttp = new Yumhttp(_kakaoNick);
-    var yumLogin = await yumHttp.yumLogin();
-    print("메인에서 토큰 있을때");
-    if (yumLogin == 200) {
-      //로그인 성공
-      var yumInfo = await yumHttp.yumInfo();
-      print(yumInfo);
+  // _login2() async {
+  //   await UserApi.instance.loginWithKakaoAccount();
+  //   // print('카카오계정으로 로그인 성공');
+  //   User _user = await UserApi.instance.me();
+  //   String _email =
+  //       _user.kakaoAccount!.profile?.toJson()['nickname'].toString() ?? "";
+  //   var yumHttp = new Yumhttp(_email);
+  //   var yumLogin = await yumHttp.yumLogin();
+  //   if (yumLogin == 200) {
+  //     //로그인 성공
+  //     var yumInfo = await yumHttp.yumInfo();
+  //     print(yumInfo);
 
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-            builder: (context) => MyYumMain(yumInfo[0]['nickName'])),
-      );
-    } else if (yumLogin == 400) {
-      // 로그인 실패, 회원가입 으로
-      Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (context) => MyNyamNickName(_kakaoNick)));
-    } else {
-      // 기타 에러
-      print(yumLogin);
-    }
-  }
+  //     Navigator.pushReplacement(
+  //       context,
+  //       MaterialPageRoute(
+  //           builder: (context) => MyYumMain(yumInfo[0]['nickName'])),
+  //     );
+  //   } else if (yumLogin == 400) {
+  //     // 로그인 실패, 회원가입 으로
+  //     Navigator.pushReplacement(context,
+  //         MaterialPageRoute(builder: (context) => MyNyamNickName(_email)));
+  //   } else {
+  //     // 기타 에러
+  //     print(yumLogin);
+  //   }
+  // }
 
   yumLogintest() async {
     if (await AuthApi.instance.hasToken()) {
+      print("여기는 바로 가능");
       try {
-        _login2();
+        // await UserApi.instance.loginWithKakaoAccount();
+        print('카카오계정으로 로그인 성공');
+        User _user = await UserApi.instance.me();
+        String _email =
+            _user.kakaoAccount!.profile?.toJson()['nickname'].toString() ?? "";
+        var yumHttp = new Yumhttp(_email);
+        var yumLogin = await yumHttp.yumLogin();
+        if (yumLogin == 200) {
+          //로그인 성공
+          var yumInfo = await yumHttp.yumInfo();
+          print(yumInfo);
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    MyYumMain(yumInfo[0]["nickName"], _email)),
+          );
+        } else if (yumLogin == 400) {
+          // 로그인 실패, 회원가입 으로
+          print("닉네임 설정 해야함 토큰은 있음");
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => MyNyamNickName(_email)));
+        } else {
+          // 기타 에러
+          print(yumLogin);
+        }
       } catch (e) {
         if (e is KakaoException && e.isInvalidTokenError()) {
           print('토큰 만료 $e');
         } else {
           print('토큰 정보 조회 실패 $e');
         }
-        Navigator.push(
+        Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => Test2()));
       }
     } else {
       print("토큰 없음");
-      Navigator.push(context, MaterialPageRoute(builder: (context) => Test2()));
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => Test2()));
     }
   }
 

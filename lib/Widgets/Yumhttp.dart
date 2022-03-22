@@ -8,17 +8,18 @@ class Yumhttp {
   String _uid;
   Yumhttp(this._uid);
 
-  yumRegister(_nickName) async {
-    final url = Uri.parse("http://52.79.251.162:80/auth/Register");
+  Future<int> yumRegister(_nickName) async {
+    final url = Uri.parse("http://52.79.251.162:80/auth/register");
     var response = await http
         .put(url, body: <String, String>{"uid": _uid, "nickName": _nickName});
-    print(response.body);
+    // print(response.body);
+    return response.statusCode;
   }
 
   yumDelete() async {
-    final url = Uri.parse("http://52.79.251.162/auth/secession");
-    var response = await http.delete(url);
-    print(response.body);
+    final url = Uri.http('52.79.251.162:80', '/auth/secession');
+    var response = await http.delete(url, headers: {'Cookie': _cookie});
+    // print(response.body);
   }
 
   Future<int> yumLogin() async {

@@ -3,11 +3,11 @@ import 'package:deanora/screen/MyYumMain.dart';
 import 'package:flutter/material.dart';
 
 class MyNyamNickName extends StatefulWidget {
-  var nickName;
-  MyNyamNickName(this.nickName);
+  var _email;
+  MyNyamNickName(this._email);
 
   @override
-  _MyNyamNickNameState createState() => _MyNyamNickNameState(this.nickName);
+  _MyNyamNickNameState createState() => _MyNyamNickNameState(this._email);
 }
 
 class _MyNyamNickNameState extends State<MyNyamNickName>
@@ -17,8 +17,10 @@ class _MyNyamNickNameState extends State<MyNyamNickName>
   String _loginCookie = "";
   bool _visible = false;
   late AnimationController _animationController;
-  var nickName;
-  _MyNyamNickNameState(this.nickName);
+
+  var _email;
+  String errorMessage = "";
+  _MyNyamNickNameState(this._email);
   @override
   void initState() {
     super.initState();
@@ -87,16 +89,53 @@ class _MyNyamNickNameState extends State<MyNyamNickName>
                 Center(
                   child: ElevatedButton(
                     onPressed: () async {
-                      var yumHttp = new Yumhttp(nickName);
                       try {
-                        var yumRegister =
-                            await yumHttp.yumRegister(_nickNameController.text);
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  MyYumMain(_nickNameController.text)),
-                        );
+                        if (_nickNameController.text == "") {
+                          setState(() {
+                            errorMessage = "닉네임을 입력해주세요";
+                          });
+                          if (!_visible) {
+                            _animationController.forward();
+                            _visible = !_visible;
+                          } else {
+                            _animationController.reverse();
+                            Future.delayed(const Duration(milliseconds: 500),
+                                () {
+                              _animationController.forward();
+                            });
+                          }
+                        } else {
+                          var yumHttp = new Yumhttp(_email);
+                          print(_email);
+                          var yumRegister = await yumHttp
+                              .yumRegister(_nickNameController.text);
+                          print(yumRegister);
+                          if (yumRegister == 200) {
+                            var yumLogin = await yumHttp.yumLogin();
+                            var yumInfo = await yumHttp.yumInfo();
+                            print(yumInfo[0]["nickName"]);
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MyYumMain(
+                                      yumInfo[0]["nickName"], _email)),
+                            );
+                          } else {
+                            setState(() {
+                              errorMessage = "사용중인 닉네임입니다";
+                            });
+                            if (!_visible) {
+                              _animationController.forward();
+                              _visible = !_visible;
+                            } else {
+                              _animationController.reverse();
+                              Future.delayed(const Duration(milliseconds: 500),
+                                  () {
+                                _animationController.forward();
+                              });
+                            }
+                          }
+                        }
                       } catch (e) {}
                     },
                     style: ElevatedButton.styleFrom(
@@ -132,7 +171,7 @@ class _MyNyamNickNameState extends State<MyNyamNickName>
                   opacity: _animationController,
                   child: Center(
                       child: Text(
-                    "사용중인 닉네임입니다",
+                    errorMessage,
                     style: TextStyle(
                         color: Colors.red,
                         fontWeight: FontWeight.w600,

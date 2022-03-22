@@ -7,8 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 
 class Test2 extends StatefulWidget {
-  const Test2({Key? key}) : super(key: key);
-
   @override
   _Test2State createState() => _Test2State();
 }
@@ -56,25 +54,26 @@ class _Test2State extends State<Test2> {
     await UserApi.instance.loginWithKakaoAccount();
     // print('카카오계정으로 로그인 성공');
     User _user = await UserApi.instance.me();
-    String _kakaoNick =
-        _user.kakaoAccount!.profile?.toJson()['nickname'].toString() ?? "";
-    var yumHttp = new Yumhttp(_kakaoNick);
+    String _email =
+        _user.kakaoAccount!.profile?.toJson()['nickname'].toString() ??
+            ""; //이메일로 바꿔야함
+    var yumHttp = new Yumhttp(_email);
     var yumLogin = await yumHttp.yumLogin();
     print(yumLogin);
     if (yumLogin == 200) {
       //로그인 성공
       var yumInfo = await yumHttp.yumInfo();
-      print(yumInfo);
+      print(yumInfo[0]["nickName"]);
 
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-            builder: (context) => MyYumMain(yumInfo[0]['nickName'])),
+            builder: (context) => MyYumMain(yumInfo[0]["nickName"], _email)),
       );
     } else if (yumLogin == 400) {
       // 로그인 실패, 회원가입 으로
       Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (context) => MyNyamNickName(_kakaoNick)));
+          MaterialPageRoute(builder: (context) => MyNyamNickName(_email)));
     } else {
       // 기타 에러
       print(yumLogin);
