@@ -149,6 +149,7 @@ class _MyMenuState extends State<MyMenu> {
 
     return MaterialApp(
       home: Scaffold(
+        resizeToAvoidBottomInset: false,
         body: SafeArea(
             child: Container(
           color: Colors.black,
@@ -256,13 +257,13 @@ class _MyMenuState extends State<MyMenu> {
         User _user = await UserApi.instance.me();
         String _email =
             _user.kakaoAccount!.profile?.toJson()['nickname'].toString() ?? "";
-        var yumHttp = new Yumhttp(_email);
+        var yumHttp = new YumUserhttp(_email);
         var yumLogin = await yumHttp.yumLogin();
         if (yumLogin == 200) {
           //로그인 성공
           var yumInfo = await yumHttp.yumInfo();
           print(yumInfo);
-          Navigator.pushReplacement(
+          Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) =>
@@ -288,8 +289,7 @@ class _MyMenuState extends State<MyMenu> {
       }
     } else {
       print("토큰 없음");
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => Test2()));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => Test2()));
     }
   }
 

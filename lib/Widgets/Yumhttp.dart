@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
-class Yumhttp {
+class YumUserhttp {
   late String _cookie;
   String _uid;
-  Yumhttp(this._uid);
+  YumUserhttp(this._uid);
 
   Future<int> yumRegister(_nickName) async {
     final url = Uri.parse("http://52.79.251.162:80/auth/register");
@@ -20,6 +20,13 @@ class Yumhttp {
     final url = Uri.http('52.79.251.162:80', '/auth/secession');
     var response = await http.delete(url, headers: {'Cookie': _cookie});
     // print(response.body);
+  }
+
+  Future<int> yumUpdateNickName(_nickName) async {
+    final url = Uri.http(
+        '52.79.251.162:80', '/auth/updateNickName', {"nickName": _nickName});
+    var response = await http.post(url, headers: {'Cookie': _cookie});
+    return response.statusCode;
   }
 
   Future<int> yumLogin() async {
@@ -52,3 +59,5 @@ class Yumhttp {
     return _list;
   }
 }
+
+class YumStoreInfo {}

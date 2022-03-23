@@ -97,6 +97,9 @@ flutter:
     - family: NanumSquare_acB
       fonts:
         - asset: fonts/NanumSquare_acB.ttf
+    - family: NotoSansKR_Regular
+      fonts:
+        - asset: fonts/NotoSansKR-Regular.otf
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

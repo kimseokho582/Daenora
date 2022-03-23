@@ -19,7 +19,7 @@ class _MyYumMainState extends State<MyYumMain> {
   int _top5Index = 0;
   var _nickName;
   var _email;
-
+  final _updateNickNameController = TextEditingController();
   _MyYumMainState(this._nickName, this._email);
   @override
   void initState() {
@@ -41,9 +41,10 @@ class _MyYumMainState extends State<MyYumMain> {
 
     // _nickName.substring(9, 9 + _nickName.substring(9).indexOf('"'));
     print('$_email asdasdsad');
-    var yumHttp = new Yumhttp(_email);
+    var yumHttp = new YumUserhttp(_email);
     return MaterialApp(
       home: Scaffold(
+        resizeToAvoidBottomInset: false,
         body: SafeArea(
           child: FutureBuilder(
             future: yumHttp.yumLogin(),
@@ -100,6 +101,23 @@ class _MyYumMainState extends State<MyYumMain> {
                               },
                             ),
                           ],
+                        ),
+                        TextField(
+                          controller: _updateNickNameController,
+                        ),
+                        ElevatedButton(
+                          child: Text("닉네임변경"),
+                          onPressed: () async {
+                            try {
+                              var yumLogin = await yumHttp.yumLogin();
+                              var yumUpdateNickName =
+                                  await yumHttp.yumUpdateNickName(
+                                      _updateNickNameController.text);
+                              print(yumUpdateNickName);
+                            } catch (e) {
+                              print('회원정보 실패 $e');
+                            }
+                          },
                         ),
                         SizedBox(
                           height: 31,

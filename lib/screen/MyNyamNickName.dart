@@ -105,14 +105,14 @@ class _MyNyamNickNameState extends State<MyNyamNickName>
                             });
                           }
                         } else {
-                          var yumHttp = new Yumhttp(_email);
+                          var yumUserHttp = new YumUserhttp(_email);
                           print(_email);
-                          var yumRegister = await yumHttp
+                          var yumRegister = await yumUserHttp
                               .yumRegister(_nickNameController.text);
                           print(yumRegister);
                           if (yumRegister == 200) {
-                            var yumLogin = await yumHttp.yumLogin();
-                            var yumInfo = await yumHttp.yumInfo();
+                            var yumLogin = await yumUserHttp.yumLogin();
+                            var yumInfo = await yumUserHttp.yumInfo();
                             print(yumInfo[0]["nickName"]);
                             Navigator.pushReplacement(
                               context,

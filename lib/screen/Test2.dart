@@ -57,12 +57,12 @@ class _Test2State extends State<Test2> {
     String _email =
         _user.kakaoAccount!.profile?.toJson()['nickname'].toString() ??
             ""; //이메일로 바꿔야함
-    var yumHttp = new Yumhttp(_email);
-    var yumLogin = await yumHttp.yumLogin();
+    var yumUserHttp = new YumUserhttp(_email);
+    var yumLogin = await yumUserHttp.yumLogin();
     print(yumLogin);
     if (yumLogin == 200) {
       //로그인 성공
-      var yumInfo = await yumHttp.yumInfo();
+      var yumInfo = await yumUserHttp.yumInfo();
       print(yumInfo[0]["nickName"]);
 
       Navigator.pushReplacement(
@@ -121,16 +121,36 @@ class _Test2State extends State<Test2> {
         backgroundColor: Colors.transparent,
         body: Column(
           children: [
-            SizedBox(
-              height: 140,
+            SafeArea(
+              child: Container(
+                height: 30,
+                margin: const EdgeInsets.only(left: 25, top: 10),
+                alignment: Alignment.topLeft,
+                child: GestureDetector(
+                    onTap: () => {
+                          Navigator.pop(context),
+                        },
+                    child: Icon(
+                      Icons.arrow_back,
+                      color: Colors.white,
+                      size: 20,
+                    )),
+              ),
+            ),
+            Flexible(
+              child: SizedBox(
+                height: 90,
+              ),
             ),
             putimg(127.0, 127.0, "coverLogo"),
             SizedBox(
-              height: 20,
+              height: 19,
             ),
             putimg(127.0, 127.0, "kakaologintitle"),
-            SizedBox(
-              height: 90,
+            Flexible(
+              child: SizedBox(
+                height: 80,
+              ),
             ),
             Center(
               child: ElevatedButton(
@@ -151,7 +171,7 @@ class _Test2State extends State<Test2> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          '카카오 로그인하기  ',
+                          '카카오 로그인하기   ',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w800,
@@ -161,12 +181,26 @@ class _Test2State extends State<Test2> {
                         Image.asset(
                           'assets/images/kakaoLogo.png',
                           width: 16,
-                        )
+                        ),
                       ],
                     ),
                   ),
                 ),
               ),
+            ),
+            Flexible(
+              child: SizedBox(
+                height: 20,
+              ),
+            ),
+            Text(
+              "더욱 다양한 서비스 사용을 위해\n 냥 기능을 활성화해주세요 :)",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w500,
+                  fontFamily: "NotoSansKR_Regular",
+                  fontSize: 13),
             ),
           ],
         ),
