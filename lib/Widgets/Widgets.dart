@@ -85,12 +85,14 @@ Container loginTextF(_controller, hintext, icon, obscure) {
 
 /// [props] crawl.crawlClasses(id.text, pw.text) //classPrpps
 List classes(props) {
-  List classes = [];
+  List testclasses = [];
   props
-      .map((x) =>
-          {classes.add(Lecture(x["className"], x["profName"], x["classId"]))})
+      .map((x) => {
+            testclasses
+                .add(Lecture(x["className"], x["profName"], x["classId"]))
+          })
       .toList();
-  return classes;
+  return testclasses;
 }
 
 /// [props] crawl.crawlUser(id.text, pw.text) //userPrpps

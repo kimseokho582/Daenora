@@ -119,6 +119,20 @@ class _MyYumMainState extends State<MyYumMain> {
                             }
                           },
                         ),
+                        ElevatedButton(
+                          child: Text("링크 끊기"),
+                          onPressed: () async {
+                            try {
+                              await UserApi.instance.unlink();
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => MyMenu()));
+                            } catch (e) {
+                              print('로그아웃 실패 $e');
+                            }
+                          },
+                        ),
                         SizedBox(
                           height: 31,
                         ),

@@ -14,19 +14,17 @@ class _MyNyamNickNameState extends State<MyNyamNickName>
     with SingleTickerProviderStateMixin {
   final _nickNameController = TextEditingController();
   late FocusNode myFocusNode;
-  String _loginCookie = "";
   bool _visible = false;
   late AnimationController _animationController;
-
   var _email;
   String errorMessage = "";
+
   _MyNyamNickNameState(this._email);
   @override
   void initState() {
     super.initState();
     _animationController = new AnimationController(
         vsync: this, duration: Duration(milliseconds: 300));
-    // _animationController.repeat(reverse: true, period: Duration(seconds: 1));
     myFocusNode = FocusNode();
   }
 
@@ -109,7 +107,7 @@ class _MyNyamNickNameState extends State<MyNyamNickName>
                           print(_email);
                           var yumRegister = await yumUserHttp
                               .yumRegister(_nickNameController.text);
-                          print(yumRegister);
+                          print("$yumRegister  asdsdads");
                           if (yumRegister == 200) {
                             var yumLogin = await yumUserHttp.yumLogin();
                             var yumInfo = await yumUserHttp.yumInfo();

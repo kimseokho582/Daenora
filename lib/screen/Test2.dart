@@ -4,6 +4,7 @@ import 'package:deanora/screen/LoginTest.dart';
 import 'package:deanora/screen/MyNyamNickName.dart';
 import 'package:deanora/screen/MyYumMain.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 
 class Test2 extends StatefulWidget {
@@ -51,64 +52,81 @@ class _Test2State extends State<Test2> {
   // }
 
   _login2() async {
-    await UserApi.instance.loginWithKakaoAccount();
+    try {
+      _isKakaoInstalled
+          ? await UserApi.instance.loginWithKakaoTalk()
+          : await UserApi.instance.loginWithKakaoAccount();
+    } catch (e) {
+      // 사용자가 카카오톡 설치 후 디바이스 권한 요청 화면에서 로그인을 취소한 경우,
+      // 의도적인 로그인 취소로 보고 카카오계정으로 로그인 시도 없이 로그인 취소로 처리 (예: 뒤로 가기)
+      if (e is PlatformException && e.code == 'CANCELED') {
+        return;
+      }
+    }
     // print('카카오계정으로 로그인 성공');
-    User _user = await UserApi.instance.me();
-    String _email =
-        _user.kakaoAccount!.profile?.toJson()['nickname'].toString() ??
-            ""; //이메일로 바꿔야함
-    var yumUserHttp = new YumUserhttp(_email);
-    var yumLogin = await yumUserHttp.yumLogin();
-    print(yumLogin);
-    if (yumLogin == 200) {
-      //로그인 성공
-      var yumInfo = await yumUserHttp.yumInfo();
-      print(yumInfo[0]["nickName"]);
 
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-            builder: (context) => MyYumMain(yumInfo[0]["nickName"], _email)),
-      );
-    } else if (yumLogin == 400) {
-      // 로그인 실패, 회원가입 으로
-      Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (context) => MyNyamNickName(_email)));
-    } else {
-      // 기타 에러
+    try {
+      User _user = await UserApi.instance.me();
+      String _email =
+          _user.kakaoAccount!.profile?.toJson()['nickname'].toString() ??
+              ""; //이메일로 바꿔야함
+      var yumUserHttp = new YumUserhttp(_email);
+      var yumLogin = await yumUserHttp.yumLogin();
       print(yumLogin);
+      if (yumLogin == 200) {
+        //로그인 성공
+        var yumInfo = await yumUserHttp.yumInfo();
+        print(yumInfo[0]["nickName"]);
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => MyYumMain(yumInfo[0]["nickName"], _email)),
+        );
+      } else if (yumLogin == 400) {
+        // 로그인 실패, 회원가입 으로
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => MyNyamNickName(_email)));
+      } else {
+        // 기타 에러
+        print(yumLogin);
+      }
+    } catch (e) {
+      if (e is PlatformException && e.code == 'CANCELED') {
+        return;
+      }
     }
   }
 
   //nickname에서 email로 바꿔야함!
-  _login() async {
-    if (await isKakaoTalkInstalled()) {
-      try {
-        _login2();
-      } catch (error) {
-        // print('카카오톡으로 로그인 실패 $error');
+  // _login() async {
+  //   if (await isKakaoTalkInstalled()) {
+  //     try {
+  //       _login2();
+  //     } catch (error) {
+  //       print('카카오톡으로 로그인 실패 $error');
 
-        // 사용자가 카카오톡 설치 후 디바이스 권한 요청 화면에서 로그인을 취소한 경우,
-        // 의도적인 로그인 취소로 보고 카카오계정으로 로그인 시도 없이 로그인 취소로 처리 (예: 뒤로 가기)
-        // if (error is PlatformException && error.code == 'CANCELED') {
-        //     return;
-        // }
+  //       // 사용자가 카카오톡 설치 후 디바이스 권한 요청 화면에서 로그인을 취소한 경우,
+  //       // 의도적인 로그인 취소로 보고 카카오계정으로 로그인 시도 없이 로그인 취소로 처리 (예: 뒤로 가기)
+  //       if (error is PlatformException && error.code == 'CANCELED') {
+  //         return;
+  //       }
 
-        // 카카오톡에 연결된 카카오계정이 없는 경우, 카카오계정으로 로그인
-        try {
-          _login2();
-        } catch (error) {
-          // print('카카오계정으로 로그인 실패 $error');
-        }
-      }
-    } else {
-      try {
-        _login2();
-      } catch (error) {
-        // print('카카오계정으로 로그인 실패 $error');
-      }
-    }
-  }
+  //       // 카카오톡에 연결된 카카오계정이 없는 경우, 카카오계정으로 로그인
+  //       try {
+  //         _login2();
+  //       } catch (error) {
+  //         // print('카카오계정으로 로그인 실패 $error');
+  //       }
+  //     }
+  //   } else {
+  //     try {
+  //       _login2();
+  //     } catch (error) {
+  //       // print('카카오계정으로 로그인 실패 $error');
+  //     }
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -154,7 +172,7 @@ class _Test2State extends State<Test2> {
             ),
             Center(
               child: ElevatedButton(
-                onPressed: _login,
+                onPressed: _login2,
                 style: ElevatedButton.styleFrom(
                     padding: EdgeInsets.zero,
                     shape: RoundedRectangleBorder(
@@ -179,7 +197,7 @@ class _Test2State extends State<Test2> {
                           ),
                         ),
                         Image.asset(
-                          'assets/images/kakaoLogo.png',
+                          'assets/images/kakaologo.png',
                           width: 16,
                         ),
                       ],

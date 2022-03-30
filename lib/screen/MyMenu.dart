@@ -1,8 +1,8 @@
-import 'dart:convert';
 import 'package:deanora/Widgets/Yumhttp.dart';
 import 'package:deanora/object/AmdinLogin.dart';
 import 'package:deanora/screen/MyKakaoLogin.dart';
 import 'package:deanora/screen/MyNyamNickname.dart';
+import 'package:deanora/screen/MyYumMainTest.dart';
 import 'package:deanora/screen/Test2.dart';
 import 'package:http/http.dart' as http;
 import 'package:deanora/Widgets/Tutorial.dart';
@@ -18,6 +18,7 @@ import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 // import 'package:location/location.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:deanora/Widgets/LoginDataCtrl.dart';
+import 'package:provider/provider.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 class MyMenu extends StatefulWidget {
@@ -147,45 +148,66 @@ class _MyMenuState extends State<MyMenu> {
       );
     }
 
-    return MaterialApp(
-      home: Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: SafeArea(
+    return Provider<Crawl>(
+      create: (_) => Crawl("2018H1109", "zky78nt@cf!"),
+      child: MaterialApp(
+        home: Scaffold(
+          resizeToAvoidBottomInset: false,
+          body: SafeArea(
+              child: Container(
+            color: Colors.black,
+            width: windowWidth,
+            height: windowHeight,
             child: Container(
-          color: Colors.black,
-          width: windowWidth,
-          height: windowHeight,
-          child: Container(
-            margin: EdgeInsets.only(top: 30, left: 30, right: 30),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("냥냠대 컨탠츠",
-                    style: TextStyle(color: Colors.white, fontSize: 25)),
-                SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  height: windowHeight - 100,
-                  child: ListView(
-                    children: [
-                      SizedBox(
-                        height: 18,
-                      ),
-                      contentsMenu(nyanLogintest, "nyanTitle", "냥대 - 내 강의실",
-                          "각 과목의 과제 정보와 학사 일정을 확인"),
-                      SizedBox(
-                        height: 30,
-                      ),
-                      contentsMenu(yumLogintest, "yumTitle", "냠대 - 맛집 정보",
-                          "안양대생만의 숨은 꿀 맛집 정보를 공유"),
-                    ],
+              margin: EdgeInsets.only(top: 30, left: 30, right: 30),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("냥냠대 컨탠츠",
+                      style: TextStyle(color: Colors.white, fontSize: 25)),
+                  SizedBox(
+                    height: 10,
                   ),
-                ),
-              ],
+                  Container(
+                    height: windowHeight - 100,
+                    child: ListView(
+                      children: [
+                        SizedBox(
+                          height: 18,
+                        ),
+                        ElevatedButton(
+                          onPressed: () async {
+                            await context.read<Crawl>().crawlUserTest();
+                            print(Provider.of<Crawl>(context, listen: false)
+                                .providerUser);
+                          },
+                          child: Text(""),
+                        ),
+                        contentsMenu(nyanLogintest, "nyanTitle", "냥대 - 내 강의실",
+                            "각 과목의 과제 정보와 학사 일정을 확인"),
+                        SizedBox(
+                          height: 30,
+                        ),
+                        // contentsMenu(
+                        //     () => {
+                        //           Navigator.push(
+                        //               context,
+                        //               MaterialPageRoute(
+                        //                   builder: (context) => MyYumMainTest()))
+                        //         },
+                        //     "yumTitle",
+                        //     "냠대 - 맛집 정보",
+                        //     "안양대생만의 숨은 꿀 맛집 정보를 공유"),
+                        contentsMenu(yumLogintest, "yumTitle", "냠대 - 맛집 정보",
+                            "안양대생만의 숨은 꿀 맛집 정보를 공유"),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        )),
+          )),
+        ),
       ),
     );
   }
@@ -197,8 +219,9 @@ class _MyMenuState extends State<MyMenu> {
     saved_pw = assurance["user_pw"] ?? "";
     var crawl = new Crawl(saved_id, saved_pw);
     try {
-      var classes = await crawl.crawlClasses();
       var user = await crawl.crawlUser();
+      var classes = await crawl.crawlClasses();
+
       print("Saved_login");
       Navigator.push(
           context,

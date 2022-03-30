@@ -1,8 +1,10 @@
+import 'package:deanora/object/user.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' show parse;
 import 'customException.dart';
 
-class Crawl {
+class Crawl with ChangeNotifier {
   String _cookie = '';
   String _id, _pw;
 
@@ -42,10 +44,7 @@ class Crawl {
     var loginBtn = document.getElementById('login_popup');
     var element = document.querySelector('.login_info > ul > li:last-child');
 
-    if (loginBtn != null) {
-      this._cookie = '';
-      throw new CustomException(301, 'Cookie has Expired');
-    }
+    if (loginBtn != null) throw new CustomException(301, 'Cookie has Expired1');
 
     String userData = element!.text;
     List<String> data = userData.split(' ');
@@ -57,6 +56,33 @@ class Crawl {
     return user;
   }
 
+  late User _providerUser;
+  User get providerUser => _providerUser;
+
+  Future<void> crawlUserTest() async {
+    if (this._cookie == '') await _login();
+
+    final url = 'http://cyber.anyang.ac.kr/MMain.do?cmd=viewIndexPage';
+    final response = await _getResponse('GET', url, {'cookie': this._cookie});
+    final document = parse(await response.stream.bytesToString());
+
+    var loginBtn = document.getElementById('login_popup');
+    var element = document.querySelector('.login_info > ul > li:last-child');
+
+    if (loginBtn != null) throw new CustomException(301, 'Cookie has Expired1');
+
+    String userData = element!.text;
+    List<String> data = userData.split(' ');
+    Map<String, String> user = {
+      'name': data[0],
+      'studentId': data[1].substring(1, data[1].length - 1)
+    };
+    _providerUser = (User(user["name"]!, user["studentId"]!));
+    notifyListeners();
+  }
+
+  @override
+  String toString() => '$providerUser';
   Future<List<Map<String, String>>> crawlClasses() async {
     if (this._cookie == '') await _login();
 
@@ -68,10 +94,7 @@ class Crawl {
     var options = document.getElementsByTagName('option');
     List<Map<String, String>> classes = [];
 
-    if (loginBtn != null) {
-      this._cookie = '';
-      throw new CustomException(300, 'Cookie has Expired1');
-    }
+    if (loginBtn != null) throw new CustomException(300, 'Cookie has Expired2');
 
     for (var i = 1; i < options.length; i++) {
       var data = options[i].attributes['value']?.split(',');
@@ -93,23 +116,18 @@ class Crawl {
     var response = await _getResponse('GET', url, {'cookie': this._cookie});
     var document = parse(await response.stream.bytesToString());
 
-    if (response.statusCode != 200) {
-      this._cookie = '';
+    if (response.statusCode != 200)
       throw new CustomException(500, 'Homepage Error');
-    }
 
     var error = document.querySelector('.error_none');
-    if (error != null) throw new CustomException(300, 'Cookie has Expired2');
+    if (error != null) throw new CustomException(300, 'Cookie has Expired3');
 
     url =
         'https://cyber.anyang.ac.kr/MReport.do?cmd=viewReportInfoPageList&boardInfoDTO.boardInfoGubun=report&courseDTO.courseId=$courseId';
     response = await _getResponse('GET', url, {'cookie': this._cookie});
     document = parse(await response.stream.bytesToString());
     error = document.querySelector('.error_none');
-    if (error != null) {
-      this._cookie = '';
-      throw new CustomException(300, 'Cookie has Expired3');
-    }
+    if (error != null) throw new CustomException(300, 'Cookie has Expired4');
 
     List<Map<String, String>> assignments = [];
 

@@ -1,4 +1,5 @@
 import 'package:deanora/Widgets/Widgets.dart';
+import 'package:deanora/crawl/crawl.dart';
 import 'package:deanora/screen/MyMenu.dart';
 import 'package:deanora/screen/Test.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:page_transition/page_transition.dart';
 import 'dart:async';
-
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 
@@ -23,7 +24,15 @@ void main() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   FirebaseMessaging.onBackgroundMessage(_messageHandler);
   isviewed = prefs.getInt('Tutorial');
-  runApp(MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+            create: (_) => Crawl("2018H1109", "zky78nt@cf!")),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {

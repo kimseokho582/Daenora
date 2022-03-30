@@ -11,7 +11,7 @@ class YumUserhttp {
   Future<int> yumRegister(_nickName) async {
     final url = Uri.parse("http://52.79.251.162:80/auth/register");
     var response = await http
-        .put(url, body: <String, String>{"uid": _uid, "nickName": _nickName});
+        .put(url, body: <String, String?>{"uid": _uid, "nickName": _nickName});
     // print(response.body);
     return response.statusCode;
   }
@@ -59,5 +59,3 @@ class YumUserhttp {
     return _list;
   }
 }
-
-class YumStoreInfo {}
