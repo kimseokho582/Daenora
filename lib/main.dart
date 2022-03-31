@@ -27,8 +27,7 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-            create: (_) => Crawl("2018H1109", "zky78nt@cf!")),
+        ChangeNotifierProvider(create: (_) => Crawl()),
       ],
       child: MyApp(),
     ),

@@ -84,24 +84,24 @@ Container loginTextF(_controller, hintext, icon, obscure) {
 }
 
 /// [props] crawl.crawlClasses(id.text, pw.text) //classPrpps
-List classes(props) {
-  List testclasses = [];
-  props
-      .map((x) => {
-            testclasses
-                .add(Lecture(x["className"], x["profName"], x["classId"]))
-          })
-      .toList();
-  return testclasses;
-}
+// List classes(props) {
+//   List testclasses = [];
+//   props
+//       .map((x) => {
+//             testclasses
+//                 .add(Lecture(x["className"], x["profName"], x["classId"]))
+//           })
+//       .toList();
+//   return testclasses;
+// }
 
 /// [props] crawl.crawlUser(id.text, pw.text) //userPrpps
-List user(props) {
-  List user = [];
-  user.add(User(props["name"], props["studentId"]));
-  //print(user[0].name);
-  return user;
-}
+// List user(props) {
+//   List user = [];
+//   user.add(User(props["name"], props["studentId"]));
+//   //print(user[0].name);
+//   return user;
+// }
 
 /// [props] await crawl.crawlAssignments(id, pw, cId); //assignmentProps
 List assignments(props) {
@@ -144,7 +144,7 @@ Widget firstfault = Text(
 
 Future<List> requestAssignment(id, pw, props) async {
   try {
-    var crawl = new Crawl(id, pw);
+    var crawl = new Crawl();
     List<dynamic> assignment = [];
     List doneCnt = [];
 
@@ -176,7 +176,7 @@ Future<List> requestAssignment(id, pw, props) async {
 }
 
 requestDnc(id, pw, props) async {
-  var crawl = new Crawl(id, pw);
+  var crawl = new Crawl();
   List<dynamic> _assignment = [];
 
   try {

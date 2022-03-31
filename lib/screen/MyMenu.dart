@@ -149,7 +149,7 @@ class _MyMenuState extends State<MyMenu> {
     }
 
     return Provider<Crawl>(
-      create: (_) => Crawl("2018H1109", "zky78nt@cf!"),
+      create: (_) => Crawl(),
       child: MaterialApp(
         home: Scaffold(
           resizeToAvoidBottomInset: false,
@@ -217,10 +217,12 @@ class _MyMenuState extends State<MyMenu> {
     var assurance = await ctrl.loadLoginData();
     saved_id = assurance["user_id"] ?? "";
     saved_pw = assurance["user_pw"] ?? "";
-    var crawl = new Crawl(saved_id, saved_pw);
+    print('$saved_id $saved_pw');
+    Crawl.id = saved_id;
+    Crawl.pw = saved_pw;
     try {
-      var user = await crawl.crawlUser();
-      var classes = await crawl.crawlClasses();
+      // var classes = await crawl.crawlClasses();
+      await context.read<Crawl>().crawlClassesTest();
 
       print("Saved_login");
       Navigator.push(
@@ -228,9 +230,11 @@ class _MyMenuState extends State<MyMenu> {
           PageTransition(
             duration: Duration(milliseconds: 250),
             type: PageTransitionType.fade,
-            child: MyClass(saved_id, saved_pw, classes, user, weatherData),
+            child: MyClass(saved_id, saved_pw, [],
+                context.read<Crawl>().crawlUserTest(), weatherData),
           ));
     } on CustomException catch (e) {
+      print(e);
       Navigator.push(
         context,
         PageTransition(

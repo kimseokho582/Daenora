@@ -5,4 +5,6 @@ class Assignment {
   String endDate;
 
   Assignment(this.title, this.state, this.startDate, this.endDate);
+  @override
+  String toString() => '$title $state $startDate $endDate';
 }

@@ -99,7 +99,7 @@ class _ClassDividState extends State<ClassDivid> with TickerProviderStateMixin {
   }
 
   requestAssignment(id, pw, cId) async {
-    var crawl = new Crawl(id, pw);
+    var crawl = new Crawl();
     assignmentProps = await crawl.crawlAssignments(cId);
     if (!(assignmentProps == null)) {
       assignment = assignments(assignmentProps);

@@ -1,6 +1,7 @@
 import 'package:deanora/Widgets/MemoData.dart';
 import 'package:deanora/Widgets/MenuTabBar.dart';
 import 'package:deanora/Widgets/FCMsample.dart';
+import 'package:deanora/crawl/crawl.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
@@ -99,7 +100,9 @@ class _MyAssignmentState extends State<MyAssignment>
 
   Widget build(BuildContext context) {
     List<dynamic> myAssignment = assignments(assignmentProps);
-    int doneCnt = (progress * myAssignment.length).toInt();
+    // int doneCnt = (progress * myAssignment.length).toInt();
+    int doneCnt = 0;
+
     Widget _child = new Text("");
     setState(() {
       if (assignmentProps.length > 0) {
