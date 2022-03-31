@@ -83,180 +83,173 @@ class _MyClassState extends State<MyClass> with TickerProviderStateMixin {
 
     return WillPopScope(
       onWillPop: _willPopCallback,
-      child: ChangeNotifierProvider<Crawl>(
-        create: (_) => Crawl(),
-        child: MaterialApp(
-          theme: ThemeData(primaryColor: Colors.lightGreen),
-          //debugShowCheckedModeBanner: false,
-          home: GestureDetector(
-            onTap: () => {
-              FocusScope.of(context).unfocus(),
-              setState(() {
-                bar = new Text("");
-                searchIcon = new Icon(Icons.search);
-              })
-            },
-            child: Container(
-              child: Scaffold(
-                  appBar: myAppbar(context),
-                  resizeToAvoidBottomInset: false,
-                  body: SafeArea(
-                    child: Stack(children: [
-                      Container(
-                        color: Colors.white,
-                        child: Container(
-                          margin: const EdgeInsets.only(
-                              top: 3, left: 20, right: 20),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                height: 30,
+      child: MaterialApp(
+        theme: ThemeData(primaryColor: Colors.lightGreen),
+        //debugShowCheckedModeBanner: false,
+        home: GestureDetector(
+          onTap: () => {
+            FocusScope.of(context).unfocus(),
+            setState(() {
+              bar = new Text("");
+              searchIcon = new Icon(Icons.search);
+            })
+          },
+          child: Container(
+            child: Scaffold(
+                appBar: myAppbar(context),
+                resizeToAvoidBottomInset: false,
+                body: SafeArea(
+                  child: Stack(children: [
+                    Container(
+                      color: Colors.white,
+                      child: Container(
+                        margin:
+                            const EdgeInsets.only(top: 3, left: 20, right: 20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              height: 30,
+                              margin:
+                                  const EdgeInsets.only(left: 10, bottom: 20),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.account_circle,
+                                    color: Colors.blueGrey,
+                                    size: 35,
+                                  ),
+                                  Text.rich(TextSpan(children: <TextSpan>[
+                                    TextSpan(text: "  안녕하세요, "),
+                                    TextSpan(
+                                      text:
+                                          "${context.watch<Crawl>().providerUser.name}",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 18),
+                                    ),
+                                    TextSpan(text: "님")
+                                  ])),
+                                ],
+                              ),
+                            ),
+                            //날씨
+                            // InkWell(
+                            //   onTap: () {
+                            //     Navigator.push(
+                            //         context,
+                            //         MaterialPageRoute(
+                            //             builder: (context) => MyWeather()));
+                            //   },
+                            //   child: Container(
+                            //     height: 30,
+                            //     child: Text(
+                            //         "${weatherData['weather'][0]['main']} // 전래동화...???"),
+                            //   ),
+                            // ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Container(
                                 margin:
-                                    const EdgeInsets.only(left: 10, bottom: 20),
+                                    const EdgeInsets.only(left: 10, right: 10),
                                 child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Icon(
-                                      Icons.account_circle,
-                                      color: Colors.blueGrey,
-                                      size: 35,
-                                    ),
-                                    Text.rich(TextSpan(children: <TextSpan>[
-                                      TextSpan(text: "  안녕하세요, "),
-                                      TextSpan(
-                                        text:
-                                            "${context.watch<Crawl>().providerUser.name}",
+                                    Text("내 강의실 List",
                                         style: TextStyle(
                                             fontWeight: FontWeight.w700,
-                                            fontSize: 18),
-                                      ),
-                                      TextSpan(text: "님")
-                                    ])),
-                                  ],
-                                ),
-                              ),
-                              //날씨
-                              // InkWell(
-                              //   onTap: () {
-                              //     Navigator.push(
-                              //         context,
-                              //         MaterialPageRoute(
-                              //             builder: (context) => MyWeather()));
-                              //   },
-                              //   child: Container(
-                              //     height: 30,
-                              //     child: Text(
-                              //         "${weatherData['weather'][0]['main']} // 전래동화...???"),
-                              //   ),
-                              // ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Container(
-                                  margin: const EdgeInsets.only(
-                                      left: 10, right: 10),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Text("내 강의실 List",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w700,
-                                              fontSize: 18)),
-                                      InkWell(
-                                        onTap: () async {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      MyCalendar()));
-                                        },
-                                        child: Ink(
-                                          child: Row(
-                                            children: [
-                                              Icon(
-                                                Icons.event_available,
-                                                size: 20,
-                                              ),
-                                              Text("학사일정"),
-                                            ],
-                                          ),
+                                            fontSize: 18)),
+                                    InkWell(
+                                      onTap: () async {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    MyCalendar()));
+                                      },
+                                      child: Ink(
+                                        child: Row(
+                                          children: [
+                                            Icon(
+                                              Icons.event_available,
+                                              size: 20,
+                                            ),
+                                            Text("학사일정"),
+                                          ],
                                         ),
-                                      )
-                                    ],
-                                  )),
-                              SizedBox(
-                                height: 30,
-                              ),
-                              RefreshIndicator(
-                                onRefresh: _refresh,
-                                child: FutureBuilder(
-                                    future: requestAssignment(
-                                        id, pw, filteredNames),
-                                    builder:
-                                        (futureContext, AsyncSnapshot snap) {
-                                      if (snap.hasData) {
-                                        dncList = snap.data;
-                                        return Center(
-                                          child: SizedBox(
-                                            height: windowHeight - 270,
-                                            child: myclasses.length != 0
-                                                ? ListView.builder(
-                                                    itemCount: myclasses.length,
-                                                    itemBuilder: (BuildContext
-                                                            classContext,
-                                                        int index) {
-                                                      return ClassList(context,
-                                                          myclasses[index]);
-                                                    })
-                                                : ListView(children: [
-                                                    Center(
-                                                        child: Text("강의가 없습니다"))
-                                                  ]),
-                                          ),
-                                        );
-                                      } else if (snap.hasError) {
-                                        return Container(
+                                      ),
+                                    )
+                                  ],
+                                )),
+                            SizedBox(
+                              height: 30,
+                            ),
+                            RefreshIndicator(
+                              onRefresh: _refresh,
+                              child: FutureBuilder(
+                                  future:
+                                      requestAssignment(id, pw, filteredNames),
+                                  builder: (futureContext, AsyncSnapshot snap) {
+                                    if (snap.hasData) {
+                                      dncList = snap.data;
+                                      return Center(
+                                        child: SizedBox(
                                           height: windowHeight - 270,
-                                          child: ListView(
-                                            children: [
-                                              Container(
-                                                alignment: Alignment.center,
-                                                child:
-                                                    Text(snap.error.toString()),
-                                              ),
-                                            ],
-                                          ),
-                                        );
-                                      } else {
-                                        return Container(
-                                            alignment: Alignment.center,
-                                            child: SizedBox(
-                                                width: 50,
-                                                height: 50,
-                                                child:
-                                                    CircularProgressIndicator(
-                                                  valueColor:
-                                                      animationController.drive(
-                                                          ColorTween(
-                                                              begin: Color(
-                                                                  0xff8E53E9),
-                                                              end: Colors.red)),
-                                                )));
-                                      }
-                                    }),
-                              )
-                            ],
-                          ),
+                                          child: myclasses.length != 0
+                                              ? ListView.builder(
+                                                  itemCount: myclasses.length,
+                                                  itemBuilder: (BuildContext
+                                                          classContext,
+                                                      int index) {
+                                                    return ClassList(context,
+                                                        myclasses[index]);
+                                                  })
+                                              : ListView(children: [
+                                                  Center(
+                                                      child: Text("강의가 없습니다"))
+                                                ]),
+                                        ),
+                                      );
+                                    } else if (snap.hasError) {
+                                      return Container(
+                                        height: windowHeight - 270,
+                                        child: ListView(
+                                          children: [
+                                            Container(
+                                              alignment: Alignment.center,
+                                              child:
+                                                  Text(snap.error.toString()),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    } else {
+                                      return Container(
+                                          alignment: Alignment.center,
+                                          child: SizedBox(
+                                              width: 50,
+                                              height: 50,
+                                              child: CircularProgressIndicator(
+                                                valueColor: animationController
+                                                    .drive(ColorTween(
+                                                        begin:
+                                                            Color(0xff8E53E9),
+                                                        end: Colors.red)),
+                                              )));
+                                    }
+                                  }),
+                            )
+                          ],
                         ),
                       ),
-                      MenuTabBar(mycontext: context)
-                    ]),
-                  )),
-            ),
+                    ),
+                    MenuTabBar(mycontext: context)
+                  ]),
+                )),
           ),
         ),
       ),

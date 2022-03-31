@@ -24,7 +24,7 @@ class Crawl with ChangeNotifier {
     final body = {'userDTO.userId': id, 'userDTO.password': pw};
     final url = 'http://cyber.anyang.ac.kr/MUser.do?cmd=loginUser';
     final response = await _getResponse('POST', url, headers, body);
-
+    print("나 또옴 ㅅㅂ");
     String rawCookie = response.headers['set-cookie'] ?? '';
     if (response.headers['pragma'] != null)
       throw new CustomException(300, 'Login Failed');
@@ -60,7 +60,8 @@ class Crawl with ChangeNotifier {
 
   Future<void> crawlUserTest() async {
     print('${this._cookie} 쿠키');
-    if (this._cookie == '') await _login();
+    await _login();
+    // if (this._cookie == '') await _login();
 
     final url = 'http://cyber.anyang.ac.kr/MMain.do?cmd=viewIndexPage';
     final response = await _getResponse('GET', url, {'cookie': this._cookie});
@@ -112,8 +113,8 @@ class Crawl with ChangeNotifier {
 
   Future<void> crawlClassesTest() async {
     print('${this._cookie} 쿠키');
-    if (this._cookie == '') await _login();
-
+    // if (this._cookie == '') await _login();
+    await _login();
     final url = 'http://cyber.anyang.ac.kr/MMain.do?cmd=viewIndexPage';
     final response = await _getResponse('GET', url, {'cookie': this._cookie});
     final document = parse(await response.stream.bytesToString());
@@ -122,14 +123,14 @@ class Crawl with ChangeNotifier {
     var options = document.getElementsByTagName('option');
     List<Map<String, String>> classes = [];
 
-    // if (loginBtn != null) throw new CustomException(300, 'Cookie has Expired2');
-    if (loginBtn != null) {
-      try {
-        await _login();
-      } catch (e) {
-        throw new CustomException(300, 'Cookie has Expired2');
-      }
-    }
+    if (loginBtn != null) throw new CustomException(300, 'Cookie has Expired2');
+    // if (loginBtn != null) {
+    //   try {
+    //     await _login();
+    //   } catch (e) {
+    //     throw new CustomException(300, 'Cookie has Expired2');
+    //   }
+    // }
     for (var i = 1; i < options.length; i++) {
       var data = options[i].attributes['value']?.split(',');
       classes.add({

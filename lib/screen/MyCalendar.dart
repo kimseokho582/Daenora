@@ -88,113 +88,110 @@ class _MyCalendarState extends State<MyCalendar> {
   }
 
   Widget build(BuildContext context) {
-    return Provider<Crawl>(
-      create: (_) => Crawl(),
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: Container(
-          color: Color(0xffF9F9F9),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: Container(
+        color: Color(0xffF9F9F9),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: 20,
+            ),
+            Container(
+              height: MediaQuery.of(context).size.height * 0.5,
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.1),
+                    spreadRadius: 1,
+                    blurRadius: 1,
+                    offset: Offset(1, 3),
+                  )
+                ],
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                    bottomRight: Radius.circular(30),
+                    bottomLeft: Radius.circular(30)),
+              ),
+              child: _dateView(),
+            ),
+            Container(
                 height: 20,
-              ),
-              Container(
-                height: MediaQuery.of(context).size.height * 0.5,
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.1),
-                      spreadRadius: 1,
-                      blurRadius: 1,
-                      offset: Offset(1, 3),
-                    )
-                  ],
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                      bottomRight: Radius.circular(30),
-                      bottomLeft: Radius.circular(30)),
-                ),
-                child: _dateView(),
-              ),
-              Container(
-                  height: 20,
-                  margin: EdgeInsets.only(left: 20, top: 15, bottom: 15),
-                  child: Text(
-                    "${_currentDateTime.year}년 ${_currentDateTime.month}월 학사일정",
-                    style: TextStyle(fontWeight: FontWeight.w800, fontSize: 15),
-                  )),
-              Container(
-                height: MediaQuery.of(context).size.height * 0.5 - 75,
-                child: ListView.builder(
-                  itemCount: _selected.length,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      margin: EdgeInsets.only(bottom: 10, left: 20, right: 20),
-                      height: 90,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.1),
-                            spreadRadius: 1,
-                            blurRadius: 1,
-                            offset: Offset(1, 3),
-                          )
-                        ],
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: Row(
-                        children: [
-                          Container(
-                              margin: EdgeInsets.all(15),
-                              height: 25,
-                              width: 25,
-                              decoration: BoxDecoration(
-                                color: _colors[index % 8],
-                                borderRadius: BorderRadius.circular(100),
-                              )),
-                          SizedBox(width: 15),
-                          Flexible(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                SizedBox(),
-                                Text(
-                                  "${_selected[index].schdule}",
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 3,
-                                  style: TextStyle(
-                                      color: Color(0xff707070),
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w800),
-                                ),
-                                Container(
-                                  child: (_selected[index].date.length > 1)
-                                      ? Text(
-                                          "${DateFormat('MM. dd').format(_selected[index].date[0])} ~ ${DateFormat('MM. dd').format(_selected[index].date[_selected[index].date.length - 1])}",
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                              color: Color(0xff707070)))
-                                      : Text(
-                                          "${DateFormat('MM. dd').format(_selected[index].date[0])}",
-                                          style: TextStyle(
-                                              color: Color(0xff707070))),
-                                ),
-                                SizedBox(),
-                              ],
-                            ),
+                margin: EdgeInsets.only(left: 20, top: 15, bottom: 15),
+                child: Text(
+                  "${_currentDateTime.year}년 ${_currentDateTime.month}월 학사일정",
+                  style: TextStyle(fontWeight: FontWeight.w800, fontSize: 15),
+                )),
+            Container(
+              height: MediaQuery.of(context).size.height * 0.5 - 75,
+              child: ListView.builder(
+                itemCount: _selected.length,
+                itemBuilder: (context, index) {
+                  return Container(
+                    margin: EdgeInsets.only(bottom: 10, left: 20, right: 20),
+                    height: 90,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.1),
+                          spreadRadius: 1,
+                          blurRadius: 1,
+                          offset: Offset(1, 3),
+                        )
+                      ],
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                            margin: EdgeInsets.all(15),
+                            height: 25,
+                            width: 25,
+                            decoration: BoxDecoration(
+                              color: _colors[index % 8],
+                              borderRadius: BorderRadius.circular(100),
+                            )),
+                        SizedBox(width: 15),
+                        Flexible(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              SizedBox(),
+                              Text(
+                                "${_selected[index].schdule}",
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 3,
+                                style: TextStyle(
+                                    color: Color(0xff707070),
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w800),
+                              ),
+                              Container(
+                                child: (_selected[index].date.length > 1)
+                                    ? Text(
+                                        "${DateFormat('MM. dd').format(_selected[index].date[0])} ~ ${DateFormat('MM. dd').format(_selected[index].date[_selected[index].date.length - 1])}",
+                                        overflow: TextOverflow.ellipsis,
+                                        style:
+                                            TextStyle(color: Color(0xff707070)))
+                                    : Text(
+                                        "${DateFormat('MM. dd').format(_selected[index].date[0])}",
+                                        style: TextStyle(
+                                            color: Color(0xff707070))),
+                              ),
+                              SizedBox(),
+                            ],
                           ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

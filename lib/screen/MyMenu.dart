@@ -148,66 +148,63 @@ class _MyMenuState extends State<MyMenu> {
       );
     }
 
-    return Provider<Crawl>(
-      create: (_) => Crawl(),
-      child: MaterialApp(
-        home: Scaffold(
-          resizeToAvoidBottomInset: false,
-          body: SafeArea(
-              child: Container(
-            color: Colors.black,
-            width: windowWidth,
-            height: windowHeight,
+    return MaterialApp(
+      home: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: SafeArea(
             child: Container(
-              margin: EdgeInsets.only(top: 30, left: 30, right: 30),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("냥냠대 컨탠츠",
-                      style: TextStyle(color: Colors.white, fontSize: 25)),
-                  SizedBox(
-                    height: 10,
+          color: Colors.black,
+          width: windowWidth,
+          height: windowHeight,
+          child: Container(
+            margin: EdgeInsets.only(top: 30, left: 30, right: 30),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("냥냠대 컨탠츠",
+                    style: TextStyle(color: Colors.white, fontSize: 25)),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  height: windowHeight - 100,
+                  child: ListView(
+                    children: [
+                      SizedBox(
+                        height: 18,
+                      ),
+                      ElevatedButton(
+                        onPressed: () async {
+                          await context.read<Crawl>().crawlUserTest();
+                          print(Provider.of<Crawl>(context, listen: false)
+                              .providerUser);
+                        },
+                        child: Text(""),
+                      ),
+                      contentsMenu(nyanLogintest, "nyanTitle", "냥대 - 내 강의실",
+                          "각 과목의 과제 정보와 학사 일정을 확인"),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      // contentsMenu(
+                      //     () => {
+                      //           Navigator.push(
+                      //               context,
+                      //               MaterialPageRoute(
+                      //                   builder: (context) => MyYumMainTest()))
+                      //         },
+                      //     "yumTitle",
+                      //     "냠대 - 맛집 정보",
+                      //     "안양대생만의 숨은 꿀 맛집 정보를 공유"),
+                      contentsMenu(yumLogintest, "yumTitle", "냠대 - 맛집 정보",
+                          "안양대생만의 숨은 꿀 맛집 정보를 공유"),
+                    ],
                   ),
-                  Container(
-                    height: windowHeight - 100,
-                    child: ListView(
-                      children: [
-                        SizedBox(
-                          height: 18,
-                        ),
-                        ElevatedButton(
-                          onPressed: () async {
-                            await context.read<Crawl>().crawlUserTest();
-                            print(Provider.of<Crawl>(context, listen: false)
-                                .providerUser);
-                          },
-                          child: Text(""),
-                        ),
-                        contentsMenu(nyanLogintest, "nyanTitle", "냥대 - 내 강의실",
-                            "각 과목의 과제 정보와 학사 일정을 확인"),
-                        SizedBox(
-                          height: 30,
-                        ),
-                        // contentsMenu(
-                        //     () => {
-                        //           Navigator.push(
-                        //               context,
-                        //               MaterialPageRoute(
-                        //                   builder: (context) => MyYumMainTest()))
-                        //         },
-                        //     "yumTitle",
-                        //     "냠대 - 맛집 정보",
-                        //     "안양대생만의 숨은 꿀 맛집 정보를 공유"),
-                        contentsMenu(yumLogintest, "yumTitle", "냠대 - 맛집 정보",
-                            "안양대생만의 숨은 꿀 맛집 정보를 공유"),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-          )),
-        ),
+          ),
+        )),
       ),
     );
   }
@@ -223,7 +220,7 @@ class _MyMenuState extends State<MyMenu> {
     try {
       // var classes = await crawl.crawlClasses();
       await context.read<Crawl>().crawlClassesTest();
-
+      await context.read<Crawl>().crawlUserTest();
       print("Saved_login");
       Navigator.push(
           context,
@@ -231,7 +228,7 @@ class _MyMenuState extends State<MyMenu> {
             duration: Duration(milliseconds: 250),
             type: PageTransitionType.fade,
             child: MyClass(saved_id, saved_pw, [],
-                context.read<Crawl>().crawlUserTest(), weatherData),
+                context.read<Crawl>().providerClass, weatherData),
           ));
     } on CustomException catch (e) {
       print(e);
