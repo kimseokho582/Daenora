@@ -7,20 +7,18 @@ import 'package:http/http.dart' as http;
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 
 class MyYumMain extends StatefulWidget {
-  var _nickName;
+  var _userInfo;
   var _email;
-  MyYumMain(this._nickName, this._email);
+  MyYumMain(this._userInfo, this._email);
   @override
-  _MyYumMainState createState() => _MyYumMainState(this._nickName, this._email);
+  _MyYumMainState createState() => _MyYumMainState();
 }
 
 class _MyYumMainState extends State<MyYumMain> {
   List _top5List = [];
   int _top5Index = 0;
-  var _nickName;
-  var _email;
+
   final _updateNickNameController = TextEditingController();
-  _MyYumMainState(this._nickName, this._email);
   @override
   void initState() {
     _top5List
@@ -37,11 +35,8 @@ class _MyYumMainState extends State<MyYumMain> {
   }
 
   Widget build(BuildContext context) {
-    // print(_nickName);
-
-    // _nickName.substring(9, 9 + _nickName.substring(9).indexOf('"'));
-    print('$_email asdasdsad');
-    var yumHttp = new YumUserhttp(_email);
+    print('${widget._userInfo["path"]} hjhjh');
+    var yumHttp = new YumUserhttp(widget._email);
     return MaterialApp(
       home: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -60,7 +55,7 @@ class _MyYumMainState extends State<MyYumMain> {
                         ),
                         Row(
                           children: [
-                            Text("안녕하세요 $_nickName님"),
+                            Text("안녕하세요 ${widget._userInfo["userAlias"]}님"),
                             ElevatedButton(
                               child: Text("로그아웃"),
                               onPressed: () async {
@@ -129,10 +124,23 @@ class _MyYumMainState extends State<MyYumMain> {
                                   MaterialPageRoute(
                                       builder: (context) => MyMenu()));
                             } catch (e) {
-                              print('로그아웃 실패 $e');
+                              print('링크 끊기 실패 $e');
                             }
                           },
                         ),
+                        widget._userInfo["path"] != null
+                            ? Image.network(
+                                widget._userInfo["path"],
+                                width: 50,
+                                height: 50,
+                                loadingBuilder:
+                                    (context, child, loadingProgress) {
+                                  if (loadingProgress == null) return child;
+                                  return Center(
+                                      child: CircularProgressIndicator());
+                                },
+                              )
+                            : Container(),
                         SizedBox(
                           height: 31,
                         ),

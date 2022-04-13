@@ -66,6 +66,7 @@ class _Test2State extends State<Test2> {
     // print('카카오계정으로 로그인 성공');
 
     try {
+      print("여기지?");
       User _user = await UserApi.instance.me();
       String _email =
           _user.kakaoAccount!.profile?.toJson()['nickname'].toString() ??
@@ -81,7 +82,7 @@ class _Test2State extends State<Test2> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (context) => MyYumMain(yumInfo[0]["nickName"], _email)),
+              builder: (context) => MyYumMain(yumInfo[0], _email)),
         );
       } else if (yumLogin == 400) {
         // 로그인 실패, 회원가입 으로

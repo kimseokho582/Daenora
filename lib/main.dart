@@ -1,3 +1,4 @@
+import 'package:deanora/Widgets/LoadingCustom.dart';
 import 'package:deanora/Widgets/Widgets.dart';
 import 'package:deanora/crawl/crawl.dart';
 import 'package:deanora/screen/MyMenu.dart';
@@ -49,7 +50,7 @@ class _MyAppState extends State<MyApp> {
             accentColor: Colors.white),
         debugShowCheckedModeBanner: false,
         home: Cover()
-        // home: Test()
+        // home: LoadingCustom()
         );
   }
 }

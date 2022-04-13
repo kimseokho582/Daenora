@@ -6,7 +6,6 @@ import 'package:deanora/object/lecture.dart';
 import 'package:deanora/object/user.dart';
 import 'package:deanora/screen/MyAssignment.dart';
 import 'package:flutter/material.dart';
-import 'dart:ui';
 import 'package:blinking_text/blinking_text.dart';
 
 Container cover_Background() {

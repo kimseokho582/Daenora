@@ -2,6 +2,7 @@ import 'package:deanora/Widgets/Yumhttp.dart';
 import 'package:deanora/object/AmdinLogin.dart';
 import 'package:deanora/screen/MyKakaoLogin.dart';
 import 'package:deanora/screen/MyNyamNickname.dart';
+import 'package:deanora/screen/MyProfileImg.dart';
 import 'package:deanora/screen/MyYumMainTest.dart';
 import 'package:deanora/screen/Test2.dart';
 import 'package:http/http.dart' as http;
@@ -151,60 +152,61 @@ class _MyMenuState extends State<MyMenu> {
     return MaterialApp(
       home: Scaffold(
         resizeToAvoidBottomInset: false,
-        body: SafeArea(
-            child: Container(
-          color: Colors.black,
-          width: windowWidth,
-          height: windowHeight,
-          child: Container(
-            margin: EdgeInsets.only(top: 30, left: 30, right: 30),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("냥냠대 컨탠츠",
-                    style: TextStyle(color: Colors.white, fontSize: 25)),
-                SizedBox(
-                  height: 10,
+        body: Container(
+            color: Colors.black,
+            width: windowWidth,
+            height: windowHeight,
+            child: SafeArea(
+              child: Container(
+                margin: EdgeInsets.only(top: 30, left: 30, right: 30),
+                child: ListView(
+                  // crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("냥냠대 컨탠츠",
+                        style: TextStyle(color: Colors.white, fontSize: 25)),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                      height: windowHeight - 100,
+                      child: ListView(
+                        children: [
+                          SizedBox(
+                            height: 18,
+                          ),
+                          ElevatedButton(
+                            onPressed: () async {
+                              await context.read<Crawl>().crawlUserTest();
+                              print(Provider.of<Crawl>(context, listen: false)
+                                  .providerUser);
+                            },
+                            child: Text(""),
+                          ),
+                          contentsMenu(nyanLogintest, "nyanTitle", "냥대 - 내 강의실",
+                              "각 과목의 과제 정보와 학사 일정을 확인"),
+                          SizedBox(
+                            height: 30,
+                          ),
+                          // contentsMenu(
+                          //     ()async => {
+
+                          //           Navigator.push(
+                          //               context,
+                          //               MaterialPageRoute(
+                          //                   builder: (context) => MyProfileImg()))
+                          //         },
+                          //     "yumTitle",
+                          //     "냠대 - 맛집 정보",
+                          //     "안양대생만의 숨은 꿀 맛집 정보를 공유"),
+                          contentsMenu(yumLogintest, "yumTitle", "냠대 - 맛집 정보",
+                              "안양대생만의 숨은 꿀 맛집 정보를 공유"),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-                Container(
-                  height: windowHeight - 100,
-                  child: ListView(
-                    children: [
-                      SizedBox(
-                        height: 18,
-                      ),
-                      ElevatedButton(
-                        onPressed: () async {
-                          await context.read<Crawl>().crawlUserTest();
-                          print(Provider.of<Crawl>(context, listen: false)
-                              .providerUser);
-                        },
-                        child: Text(""),
-                      ),
-                      contentsMenu(nyanLogintest, "nyanTitle", "냥대 - 내 강의실",
-                          "각 과목의 과제 정보와 학사 일정을 확인"),
-                      SizedBox(
-                        height: 30,
-                      ),
-                      // contentsMenu(
-                      //     () => {
-                      //           Navigator.push(
-                      //               context,
-                      //               MaterialPageRoute(
-                      //                   builder: (context) => MyYumMainTest()))
-                      //         },
-                      //     "yumTitle",
-                      //     "냠대 - 맛집 정보",
-                      //     "안양대생만의 숨은 꿀 맛집 정보를 공유"),
-                      contentsMenu(yumLogintest, "yumTitle", "냠대 - 맛집 정보",
-                          "안양대생만의 숨은 꿀 맛집 정보를 공유"),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        )),
+              ),
+            )),
       ),
     );
   }
@@ -274,7 +276,6 @@ class _MyMenuState extends State<MyMenu> {
 
   yumLogintest() async {
     if (await AuthApi.instance.hasToken()) {
-      print("여기는 바로 가능");
       try {
         // await UserApi.instance.loginWithKakaoAccount();
         print('카카오계정으로 로그인 성공');
@@ -286,12 +287,11 @@ class _MyMenuState extends State<MyMenu> {
         if (yumLogin == 200) {
           //로그인 성공
           var yumInfo = await yumHttp.yumInfo();
-          print(yumInfo);
+          print(yumInfo[0]["userAlias"]);
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) =>
-                    MyYumMain(yumInfo[0]["nickName"], _email)),
+                builder: (context) => MyYumMain(yumInfo[0], _email)),
           );
         } else if (yumLogin == 400) {
           // 로그인 실패, 회원가입 으로

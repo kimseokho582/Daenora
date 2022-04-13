@@ -1,4 +1,5 @@
 import 'package:deanora/Widgets/Yumhttp.dart';
+import 'package:deanora/screen/MyProfileImg.dart';
 import 'package:deanora/screen/MyYumMain.dart';
 import 'package:flutter/material.dart';
 
@@ -107,7 +108,7 @@ class _MyNyamNickNameState extends State<MyNyamNickName>
                           print(_email);
                           var yumRegister = await yumUserHttp
                               .yumRegister(_nickNameController.text);
-                          print("$yumRegister  asdsdads");
+                          print(yumRegister);
                           if (yumRegister == 200) {
                             var yumLogin = await yumUserHttp.yumLogin();
                             var yumInfo = await yumUserHttp.yumInfo();
@@ -115,8 +116,8 @@ class _MyNyamNickNameState extends State<MyNyamNickName>
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => MyYumMain(
-                                      yumInfo[0]["nickName"], _email)),
+                                  builder: (context) =>
+                                      MyProfileImg(yumInfo[0], _email)),
                             );
                           } else {
                             setState(() {
