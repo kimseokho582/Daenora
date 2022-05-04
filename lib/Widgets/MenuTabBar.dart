@@ -1,5 +1,5 @@
 import 'package:deanora/screen/MyCalendar.dart';
-import 'package:deanora/screen/myClass.dart';
+import 'package:deanora/screen/MyClass.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:flutter/material.dart';
@@ -88,15 +88,17 @@ class _MenuTabBar extends State<MenuTabBar> with TickerProviderStateMixin {
   void _updateButtonPosition(double dy) {
     var position = (MediaQuery.of(context).size.height - dy);
 
-    if (position > 0) _positionButton.sink.add(position);
+    if (position > 0) {
+      _positionButton.sink.add(position);
 
-    _animationUp = new Tween<double>(
-            begin: position, end: MediaQuery.of(context).size.height * 0.7)
-        .animate(new CurvedAnimation(
-            parent: _animationControllerUp, curve: Curves.ease));
-    _animationDown = new Tween<double>(begin: position, end: 10).animate(
-        new CurvedAnimation(
-            parent: _animationControllerDown, curve: Curves.ease));
+      _animationUp = new Tween<double>(
+              begin: position, end: MediaQuery.of(context).size.height * 0.7)
+          .animate(new CurvedAnimation(
+              parent: _animationControllerUp, curve: Curves.ease));
+      _animationDown = new Tween<double>(begin: position, end: 10).animate(
+          new CurvedAnimation(
+              parent: _animationControllerDown, curve: Curves.ease));
+    }
   }
 
   void _moveButtonDown() {
@@ -151,7 +153,7 @@ class _MenuTabBar extends State<MenuTabBar> with TickerProviderStateMixin {
       ),
       GestureDetector(
         onTap: () {
-          // _moveButtonDown();
+          //  _moveButtonDown();
           print("??");
         },
         child: new Container(
@@ -255,18 +257,22 @@ class _MenuTabBar extends State<MenuTabBar> with TickerProviderStateMixin {
                                   : snapshot.data;
                               return new ClipPath(
                                   clipper: ContainerClipper(positon!),
-                                  child: new Container(
-                                    width: double.infinity,
-                                    height: MediaQuery.of(context).size.height,
-                                    //color:background
-                                    decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                          begin: Alignment.topRight,
-                                          end: Alignment.bottomLeft,
-                                          colors: <Color>[
-                                            Color(0xff6D6CEB),
-                                            Color(0xff7C4DF1)
-                                          ]),
+                                  child: Opacity(
+                                    opacity: 0.5,
+                                    child: new Container(
+                                      width: double.infinity,
+                                      height:
+                                          MediaQuery.of(context).size.height,
+                                      //color:background
+                                      decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                            begin: Alignment.topRight,
+                                            end: Alignment.bottomLeft,
+                                            colors: <Color>[
+                                              Color(0xff6D6CEB),
+                                              Color(0xff7C4DF1)
+                                            ]),
+                                      ),
                                     ),
                                   ));
                             }));
@@ -305,7 +311,7 @@ class _MenuTabBar extends State<MenuTabBar> with TickerProviderStateMixin {
                                       return new FloatingActionButton(
                                           elevation: 0,
                                           onPressed: () {
-                                            _updateButtonPosition(0);
+                                            _updateButtonPosition(20);
                                             if (_isActivated.stream.value ==
                                                 1) {
                                               _moveButtonDown();

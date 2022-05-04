@@ -1,10 +1,13 @@
-import 'package:deanora/Widgets/Yumhttp.dart';
+import 'package:deanora/http/Yumhttp.dart';
 import 'package:deanora/object/AmdinLogin.dart';
+import 'package:deanora/object/lecture.dart';
+import 'package:deanora/object/user.dart';
 import 'package:deanora/screen/MyKakaoLogin.dart';
 import 'package:deanora/screen/MyNyamNickname.dart';
 import 'package:deanora/screen/MyProfileImg.dart';
 import 'package:deanora/screen/MyYumMainTest.dart';
 import 'package:deanora/screen/Test2.dart';
+import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:deanora/Widgets/Tutorial.dart';
 import 'package:deanora/Widgets/Widgets.dart';
@@ -16,7 +19,7 @@ import 'package:deanora/screen/MyClass.dart';
 import 'package:deanora/screen/MyYumMain.dart';
 import 'package:flutter/material.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
-// import 'package:location/location.dart';
+import 'package:location/location.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:deanora/Widgets/LoginDataCtrl.dart';
 import 'package:provider/provider.dart';
@@ -37,6 +40,8 @@ var anYangPrecipitationPercentDate;
 
 class _MyMenuState extends State<MyMenu> {
   final _openweatherkey = 'e474b467f27b8f03abdeb64c8a8e027a';
+  NyanUser userInfo = NyanUser('', '');
+  List<Lecture> classesInfo = [];
   String saved_id = "", saved_pw = "";
   // Location location = new Location();
   // late PermissionStatus _permissionGranted;
@@ -48,12 +53,8 @@ class _MyMenuState extends State<MyMenu> {
     super.initState();
 
     messaging = FirebaseMessaging.instance;
-    messaging.getToken().then((value) {
-      print(value);
-    });
+    messaging.getToken().then((value) {});
     FirebaseMessaging.onMessage.listen((RemoteMessage event) {
-      print("message recieved");
-      print(event.notification!.body);
       showDialog(
           context: context,
           builder: (context) {
@@ -174,14 +175,7 @@ class _MyMenuState extends State<MyMenu> {
                           SizedBox(
                             height: 18,
                           ),
-                          ElevatedButton(
-                            onPressed: () async {
-                              await context.read<Crawl>().crawlUserTest();
-                              print(Provider.of<Crawl>(context, listen: false)
-                                  .providerUser);
-                            },
-                            child: Text(""),
-                          ),
+
                           contentsMenu(nyanLogintest, "nyanTitle", "냥대 - 내 강의실",
                               "각 과목의 과제 정보와 학사 일정을 확인"),
                           SizedBox(
@@ -216,24 +210,30 @@ class _MyMenuState extends State<MyMenu> {
     var assurance = await ctrl.loadLoginData();
     saved_id = assurance["user_id"] ?? "";
     saved_pw = assurance["user_pw"] ?? "";
-    print('$saved_id $saved_pw');
     Crawl.id = saved_id;
     Crawl.pw = saved_pw;
+    var crawl = new Crawl();
     try {
-      // var classes = await crawl.crawlClasses();
-      await context.read<Crawl>().crawlClassesTest();
-      await context.read<Crawl>().crawlUserTest();
-      print("Saved_login");
+      try {
+        userInfo = GetIt.I<NyanUser>(instanceName: "userInfo");
+        classesInfo = GetIt.I<List<Lecture>>(instanceName: "classesInfo");
+      } catch (e) {
+        await crawl.crawlUser();
+        await crawl.crawlClasses();
+        userInfo = GetIt.I<NyanUser>(instanceName: "userInfo");
+        classesInfo = GetIt.I<List<Lecture>>(instanceName: "classesInfo");
+      }
       Navigator.push(
           context,
           PageTransition(
             duration: Duration(milliseconds: 250),
             type: PageTransitionType.fade,
-            child: MyClass(saved_id, saved_pw, [],
-                context.read<Crawl>().providerClass, weatherData),
+            child: MyClass(
+              saved_id,
+              saved_pw,
+            ),
           ));
     } on CustomException catch (e) {
-      print(e);
       Navigator.push(
         context,
         PageTransition(

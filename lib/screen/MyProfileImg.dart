@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:deanora/Widgets/Widgets.dart';
-import 'package:deanora/Widgets/Yumhttp.dart';
+import 'package:deanora/http/Yumhttp.dart';
 import 'package:deanora/screen/MyYumMain.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

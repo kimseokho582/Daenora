@@ -1,4 +1,4 @@
-import 'package:deanora/Widgets/Yumhttp.dart';
+import 'package:deanora/http/Yumhttp.dart';
 import 'package:deanora/screen/MyProfileImg.dart';
 import 'package:deanora/screen/MyYumMain.dart';
 import 'package:flutter/material.dart';

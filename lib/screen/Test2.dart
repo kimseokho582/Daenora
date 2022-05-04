@@ -1,5 +1,5 @@
 import 'package:deanora/Widgets/Widgets.dart';
-import 'package:deanora/Widgets/Yumhttp.dart';
+import 'package:deanora/http/Yumhttp.dart';
 import 'package:deanora/screen/LoginTest.dart';
 import 'package:deanora/screen/MyNyamNickName.dart';
 import 'package:deanora/screen/MyYumMain.dart';

@@ -12,14 +12,14 @@ class YumUserhttp {
     //     .put(url, body: <String, String?>{"uid": _uid, "nickName": _nickName});
     // // print(response.body);
 
-    final url = Uri.http(yumURL, '/auth/register');
+    final url = Uri.http(yumURL, '/nyu/user');
     var response = await http
         .post(url, body: <String, String>{"uid": _uid, "userAlias": _nickName});
     return response.statusCode;
   }
 
   yumDelete() async {
-    final url = Uri.http(yumURL, '/auth/secession');
+    final url = Uri.http(yumURL, '/nyu/user');
     var response = await http.delete(
       url,
       headers: {'Cookie': _cookie},
@@ -28,14 +28,13 @@ class YumUserhttp {
   }
 
   Future<int> yumUpdateNickName(_nickName) async {
-    final url =
-        Uri.http(yumURL, '/auth/updateNickName', {"userAlias": _nickName});
-    var response = await http.post(url, headers: {'Cookie': _cookie});
+    final url = Uri.http(yumURL, '/nyu/user/alias', {"userAlias": _nickName});
+    var response = await http.put(url, headers: {'Cookie': _cookie});
     return response.statusCode;
   }
 
   Future<int> yumLogin() async {
-    final url = Uri.http(yumURL, '/auth/login', {"uid": _uid});
+    final url = Uri.http(yumURL, '/nyu/user/session', {"uid": _uid});
     var response = await http.get(url);
     String _tmpCookie = response.headers['set-cookie'] ?? '';
     var idx = _tmpCookie.indexOf(';');
@@ -46,14 +45,14 @@ class YumUserhttp {
     // } else {
     //   print('Request failed with status: ${response.statusCode}.');
     // }
-    print(_cookie);
+
     return response.statusCode;
   }
 
   Future<int> yumProfileImg(imgPath) async {
     var headers = {'Cookie': _cookie};
     var request = http.MultipartRequest(
-        'PUT', Uri.parse('http://54.180.116.149:82/auth/updateProfileImage'));
+        'PUT', Uri.parse('http://54.180.116.149:82/nyu/user/image'));
     request.files.add(await http.MultipartFile.fromPath('file', imgPath));
     request.headers.addAll(headers);
 
@@ -64,7 +63,7 @@ class YumUserhttp {
 
   Future<List<dynamic>> yumInfo() async {
     // print(_cookie);
-    final url = Uri.http(yumURL, '/auth/info');
+    final url = Uri.http(yumURL, '/nyu/user');
     late List<dynamic> _list;
     var response = await http.get(url, headers: {'Cookie': _cookie});
     if (response.statusCode == 200) {
@@ -74,5 +73,23 @@ class YumUserhttp {
       print('Request failed with status: ${response.statusCode}.');
     }
     return _list;
+  }
+}
+
+class YumStorehttp {
+  String yumURL = '54.180.116.149:82';
+
+  Future<List<dynamic>> storeTop5() async {
+    List<dynamic> _list = [];
+    final url = Uri.http(yumURL, '/nyu/store/monthly');
+    var response = await http.get(url);
+    if (response.statusCode == 200) {
+      String responseBody = utf8.decode(response.bodyBytes);
+      _list = jsonDecode(responseBody)['storeList'];
+      return _list;
+    } else {
+      print('Request failed with status(top5): ${response.statusCode}.');
+      return [];
+    }
   }
 }

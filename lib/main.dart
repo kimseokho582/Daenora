@@ -1,16 +1,22 @@
 import 'package:deanora/Widgets/LoadingCustom.dart';
 import 'package:deanora/Widgets/Widgets.dart';
+import 'package:deanora/Widgets/star_rating.dart';
 import 'package:deanora/crawl/crawl.dart';
+import 'package:deanora/object/user.dart';
+import 'package:deanora/screen/MyLogin.dart';
 import 'package:deanora/screen/MyMenu.dart';
+import 'package:deanora/screen/MyYumMainTest.dart';
 import 'package:deanora/screen/Test.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:get_it/get_it.dart';
 import 'package:page_transition/page_transition.dart';
 import 'dart:async';
+
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart' show KakaoSdk;
 
 int? isviewed;
 
@@ -20,6 +26,7 @@ Future<void> _messageHandler(RemoteMessage message) async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  GetIt.I.allowReassignment = true;
   KakaoSdk.init(nativeAppKey: 'dd673bf6fd4e61a745ecae2bd14a2671');
   await Firebase.initializeApp();
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -50,7 +57,7 @@ class _MyAppState extends State<MyApp> {
             accentColor: Colors.white),
         debugShowCheckedModeBanner: false,
         home: Cover()
-        // home: LoadingCustom()
+        // home: LoadingCustom(),
         );
   }
 }

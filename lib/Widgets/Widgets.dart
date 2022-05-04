@@ -43,7 +43,7 @@ Container loginTextF(_controller, hintext, icon, obscure) {
         width: 250,
         child: Stack(
           children: [
-            TextField(
+            TextFormField(
                 // onChanged: (text) {
                 //   print(text);
                 // },
@@ -140,39 +140,6 @@ Widget firstfault = Text(
   style:
       TextStyle(color: Colors.red, fontWeight: FontWeight.w600, fontSize: 12),
 );
-
-Future<List> requestAssignment(id, pw, props) async {
-  try {
-    var crawl = new Crawl();
-    List<dynamic> assignment = [];
-    List doneCnt = [];
-
-    if (props != null) {
-      // var assignmentProps = await crawl.crawlAssignments(props.classId);
-
-      for (int i = 0; i < props.length; i++) {
-        var assignmentProps = await crawl.crawlAssignments(props[i].classId);
-        if (assignmentProps.length > 0) {
-          assignment = assignments(assignmentProps);
-          double tmp = 0.0;
-          for (int i = 0; i < assignment.length; i++) {
-            if (assignment[i].state == "제출완료") {
-              tmp++;
-            }
-          }
-          doneCnt.add(tmp / assignment.length);
-        } else {
-          doneCnt.add(0.0);
-        }
-      }
-      print(doneCnt);
-      return doneCnt;
-    }
-    return [];
-  } catch (e) {
-    return Future.error(e);
-  }
-}
 
 requestDnc(id, pw, props) async {
   var crawl = new Crawl();

@@ -20,7 +20,6 @@ class _LoginTestState extends State<LoginTest> {
     User user = await UserApi.instance.me();
     setState(() {
       id = user.kakaoAccount!.profile?.toJson()['nickname'].toString();
-      print(id);
     });
   }
 
@@ -29,7 +28,6 @@ class _LoginTestState extends State<LoginTest> {
 
     var response = await http.put(url,
         body: <String, String>{"uid": "123", "nickName": "ksh123123"});
-    print(response.statusCode);
   }
 
   @override
